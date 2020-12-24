@@ -5,6 +5,7 @@ tags:
     - salesforce
     - lwc
     - best-practices
+layout: post
 ---
 
 Over the past two years, I've had the opportunity to review hundreds of Lightning Web Components developed by internal Salesforce developers and by customers and partners building on the Salesforce platform. This post is the first post of a two parts series covering some of my common observations and feedback.
