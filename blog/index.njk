@@ -1,0 +1,14 @@
+---
+layout: layouts/base.njk
+---
+
+<ul>
+    {% for post in collections.posts %}
+    <li>
+        <a href="{{ post.url }}">
+            <h2>{{ post.data.title }}</h2>
+            <aside>{{ post.data.date | formatdate({ dateStyle: "medium" }) }}</aside>
+        </a>
+    </li>
+    {% endfor %}
+</ul>

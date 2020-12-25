@@ -9,5 +9,9 @@ module.exports = function (eleventyConfig) {
         return new Intl.DateTimeFormat('en-US', config).format(date);
     });
 
-    eleventyConfig.addPassthroughCopy("css");
+    eleventyConfig.addCollection('posts', (collectionApi) => {
+        return collectionApi.getFilteredByGlob('blog/*.md');
+    });
+
+    eleventyConfig.addPassthroughCopy('css');
 };
