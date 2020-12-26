@@ -43,12 +43,13 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: site
+        path: _site
 
     - name: Deploy to GH pages
       if: 
       uses: crazy-max/ghaction-github-pages@v2
       with:
-        build_dir: site
+        build_dir: _site
         target_branch: gh-pages
         jekyll: false
       env:
