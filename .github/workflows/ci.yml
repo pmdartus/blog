@@ -48,7 +48,7 @@ jobs:
       if: 
       uses: crazy-max/ghaction-github-pages@v2
       with:
-        build_dir: _site
+        build_dir: site
         target_branch: gh-pages
         jekyll: false
       env:
