@@ -1,4 +1,9 @@
 {
     "title": "pmdartus",
-    "url": "https://pm.dartus.fr"
+    "url": "https://pm.dartus.fr",
+    "media": {
+        "github": "https://github.com/pmdartus",
+        "twitter": "https://twitter.com/pmdartus",
+        "linkedin": "https://www.linkedin.com/in/pmdartus/"
+    }
 }
