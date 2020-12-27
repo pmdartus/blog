@@ -18,12 +18,12 @@ Lightning Web Components (LWC) is a framework for creating user interfaces using
 
 LWC relies heavily on language features that were introduced in ECMAScript 6 (aka ES6, aka ES2015). Aura offers support for ECMAScript 5 (aka ES5) features. With ES6, plenty of great features have been added to JavaScript. So if you’re coming from a Visualforce page or Lightning component (Aura) development background, I highly recommended that you brush-up on these modern JavaScript skills before starting your LWC journey:
 
--   Variable declarations using `[const](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)` / `[let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)`
+-   Variable declarations using [`const`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) / [`let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)
 -   [Arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
 -   [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 -   [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
 -   [Modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
--   Array ([`Array.prototype.map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map), [`Array.prototype.filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)) and Object ([`Object.keys`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys), `[Object.values](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values)`) functional programming methods
+-   Array ([`Array.prototype.map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map), [`Array.prototype.filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)) and Object ([`Object.keys`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys), [`Object.values`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values)) functional programming methods
 
 When you’re familiar with those concepts, it’s easier to read and understand the LWC documentation and examples. If you’re interested in a refresher on ES5 features and if you want to learn about new ES6+ syntax, I recommend these resources:
 
@@ -402,4 +402,4 @@ An alternative way to design this view is to create a `<product-view>` component
 
 ## Final words
 
-That’s it for the LWC-specific tips. The [next article](https://salesforce.quip.com/2IfuAD2bMipa) in this series discusses how to make your JavaScript code more resilient and how to improve your code quality.
+That’s it for the LWC-specific tips. The [next article](/blog/step-up-your-lwc-skills-part2) in this series discusses how to make your JavaScript code more resilient and how to improve your code quality.

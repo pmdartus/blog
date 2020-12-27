@@ -209,7 +209,7 @@ You can note that this trick not only works with label imports, but also with al
 
 LWC intentionally doesn’t provide an equivalent to the [Apex @TestVisible](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_annotation_testvisible.htm) annotation. If you’re used to this escape hatch, it might be challenging to write LWC unit tests. It might be tempting to use `@api` to expose properties and methods just so that you can test them. This approach has the undesirable side effect of exposing those properties at runtime, which makes the component more fragile.
 
-Instead, LWC encourages writing[blackbox unit tests](https://en.wikipedia.org/wiki/Black-box_testing). Picture your component responding to a set of inputs and producing different outputs. With blackbox unit testing, a test should check if a set of inputs produces the expected output.
+Instead, LWC encourages writing [blackbox unit tests](https://en.wikipedia.org/wiki/Black-box_testing). Picture your component responding to a set of inputs and producing different outputs. With blackbox unit testing, a test should check if a set of inputs produces the expected output.
 
 **Inputs** are what triggers a component to change:
 
@@ -297,7 +297,7 @@ it('unrender the spinner when data is loaded', () => {
 
 ### Remove all method `console.*` methods before production
 
-The `[console.*](https://developer.mozilla.org/en-US/docs/Web/API/Console)` APIs offer a quick way to debug JavaScript code: `console.log(message)`, `console.error(message)`, `console.warn(message)`, etc. Those methods are the JavaScript equivalent of `[System.debug(message)](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_methods_system_system.htm)` in Apex. As the application grows, it’s easy for the console to be flooded with log lines from dozens of components. Furthermore, these logs occur for all users; the code isn’t removed in non-`DEBUG` mode.
+The [`console.*`](https://developer.mozilla.org/en-US/docs/Web/API/Console) APIs offer a quick way to debug JavaScript code: `console.log(message)`, `console.error(message)`, `console.warn(message)`, etc. Those methods are the JavaScript equivalent of [`System.debug(message)`](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_methods_system_system.htm) in Apex. As the application grows, it’s easy for the console to be flooded with log lines from dozens of components. Furthermore, these logs occur for all users; the code isn’t removed in non-`DEBUG` mode.
 
 I recommend removing all the `console.*` usages in the code before you commit it to your source control management (like Git) or save it to your org. The [no-console](https://eslint.org/docs/rules/no-console) eslint rule, included in [eslint-config-lwc](https://github.com/salesforce/eslint-config-lwc), causes `console.*` references to appear as errors. The same rule can be enforced in your CI and developer flow (more in this [Embrace continuous integration (CI)](https://salesforce.quip.com/2IfuAD2bMipa#PVfACAndqQQ)).
 
@@ -315,7 +315,7 @@ Linters are awesome static analysis tools that make development much easier. The
 
 For LWC, we recommend using [ESLint](https://eslint.org/) along with the [eslint-config-lwc](https://github.com/salesforce/eslint-config-lwc). The linting is automatically set up and configured by the [Salesforce Extensions Pack for VS Code](https://marketplace.visualstudio.com/items?itemName=salesforce.salesforcedx-vscode#:~:text=Salesforce%20Extensions%20for%20Visual%20Studio,%2C%20Aura%20components%2C%20and%20Visualforce.) when you create an SFDX project. Other popular code editors also offer an integration with ESLint ([VSCode](https://github.com/microsoft/vscode-eslint), [Intellij](https://www.jetbrains.com/help/idea/eslint.html)).
 
-Note that only the `[@salesforce/eslint-config-lwc/base](https://github.com/salesforce/eslint-config-lwc#salesforceeslint-config-lwcbase-configuration)` rules are enforced when saving a component to your Salesforce org. Locally, you can change the default linting configuration to be more or less strict depending your own preference.
+Note that only the [`@salesforce/eslint-config-lwc/base`](https://github.com/salesforce/eslint-config-lwc#salesforceeslint-config-lwcbase-configuration) rules are enforced when saving a component to your Salesforce org. Locally, you can change the default linting configuration to be more or less strict depending your own preference.
 
 ### Enforce a consistent code style
 
