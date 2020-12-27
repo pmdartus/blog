@@ -13,7 +13,11 @@ module.exports = function (eleventyConfig) {
         return collectionApi.getFilteredByGlob('blog/*.md');
     });
 
+    // Static assets
+    // ---------------------------------------------------------------------------------------------
+
     eleventyConfig.addPassthroughCopy('css');
+    eleventyConfig.addPassthroughCopy('fonts');
 
     // Markdown configuration
     // ---------------------------------------------------------------------------------------------
@@ -28,8 +32,7 @@ module.exports = function (eleventyConfig) {
     };
     const mdAnchorConfig = {
         permalink: true,
-        permalinkBefore: true,
-        permalinkSymbol: '§'
+        permalinkSymbol: '#'
     };
 
     const mdLib = markdownIt(mdLibConfig)

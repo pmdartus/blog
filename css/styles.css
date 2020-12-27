@@ -1,17 +1,56 @@
-a {
-    text-decoration: none !important;
+/* merriweather-300 - latin */
+@font-face {
+    font-family: 'Merriweather';
+    font-style: normal;
+    font-weight: 300;
+    src: url('/fonts/merriweather-v22-latin-300.woff2') format('woff2'),
+        url('/fonts/merriweather-v22-latin-300.woff') format('woff');
+    font-display: swap;
+}
+/* merriweather-regular - latin */
+@font-face {
+    font-family: 'Merriweather';
+    font-style: normal;
+    font-weight: 400;
+    src: url('/fonts/merriweather-v22-latin-regular.woff2') format('woff2'),
+        url('/fonts/merriweather-v22-latin-regular.woff') format('woff');
+    font-display: swap;
+}
+/* merriweather-700 - latin */
+@font-face {
+    font-family: 'Merriweather';
+    font-style: normal;
+    font-weight: 700;
+    src: url('/fonts/merriweather-v22-latin-700.woff2') format('woff2'),
+        url('/fonts/merriweather-v22-latin-700.woff') format('woff');
+    font-display: swap;
+}
+/* merriweather-900 - latin */
+@font-face {
+    font-family: 'Merriweather';
+    font-style: normal;
+    font-weight: 900;
+    src: url('/fonts/merriweather-v22-latin-900.woff2') format('woff2'),
+        url('/fonts/merriweather-v22-latin-900.woff') format('woff');
+    font-display: swap;
 }
 
-.header-anchor {
-    float: left;
-    margin-left: -0.5em;
+html {
+    font-family: 'Merriweather', Georgia, 'Times New Roman', Times, serif;
 }
 
+body {
+    line-height: 1.75;
+    font-size: 1.6rem;
+}
+
+/* Heading links */
 h2 .header-anchor,
 h3 .header-anchor,
 h4 .header-anchor,
 h5 .header-anchor {
     visibility: hidden;
+    border-bottom: none;
 }
 
 h2:hover .header-anchor,
