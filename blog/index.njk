@@ -1,14 +1,18 @@
 ---
+title: Blog
 layout: layouts/base.njk
 ---
 
-<ul>
-    {% for post in collections.posts %}
+<ul class="post-list">
+    {% for post in collections.posts | reverse %}
     <li>
         <a href="{{ post.url }}">
             <h2>{{ post.data.title }}</h2>
-            <aside>{{ post.data.date | formatdate({ dateStyle: "medium" }) }}</aside>
         </a>
+
+        <aside>{{ post.data.date | formatdate({ dateStyle: "medium" }) }}</aside>
+
+        <p>{{ post.data.description }}</p>
     </li>
     {% endfor %}
 </ul>

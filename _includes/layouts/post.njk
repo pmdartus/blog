@@ -7,9 +7,15 @@ layout: layouts/base.njk
     
     {% set wc = content | striptags | wordcount %}
     {% set wPerMinute = (wc / 240) + 1 %}
-    <p class="subtitle">Published on {{ date | formatdate({ dateStyle: "long" }) }} - {{ wPerMinute | round }} min read</p>
+    <aside>Published on {{ date | formatdate({ dateStyle: "long" }) }} - {{ wPerMinute | round }} min read</aside>
 
     {{ content | safe }}
 </article>
 
-<a href="https://twitter.com/search?q={{ metadata.url + page.url }}"  target="_blank" rel="noopener">Discuss on Twitter</a>
+<ul class="pagination">
+  {%- set nextPost = collections.posts | getNextCollectionItem(page) %}
+  {%- if nextPost %}<li><a href="{{ nextPost.url | url }}">← {{ nextPost.data.title }}</a></li>{% endif %}
+  
+  {%- set previousPost = collections.posts | getPreviousCollectionItem(page) %}
+  {%- if previousPost %}<li><a href="{{ previousPost.url | url }}">{{ previousPost.data.title }} →</a></li>{% endif %}
+</ul>

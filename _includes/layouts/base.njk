@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>{{ (title + " - " + metadata.title) if title else metadata.title }}</title>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title or metadata.title}}</title>
+    <meta name="description" content="{{ description or metadata.description }}"></description>
 
     <style>
         {% scss 'scss/index.scss' %}
@@ -15,7 +17,5 @@
     <main>
         {{ content | safe }}
     </main>
-
-    {% include "footer.njk" %}
 </body>
 </html>

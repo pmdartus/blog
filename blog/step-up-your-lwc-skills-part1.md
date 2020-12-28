@@ -1,10 +1,7 @@
 ---
 title: Step Up Your LWC skills - Part 1
 date: 2020-10-27
-tags:
-    - salesforce
-    - lwc
-    - best-practices
+description: "LWC tips: getting started, LWC specific idioms, component communication"
 layout: post
 ---
 

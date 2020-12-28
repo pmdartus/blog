@@ -83,7 +83,26 @@ a {
     }
 }
 
-/* Subtitle */
-article .subtitle {
+/* Extra */
+aside {
     color: $color-text-alt;
+    font-size: 0.9em;
+}
+
+ul.pagination {
+    padding: 0;
+    list-style: none;
+
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+ul.post-list {
+    padding: 0;
+    list-style: none;
+}
+
+ul.post-list h2 {
+    margin-bottom: 0.5rem;
 }
