@@ -4,7 +4,12 @@ layout: layouts/base.njk
 
 <article>
     <h1>{{ title }}</h1>
-    <span>{{ date | formatdate({ dateStyle: "long" }) }}</span>
+    
+    {% set wc = content | striptags | wordcount %}
+    {% set wPerMinute = (wc / 240) + 1 %}
+    <p class="subtitle">Published on {{ date | formatdate({ dateStyle: "long" }) }} - {{ wPerMinute | round }} min read</p>
 
     {{ content | safe }}
 </article>
+
+<a href="https://twitter.com/search?q={{ metadata.url + page.url }}"  target="_blank" rel="noopener">Discuss on Twitter</a>

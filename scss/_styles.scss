@@ -1,0 +1,89 @@
+/* Utils */
+@mixin no-border-link {
+    color: $color-blossom;
+    border-bottom: none;
+
+    &:hover {
+        border-bottom: none;
+    }
+}
+
+/* Headers */
+header {
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (max-width: 684px) {
+    header {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+header {
+    a {
+        @include no-border-link;
+    }
+
+    .title {
+        font-family: $font-family-heading;
+        font-weight: 800;
+        font-size: 1.5em;
+    }
+
+    nav {
+        font-weight: 800;
+
+        a {
+            font-weight: 500;
+        }
+    }
+}
+
+/* Footer */
+footer {
+    a {
+        font-family: $font-family-heading;
+        float: right;
+
+        @include no-border-link;
+    }
+}
+
+/* Titles */
+h1,
+h2,
+h3,
+h4,
+h5 {
+    .header-anchor {
+        visibility: hidden;
+        border-bottom: none;
+        text-decoration: none;
+    }
+
+    &:hover .header-anchor {
+        visibility: visible;
+    }
+}
+
+/* Links */
+a {
+    color: $color-blossom;
+    border-bottom: 1px solid $color-blossom;
+
+    &:hover {
+        border-bottom: none;
+    }
+
+    &:visited,
+    &:hover {
+        color: $color-blossom;
+    }
+}
+
+/* Subtitle */
+article .subtitle {
+    color: $color-text-alt;
+}
