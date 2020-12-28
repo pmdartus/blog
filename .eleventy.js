@@ -1,4 +1,30 @@
+const sass = require('sass');
+
 const syntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
+
+const markdownIt = require('markdown-it');
+const markdownItAnchor = require('markdown-it-anchor');
+const markdownItContainer = require('markdown-it-container');
+const markdownItFootNote = require('markdown-it-footnote');
+
+const __PROD__ = process.env.NODE_ENV === 'production';
+
+function compileScss(file) {
+    return new Promise((resolve, reject) => {
+        sass.render(
+            {
+                file,
+                outputStyle: __PROD__ ? 'compressed' : 'expanded'
+            },
+            (err, res) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(res);
+            },
+        );
+    });
+}
 
 module.exports = function (eleventyConfig) {
     eleventyConfig.addPlugin(syntaxHighlight);
@@ -15,24 +41,24 @@ module.exports = function (eleventyConfig) {
 
     // Static assets
     // ---------------------------------------------------------------------------------------------
-
-    eleventyConfig.addPassthroughCopy('css');
     eleventyConfig.addPassthroughCopy('fonts');
+
+    // SCSS
+    // ---------------------------------------------------------------------------------------------
+    eleventyConfig.addWatchTarget('scss');
+    eleventyConfig.addAsyncShortcode('scss', async function (file) {
+        const res = await compileScss(file);
+        return res.css.toString();
+    });
 
     // Markdown configuration
     // ---------------------------------------------------------------------------------------------
-
-    const markdownIt = require('markdown-it');
-    const markdownItAnchor = require('markdown-it-anchor');
-    const markdownItContainer = require('markdown-it-container');
-    const markdownItFootNote = require('markdown-it-footnote');
-
     const mdLibConfig = {
         html: true,
     };
     const mdAnchorConfig = {
         permalink: true,
-        permalinkSymbol: '#'
+        permalinkSymbol: '#',
     };
 
     const mdLib = markdownIt(mdLibConfig)
