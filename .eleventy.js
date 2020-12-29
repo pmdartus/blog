@@ -29,18 +29,20 @@ function compileScss(file) {
 module.exports = function (eleventyConfig) {
     eleventyConfig.addPlugin(syntaxHighlight);
 
-    eleventyConfig.addLayoutAlias('post', 'layouts/post.njk');
 
     eleventyConfig.addFilter('formatdate', (date, config) => {
         return new Intl.DateTimeFormat('en-US', config).format(date);
     });
 
+    eleventyConfig.addLayoutAlias('post', 'layouts/post.njk');
     eleventyConfig.addCollection('posts', (collectionApi) => {
         return collectionApi.getFilteredByGlob('blog/*.md');
     });
 
     // Static assets
     // ---------------------------------------------------------------------------------------------
+    eleventyConfig.addPassthroughCopy('CNAME');
+    eleventyConfig.addPassthroughCopy('img');
     eleventyConfig.addPassthroughCopy('fonts');
 
     // SCSS
