@@ -2,10 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ (title + " - " + metadata.title) if title else metadata.title }}</title>
+
+    {% set pageTitle = (title + " - " + metadata.title) if title else metadata.title %}
+    <title>{{ pageTitle | escape }}</title>
+    <meta property="og:title" content="{{ pageTitle | escape }}">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ description or metadata.description }}"></description>
+
+    {% set desc = description or metadata.description %}
+    {% if not desc %}
+      {% set desc = content | striptags | truncate(140) %}
+    {% endif %}
+    {% if desc %}
+      <meta name="description" content="{{ desc | escape  }}">
+      <meta property="og:description" content="{{ desc | escape }}">
+    {% endif %}
+
+    <meta name="og:image" content="{{ metadata.url }}/img/profile-picture.jpg">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@{{ metadata.twitterHandle }}">
+    <meta name="twitter:creator" content="@{{ metadata.twitterHandle }}">
 
     <link rel="icon" href="/img/favicon.svg">
 
