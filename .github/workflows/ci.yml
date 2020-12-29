@@ -24,6 +24,8 @@ jobs:
 
     - name: Run build step
       run: npm run build
+      env:
+        NODE_ENV: production
 
     - name: Save build output
       uses: actions/upload-artifact@v2

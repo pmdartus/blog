@@ -27,16 +27,14 @@ function compileScss(file) {
 }
 
 module.exports = function (eleventyConfig) {
+    // Eleventy plugins
+    // ---------------------------------------------------------------------------------------------
     eleventyConfig.addPlugin(syntaxHighlight);
 
-
+    // Custom filters
+    // ---------------------------------------------------------------------------------------------
     eleventyConfig.addFilter('formatdate', (date, config) => {
         return new Intl.DateTimeFormat('en-US', config).format(date);
-    });
-
-    eleventyConfig.addLayoutAlias('post', 'layouts/post.njk');
-    eleventyConfig.addCollection('posts', (collectionApi) => {
-        return collectionApi.getFilteredByGlob('blog/*.md');
     });
 
     // Static assets

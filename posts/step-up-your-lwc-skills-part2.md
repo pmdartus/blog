@@ -2,7 +2,6 @@
 title: Step Up Your LWC skills - Part 2
 date: 2020-10-27
 description: "LWC tips: JavaScript best practices, testing & code quality"
-layout: post
 ---
 
 Over the past two years, I've had the opportunity to review hundreds of Lightning Web Components developed by internal Salesforce developers and by customers and partners building on the Salesforce platform. This post is the second post of a two parts series covering some of the recurring observations and feedback.
