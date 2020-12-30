@@ -11,9 +11,11 @@ layout: layouts/base.njk
     <img src="{{ '/img/profile-picture.jpg' | url }}"  alt="Profile picture" width="300" height="300" />
 </picture>
 
-Hi! I am Pierre-Marie Dartus, working as a software engineer in the UI platform at Salesforce. I am currently based out of Paris, France.
+Hi! I am Pierre-Marie Dartus, software engineer based out of Paris, France.
 
-I currently part of the [LWC](https://lwc.dev/) core team where create tools to help developers build the next generation of web applications at Salesforce.
+Currently working at Salesforce on the UI platform, I create tools and frameworks for developers to build the next generation of web applications on the Salesforce platform.
+
+I primarily work on the web platform and JavaScript runtimes APIs, developer tooling, and performance optimizations. Web standard and open source enthusiast, I am a W3C representative and maintainer of [jsdom](https://github.com/jsdom/jsdom).
 
 [GitHub](https://github.com/pmdartus) / [Twitter](https://twitter.com/pmdartus) / [LinkedIn](https://www.linkedin.com/in/pmdartus)
 
