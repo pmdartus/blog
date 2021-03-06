@@ -1,6 +1,6 @@
 ---
 title: Step Up Your LWC skills - Part 1
-date: 2020-10-27
+publishDate: 2020-10-27
 description: "LWC tips: getting started, LWC specific idioms, component communication"
 ---
 

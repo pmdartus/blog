@@ -41,16 +41,6 @@ header {
     }
 }
 
-/* Footer */
-footer {
-    a {
-        font-family: $font-family-heading;
-        float: right;
-
-        @include no-border-link;
-    }
-}
-
 /* Titles */
 h1,
 h2,
@@ -83,11 +73,7 @@ a {
     }
 }
 
-/* Extra */
-aside {
-    color: $color-text-alt;
-    font-size: 0.9em;
-}
+/* Pagination */
 
 ul.pagination {
     padding: 0;
@@ -98,11 +84,12 @@ ul.pagination {
     flex-wrap: wrap;
 }
 
-ul.post-list {
-    padding: 0;
-    list-style: none;
+/* Extra */
+aside, footer {
+    color: $color-text-alt;
+    font-size: 0.9em;
 }
 
-ul.post-list h2 {
-    margin-bottom: 0.5rem;
+footer {
+    margin-top: 2.5em;
 }

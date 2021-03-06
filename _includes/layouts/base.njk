@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 
-    {% set pageTitle = (title + " - " + metadata.title) if title else metadata.title %}
+    {% set pageTitle = (title + " | " + metadata.title) if title else metadata.title %}
     <title>{{ pageTitle | escape }}</title>
     <meta property="og:title" content="{{ pageTitle | escape }}">
     
@@ -29,12 +29,18 @@
     <style>
         {% scss 'scss/index.scss' %}
     </style>
+
+    {% block head %}{% endblock %}
 </head>
 <body>
     {% include "header.njk" %}
 
     <main>
-        {{ content | safe }}
+        {% block main %}
+          {{ content | safe }}
+        {% endblock %}
     </main>
+
+    {% include "footer.njk" %}
 </body>
 </html>

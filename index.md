@@ -1,9 +1,10 @@
 ---
-title: About
+title: About me
+description: Pierre-Marie Dartus is a software engineer working at Salesforce. He primarily works on web platform tooling and performance optimizations.
 layout: layouts/base.njk
 ---
 
-## About me
+# About me
 
 <picture>
     <source srcset="{{ '/img/profile-picture.avif' | url }}" type="image/avif">
