@@ -13,6 +13,7 @@
   "devDependencies": {
     "@11ty/eleventy": "^0.11.1",
     "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.6",
+    "date-fns": "^2.19.0",
     "markdown-it-anchor": "^7.0.2",
     "markdown-it-container": "^3.0.0",
     "markdown-it-footnote": "^3.0.2",

@@ -10,7 +10,7 @@ layout: layouts/base.njk
             <h2>{{ post.data.title }}</h2>
         </a>
 
-        <aside>{{ post.data.date | formatdate({ dateStyle: "medium" }) }}</aside>
+        <aside>{{ post.data.date | formatdate("MMM. dd, y") }}</aside>
 
         <p>{{ post.data.description }}</p>
     </li>

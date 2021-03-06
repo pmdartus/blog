@@ -7,7 +7,7 @@ layout: layouts/base.njk
 
     {% set wc = content | striptags | wordcount %}
     {% set wPerMinute = (wc / 240) + 1 %}
-    <aside>Published on {{ date | formatdate({ dateStyle: "long" }) }} - {{ wPerMinute | round }} min read</aside>
+    <aside>Published on {{ date | formatdate("MMM. dd, y") }} - {{ wPerMinute | round }} min read</aside>
 
     {{ content | safe }}
 </article>
