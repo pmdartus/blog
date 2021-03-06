@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 
-    {% set pageTitle = (title + " - " + metadata.title) if title else metadata.title %}
+    {% set pageTitle = (title + " | " + metadata.title) if title else metadata.title %}
     <title>{{ pageTitle | escape }}</title>
     <meta property="og:title" content="{{ pageTitle | escape }}">
     
