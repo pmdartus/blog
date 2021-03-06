@@ -1,7 +1,7 @@
----
-layout: layouts/base.njk
----
+{% extends "layouts/base.njk" %}
+
 {%- set updateDate = updateDate or publishDate %}
+{% block head %}
 <script type="application/ld+json">
   { 
     "@context": "https://schema.org", 
@@ -15,23 +15,26 @@ layout: layouts/base.njk
     }
   }
 </script>
+{% endblock head %}
 
-<article>
-  <h1>{{ title }}</h1>
+{% block main %}
+  <article>
+    <h1>{{ title }}</h1>
 
-  {%- set wc = content | striptags | wordcount %}
-  {%- set wPerMinute = (wc / 240) + 1 %}
-  <aside>Published on <time datetime="{{ publishDate | formatdate('yyyy-MM-dd') }}">{{ publishDate | formatdate("MMM. dd, yyyy") }}</time> - {{ wPerMinute | round }} min read</aside>
+    {%- set wc = content | striptags | wordcount %}
+    {%- set wPerMinute = (wc / 240) + 1 %}
+    <aside>Published on <time datetime="{{ publishDate | formatdate('yyyy-MM-dd') }}">{{ publishDate | formatdate("MMM. dd, yyyy") }}</time> - {{ wPerMinute | round }} min read</aside>
 
-  <section class="content">
-    {{ content | safe }}
-  </section>
-</article>
+    <section class="content">
+      {{ content | safe }}
+    </section>
+  </article>
 
-<ul class="pagination">
-  {%- set nextPost = collections.posts | getNextCollectionItem(page) %}
-  {%- if nextPost %}<li><a href="{{ nextPost.url | url }}">← {{ nextPost.data.title }}</a></li>{% endif %}
+  <ul class="pagination">
+    {%- set nextPost = collections.posts | getNextCollectionItem(page) %}
+    {%- if nextPost %}<li><a href="{{ nextPost.url | url }}">← {{ nextPost.data.title }}</a></li>{% endif %}
 
-  {%- set previousPost = collections.posts | getPreviousCollectionItem(page) %}
-  {%- if previousPost %}<li><a href="{{ previousPost.url | url }}">{{ previousPost.data.title }} →</a></li>{% endif %}
-</ul>
+    {%- set previousPost = collections.posts | getPreviousCollectionItem(page) %}
+    {%- if previousPost %}<li><a href="{{ previousPost.url | url }}">{{ previousPost.data.title }} →</a></li>{% endif %}
+  </ul>
+{% endblock main %}

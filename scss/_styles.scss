@@ -73,11 +73,7 @@ a {
     }
 }
 
-/* Extra */
-aside {
-    color: $color-text-alt;
-    font-size: 0.9em;
-}
+/* Pagination */
 
 ul.pagination {
     padding: 0;
@@ -86,4 +82,14 @@ ul.pagination {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+}
+
+/* Extra */
+aside, footer {
+    color: $color-text-alt;
+    font-size: 0.9em;
+}
+
+footer {
+    margin-top: 2.5em;
 }

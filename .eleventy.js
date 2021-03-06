@@ -60,11 +60,11 @@ module.exports = function (eleventyConfig) {
 
     // Custom filters
     // ---------------------------------------------------------------------------------------------
-    eleventyConfig.addFilter('formatdate', (date, format) => {
-        return dateFns.format(date, format);
-    });
     eleventyConfig.addFilter('absoluteurl', (url, base) => {
         return new URL(url, base).href;
+    });
+    eleventyConfig.addFilter('formatdate', (date, format) => {
+        return dateFns.format(date, format);
     });
     eleventyConfig.addFilter('lastmodifiedgitdate', (path) => {
         return getLastModifiedDate(path);
