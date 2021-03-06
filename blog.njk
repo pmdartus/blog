@@ -4,6 +4,8 @@ layout: layouts/base.njk
 ---
 
 <section class="post-list">
+    <h1>Blog posts</h1>
+
     {% for post in collections.posts | reverse %}
     <article>
         <a href="{{ post.url }}">
