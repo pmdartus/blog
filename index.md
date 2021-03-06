@@ -3,7 +3,7 @@ title: About
 layout: layouts/base.njk
 ---
 
-## About me
+# About me
 
 <picture>
     <source srcset="{{ '/img/profile-picture.avif' | url }}" type="image/avif">
