@@ -41,16 +41,6 @@ header {
     }
 }
 
-/* Footer */
-footer {
-    a {
-        font-family: $font-family-heading;
-        float: right;
-
-        @include no-border-link;
-    }
-}
-
 /* Titles */
 h1,
 h2,
@@ -96,13 +86,4 @@ ul.pagination {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-}
-
-ul.post-list {
-    padding: 0;
-    list-style: none;
-}
-
-ul.post-list h2 {
-    margin-bottom: 0.5rem;
 }

@@ -3,13 +3,15 @@ layout: layouts/base.njk
 ---
 
 <article>
-    <h1>{{ title }}</h1>
+  <h1>{{ title }}</h1>
 
-    {% set wc = content | striptags | wordcount %}
-    {% set wPerMinute = (wc / 240) + 1 %}
-    <aside>Published on {{ date | formatdate("MMM. dd, y") }} - {{ wPerMinute | round }} min read</aside>
+  {% set wc = content | striptags | wordcount %}
+  {% set wPerMinute = (wc / 240) + 1 %}
+  <aside>Published on <time datetime="{{ date | formatdate('y-MM-dd') }}">{{ date | formatdate("MMM. dd, y") }}</time> - {{ wPerMinute | round }} min read</aside>
 
+  <section class="content">
     {{ content | safe }}
+  </section>
 </article>
 
 <ul class="pagination">

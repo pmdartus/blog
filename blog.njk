@@ -3,16 +3,18 @@ title: Blog
 layout: layouts/base.njk
 ---
 
-<ul class="post-list">
+<section class="post-list">
     {% for post in collections.posts | reverse %}
-    <li>
+    <article>
         <a href="{{ post.url }}">
             <h2>{{ post.data.title }}</h2>
         </a>
 
-        <aside>{{ post.data.date | formatdate("MMM. dd, y") }}</aside>
+        <aside>
+            <time datetime="{{ post.data.date | formatdate('y-MM-dd') }}">{{ post.data.date | formatdate("MMM. dd, y") }}</time>
+        </aside>
 
         <p>{{ post.data.description }}</p>
-    </li>
+    </article>
     {% endfor %}
-</ul>
+</section>
