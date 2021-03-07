@@ -8,7 +8,7 @@ description: "LWC tips: JavaScript best practices, testing & code quality"
 
 Over the past two years, I've had the opportunity to review hundreds of Lightning Web Components developed by internal Salesforce developers and by customers and partners building on the Salesforce platform. This post is the second post of a two parts series covering some of the recurring observations and feedback.
 
-In the [previous post](/blog/step-up-your-lwc-skills-part1) we discussed tips that are specific to LWC. This post explores how to make your JavaScript code more resilient and and how to improve the code quality of your project.
+In the [previous post](/blog/step-up-your-lwc-skills-part-1) we discussed tips that are specific to LWC. This post explores how to make your JavaScript code more resilient and and how to improve the code quality of your project.
 
 ## JavaScript best practices
 
