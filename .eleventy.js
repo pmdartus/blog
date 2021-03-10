@@ -1,10 +1,10 @@
 const fs = require('fs');
 const cp = require('child_process');
 
-
 const sass = require('sass');
 const dateFns = require('date-fns');
 
+const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
 const syntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
 
 const markdownIt = require('markdown-it');
@@ -19,7 +19,7 @@ function compileScss(file) {
         sass.render(
             {
                 file,
-                outputStyle: __PROD__ ? 'compressed' : 'expanded'
+                outputStyle: __PROD__ ? 'compressed' : 'expanded',
             },
             (err, res) => {
                 if (err) {
@@ -57,6 +57,7 @@ module.exports = function (eleventyConfig) {
     // Eleventy plugins
     // ---------------------------------------------------------------------------------------------
     eleventyConfig.addPlugin(syntaxHighlight);
+    eleventyConfig.addPlugin(eleventyNavigationPlugin);
 
     // Custom filters
     // ---------------------------------------------------------------------------------------------
