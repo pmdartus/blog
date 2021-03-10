@@ -10,36 +10,13 @@ When it comes to mutation tracking we can distinguish 2 modes: record properties
 
 In short, **the LWC engine only re-renders a component is a property accessed in the pervious rendering cycle is updated**. This is an optimization that has been put in place to avoid a component from over-rendering.
 
-## A short intro on reactivity
-
-Nowadays, most the modern UI framework operate under the same assumption that the DOM state is function of the components' internal state. In other word: `dom_state = render(component_state)`. Another assumption is that the `render` is side-effect free. Meaning that given some input - for the same `component_state` -, the method always returns the same output - the `render` produces the same DOM tree. What modern UI framework brings to the table is the ability to track track the internal component state and invoke the `render` method for you. This process of tracking state and re-rendering when needed what is commonly referred to as reactivity.
-
-One of the huge caveat here is that, rendering a component and updating the DOM is an expensive operation. You only want your UI framework to update the DOM only when it is really needed.
-
-One key optimization to avoid _over-rendering_ is for a UI framework to have a finer understanding of what the component state. Let's take the following example:
-
-```js
-import { LightningElement } from 'lwc';
-
-export default class App extends LightningElement {
-    counter = {
-        id: 1234,
-        value: 0,
-    };
-}
-```
-
-The `App` component has a single property called `counter`. In this case, the resulting DOM state for this component is a function of `counter`: `dom_state = render(counter)`. Since the `counter` object contains 2 properties (`id` and `value`), we can refine render function inputs to: `dom_state = function(counter, counter.id, counter.value)`. So if `counter` object or if `counter.id` or `counter.value` are updated the component should be re-rendered.
-
-Now let say that the template associated with this component is the following:
-
-```html
-<template> Counter: {counter.value} </template>
-```
-
-With the combined knowledge of the component state and the template, you can refine the render function input to `dom_state = render(counter, counter.value)`. The `counter.id` property is never accessed by the template and doesn't influence the DOM output. Because of this is pointless to track changes made to the `counter.value` property.
-
 ## LWC reactivity
+
+Nowadays, most the modern UI framework operate under the same assumption that the DOM state is function of the components' internal state. In other word: 
+
+> _dom_state = render(component_state)_
+
+Another assumption is that the `render` is side-effect free. Meaning that given some input - for the same `component_state` -, the method always returns the same output - the `render` produces the same DOM tree. What modern UI framework brings to the table is the ability to track track the internal component state and invoke the `render` method for you. This process of tracking state and re-rendering when needed what is commonly referred to as reactivity.
 
 ### Reactive class fields
 
@@ -128,7 +105,7 @@ export default class App extends LightningElement {
 
 ... is interpreted like this by the LWC engine.
 
-```js/7-9
+```js
 import { LightningElement } from 'lwc';
 
 export default class App extends LightningElement {
@@ -181,3 +158,34 @@ export default class App extends LightningElement {
     }
 }
 ```
+
+## Optimization
+
+One of the huge caveat here is that, rendering a component and updating the DOM is an expensive operation. You only want your UI framework to update the DOM only when it is really needed.
+
+One key optimization to avoid _over-rendering_ is for a UI framework to have a finer understanding of what the component state. Let's take the following example:
+
+```js
+import { LightningElement } from 'lwc';
+
+export default class App extends LightningElement {
+    counter = {
+        id: 1234,
+        value: 0,
+    };
+}
+```
+
+The `App` component has a single property called `counter`. In this case, the resulting DOM state for this component is a function of `counter`: `dom_state = render(counter)`. Since the `counter` object contains 2 properties (`id` and `value`), we can refine render function inputs to: . So if `counter` object or if `counter.id` or `counter.value` are updated the component should be re-rendered.
+
+> _dom_state = function(counter, counter.id, counter.value)_
+
+Now let say that the template associated with this component is the following:
+
+```html
+<template> Counter: {counter.value} </template>
+```
+
+With the combined knowledge of the component state and the template, you can refine the render function input to `dom_state = render(counter, counter.value)`. The `counter.id` property is never accessed by the template and doesn't influence the DOM output. Because of this is pointless to track changes made to the `counter.value` property.
+
+> _dom_state = render(counter, counter.value)_
