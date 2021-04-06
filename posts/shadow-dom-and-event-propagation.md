@@ -64,7 +64,7 @@ evt.dispatchEvent(evt);
 
 By default, events don't bubbles up the through the DOM. It means that by default, a dispatched event only invoked the listener attached to the dispatched element. If you want to make an event bubble the `bubble` config has to be set to `true`.
 
-## Event composed
+## Traverse shadow boundaries using `composed`
 
 By default events doesn't traverse the shadow boundaries. In other words, event doesn't bubble from a shadow root to its host element by default. 
 
@@ -111,8 +111,6 @@ As you can see, when the dispatched event is composed only, the event propagates
 Now that you better understand how event propagates in the shadow DOM, it is important to call out that you should carefully think about how your events are configured especially if you are building some complex applications. Not all the events should composed and bubbling. Events are part of the public API exposed by a web component
 
 
-
-
 ### What about standard events?
 
 <!---
@@ -142,11 +140,32 @@ Most of the standard [UI events](https://w3c.github.io/uievents) bubble and are 
 
 
 
-## Event retargetting
+## Event retargeting
 
-The [`Event.prototype.target`](https://developer.mozilla.org/en-US/docs/Web/API/Event/target) property references the object which the event was dispatched from. When an event is dispatched from a DOM node, it target is set to the node from which the event originates.
+The [`Event.prototype.target`](https://developer.mozilla.org/en-US/docs/Web/API/Event/target) property references the object which the event was dispatched from. When an event is dispatched from a DOM node, it `target` is set to the node from which the event originates.
 
-To preserve element encapsulation 
+To preserve shadow DOM encapsulation and avoid leaking component internals, the **`target` is updated to the host element as events cross shadow boundaries**. This process is called event retargeting. Let's take the same nested shadow tree example that we used before to illustrate this aspect:
+
+<event-visualizer label="Nested shadow trees" event-bubbles event-composed>
+  <template>
+    <div id="a">
+      <template shadowroot="open">
+        <div id="c">
+          <template shadowroot="open">
+            <div id="e" target></div>
+          </template>
+          <div id="d"></div>
+        </div>
+      </template>
+      <div id="b"></div>
+    </div>
+  </template>
+</event-visualizer>
+
+When the composed event propagates from `div#c` shadow root to the host element, the event `target` is set to `div#c`. The same way once the event propagates through `div#a` shadow boundary, the event target is set to `div#a`.
+
+One interesting side-effect of event retargeting is that once the event is done propagating the event `target` is always set to the outermost host element. In the case you are doing debouncing, the event `target` should be [cached](https://github.com/salesforce/lwc/issues/2265) otherwise the debounced loose track of the event target.
+
 
 ## Slotting
 
