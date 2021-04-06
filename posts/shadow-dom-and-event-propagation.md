@@ -108,7 +108,39 @@ This might be counter intuitive (at least it was to me at the beginning) a compo
 
 As you can see, when the dispatched event is composed only, the event propagates from one host element to another, `div#c` and `div#a`, without propagating through the intermediary nodes. When thinking about DOM events propagation, **`bubbles` indicates if the event propagates throw the parent hierarchy** while **`composed` indicates if the event should propagate throw the shadow DOM hierarchy**. A bubbling and composed event propagate throw all the node from the dispatched one up to the document root.
 
-You should be cautious with using both `bubbles` and `composed` at the same time when building complex applications. 
+Now that you better understand how event propagates in the shadow DOM, it is important to call out that you should carefully think about how your events are configured especially if you are building some complex applications. Not all the events should composed and bubbling. Events are part of the public API exposed by a web component
+
+
+
+
+### What about standard events?
+
+<!---
+Generated running the following script on: https://w3c.github.io/uievents
+
+Array.from(document.querySelectorAll('.event-definition')).map(el => {
+  const tableValue = field => Array.from(el.querySelectorAll('th')).find(th => th.textContent.trim() === field)?.nextSibling.textContent.trim();
+  return { type: tableValue('Type'), bubbles: tableValue('Bubbles'), composed: tableValue('Composed') }
+});
+
+- https://w3c.github.io/touch-events/#touch-interface
+- https://w3c.github.io/pointerevents/#firing-events-using-the-pointerevent-interface
+- https://w3c.github.io/clipboard-apis/#clipboard-event-definitions
+-->
+
+Most of the standard [UI events](https://w3c.github.io/uievents) bubble and are composed with a few exceptions. There are a few exception like `mouseenter` and `mouseleave` that aren't bubbling and composed. Finally, the `slotchange` event stands out as the only bubbling and non-composed event.
+
+<details>
+    <summary>Complete event list</summary>
+
+| Configuration                            | Type           |
+| ---------------------------------------- | ------------- | 
+| **Bubbling and composed events**         | `focusin`, `focusout`, `auxclick`, `click`, `dblclick`, `mousedown`, `mousemove`, `mouseout`, `mouseover`, `mouseup`, `wheel`, `input`, `keydown`, `keyup`, `keypress`, `touchstart`, `touchend`, `touchmove`, `pointerover`, `pointerdown`, `pointermove`, `pointerup`, `pointerout` |
+| **Non-bubbling and non-composed events** | `mouseenter`, `mouseleave`, `pointerenter`, `pointerleave` |
+| **Bubbling and non-composed events**     | `slotchange` |
+</details>
+
+
 
 ## Event retargetting
 
@@ -117,6 +149,8 @@ The [`Event.prototype.target`](https://developer.mozilla.org/en-US/docs/Web/API/
 To preserve element encapsulation 
 
 ## Slotting
+
+
 
 
 ## ComposedPath
