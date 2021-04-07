@@ -185,33 +185,29 @@ In the example above, `div#b` is slotted into `div#a` shadow tree. When a bubbli
 
 ## `Event.prototype.composedPath`
 
-The `Event.prototype.composedPath` method returns an array with all the nodes, in order, through which the event propagates.
+The [`Event.prototype.composedPath`](https://developer.mozilla.org/en-US/docs/Web/API/Event/composedPath) method returns an array with all the nodes, in order, through which the event propagates.
 
-Something important to notice is that the composed path returns all the node throw which the event propagates through which is a superset of nodes on which event listeners is actually invoked. If you toggle the `bubbles` value you can see that the event invoke different listeners (as discussed in the previous section) however the composed path remains identical regardless.
-
-<event-visualizer label="Nested shadow trees" event-bubbles event-composed>
+<event-visualizer label="Single shadow tree" event-bubbles event-composed>
   <template>
     <div id="a">
       <template shadowroot="open">
         <div id="c">
-          <template shadowroot="open">
-            <div id="e" target></div>
-          </template>
-          <div id="d"></div>
+          <div id="d" target></div>
         </div>
+        <div id="e"></div>
       </template>
       <div id="b"></div>
     </div>
   </template>
 </event-visualizer>
 
-Careful readers might notice that the composed path remains identical as the event propagate, while the target is retargeted. The composed path offers an escape hatch to get a handle on shadow DOM internal details. For example, as the event reaches `div#a`, its target is set to `div#a` thanks to retargeting. However it is always possible to get an handle on the node which originally dispatched the event by looking up the first entry in the composed path.
+When a bubbling and composed event is dispatched from `div#d` the composed path contains: `div#d`, `div#c`, shadow root, and `div#a`. Something that is important to note about the composed path is that it not only includes the node with event listener that will be invoke but all the nodes in the path. In the previous example when changing `bubbles` to `false` and leaving `composed` to `true`, the composed path remains identical even the event directly propagates from `div#d` to `div#a`.
 
-Another thing to be aware of with composed path is that it impact with the shadow root [`mode`](https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot/mode). Until now all the shadow tree presented in the article were `open`. The shadow root mode can either be `open` or `closed`.
+Careful readers might notice that the composed path remains identical as the event propagate, while the target is retargeted. The composed path offers an escape hatch to shadow DOM encapsulation model as it give you access to component internals. For example, as the event reaches `div#a`, its target is set to `div#a`. However it is always possible to get an handle on the node which originally dispatched the event by looking up the first entry in the composed path.
 
-You can think of the `open` mode as a lightweight encapsulation. Even if the shadow tree internals are hidden it is always possible to access the shadow root associated to an element by looking up the [`shadowRoot`](https://developer.mozilla.org/en-US/docs/Web/API/Element/shadowRoot) property.
+Something that hasn't been discussed in this article is the shadow tree [`mode`](https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot/mode). Until now all the shadow tree presented in this article were `open` shadow tree. Open shadow trees enforces a loose encapsulation as it possible to get access its internal via `Element.prototype.shadowRoot` and `Event.prototype.composedPath`. 
 
-On the other hand the `closed` mode enforces strong encapsulation. The
+Enforcing strict encapsulation can be enforced by setting the shadow root  to `closed`. In this mode, `Element.prototype.shadowRoot` always returns `null` regardless if a shadow tree is attached to the element. The composed path also omits nodes from closed shadow trees.
 
 <event-visualizer label="Nested closed shadow trees" event-bubbles event-composed>
   <template>
@@ -228,6 +224,26 @@ On the other hand the `closed` mode enforces strong encapsulation. The
     </div>
   </template>
 </event-visualizer>
+
+The example above illustrates this behavior with nested shadow trees. When dispatched from `div#e` the composed path contains all the node in its path from `div#e` to `div#a`. But as it propagate to `div#c` and `div#a`, the composed path drops all the node from the closed shadow tree the event originate from.
+
+Here is an even more contrived example with a closed shadow tree and slotted content.
+
+<event-visualizer label="Event dispatching from slotted content in closed shadow tree" event-bubbles>
+  <template>
+    <div id="a">
+      <template shadowroot="closed">
+        <div id="c">
+          <slot id="d"></slot>
+          <div id="e"></div>
+        </div>
+      </template>
+      <div id="b" target></div>
+    </div>
+  </template>
+</event-visualizer>
+
+When dispatched from `div#b` the event composed path only includes `div#b` and `div#a`. When the event enters into the closed shadow tree and reaches `slot#d` its composed path is updated to include the shadow tree node. The composed path is set again to its original value when it escapes the shadow tree and reaches `div#a`.  
 
 ## Closing words
 
