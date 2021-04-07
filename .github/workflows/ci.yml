@@ -19,6 +19,9 @@ jobs:
       with:
         node-version: '14'
 
+    - name: Install latest version of NPM
+      run: npm install -g npm@7
+
     - name: Install dependencies
       run: npm install
 
