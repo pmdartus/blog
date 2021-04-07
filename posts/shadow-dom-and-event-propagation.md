@@ -256,4 +256,4 @@ By now you should have a better idea of how eventing and shadow DOM work togethe
 
 If you are still uncertain how it works in a specific scenario not covered in this article you can always edit any of the event visualizations in [Codepen](https://codepen.io/pmdartus/pen/ZELJRyX?editors=1000).
 
-<script type="module" src="https://cdn.skypack.dev/pin/@pmdartus/event-visualizer@v2.0.0-GDc7Ml0NKA1QpykUvAdD/mode=imports,min/optimized/@pmdartus/event-visualizer.js"></script>
+<script type="module" src="https://cdn.skypack.dev/pin/@pmdartus/event-visualizer@v2.0.1-8tgfm9q9ED4f45PRrGVC/mode=imports,min/optimized/@pmdartus/event-visualizer.js"></script>
