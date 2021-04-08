@@ -31,6 +31,14 @@ description: "Explaining everything to know about shadow DOM and event propagati
   }
 </style>
 
+<noscript>
+  <style>
+    event-visualizer:not(:defined):after {
+      content: 'Turn on JavaScript and reload this page to enjoy this beautiful this interactive visualization.';
+    }
+  </style>
+</noscript>
+
 Shadow DOM directly influences how event propagate through the DOM. It took me quite some time to fully appreciate this. Even if there is a lot of content on the web covering this topic, I haven't found an article going into all the nuances shadow DOM adds to event propagation.
 
 This article is my attempt to give a complete overview of how eventing works in the shadow DOM.
@@ -107,7 +115,7 @@ This might be counterintuitive but, a composed event always propagates outside t
 
 As you can see, when the dispatched event is composed only, the event propagates from one host element to another, `div#c` and `div#a`, without propagating through the intermediary nodes. When thinking about DOM events propagation, **`bubbles` indicates if the event propagates throw the parent hierarchy** while **`composed` indicates if the event should propagate throw the shadow DOM hierarchy**. A bubbling and composed event propagate throw all the nodes from the dispatched one up to the document root.
 
-Now that you better understand how event propagates in the shadow DOM, it is important to call out that you should carefully think about how your events are configured especially if you are building some complex applications. Not all the events should composed and bubbling. Events are part of the public API exposed by a web component.
+Now that you better understand how event propagates in the shadow DOM, it is important to call out that you should think carefully about how your events are configured especially if you are building some complex applications. While it might be tempting to make all the composed and bubbling, it should not be your go-to events configuration. Events are part of the public API exposed by a web component. Not all events are equal and only certain events are worth being exposed outside the component shadow tree.
 
 ## What about standard events?
 
