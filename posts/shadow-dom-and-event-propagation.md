@@ -1,7 +1,7 @@
 ---
-title: Shadow DOM and event propagation
+title: A complete guide on shadow DOM and event propagation
 publishDate: 2021-03-28
-description: "The definitive guide on event propagation in the shadow DOM."
+description: "Explaining everything to know about shadow DOM and event propagation with interactive visuals."
 ---
 
 <style>
@@ -31,21 +31,21 @@ description: "The definitive guide on event propagation in the shadow DOM."
   }
 </style>
 
-Shadow DOM directly influences how event propagates through the DOM. It took me quite some time to fully appreciate this. Even if there is a lot of content on the web covering this topic, I haven't found yet a page going into all the nuances shadow DOM adds to event propagation.
+Shadow DOM directly influences how event propagate through the DOM. It took me quite some time to fully appreciate this. Even if there is a lot of content on the web covering this topic, I haven't found an article going into all the nuances shadow DOM adds to event propagation.
 
 This article is my attempt to give a complete overview of how eventing works in the shadow DOM.
 
 ## Shadow DOM and encapsulation
 
-Shadow DOM is a browser built-in encapsulation mechanism. This mechanism **offers a way for developers to author components that are safe to distribute and consume on third-party pages**. The shadow DOM encapsulation works both ways. First, it prevents component internals to be introspectable from outside the shadow DOM. But it also prevents shadow DOM internal to bleed into the document.
+Shadow DOM is a browser built-in encapsulation mechanism. This mechanism **offers a way for developers to author components that are safe to distribute and consume on third-party pages**. The shadow DOM encapsulation works both ways. First, it prevents component internals to be introspectable from outside the shadow DOM. But it also prevents shadow DOM internals to bleed into the document.
 
-One of the features Shadow DOM is mostly known for is its style scoping enforcement. Page-level styles don't get applied to elements rendered in a shadow tree. And styles injected in the shadow tree don't get applied at the page level.
+One of the features Shadow DOM is most known for is its style scoping enforcement. Page-level styles don't get applied to elements rendered in a shadow tree. And styles injected in the shadow tree don't get applied at the page level.
 
-All the spec adjustments and new features related to eventing that has been introduced along with shadow DOM revolve around this idea of how enables developers to author components complying with this new encapsulation mechanism. Let's dive into it.
+All the spec adjustments and new features related to eventing that have been introduced along with shadow DOM revolve around this idea of how it enables developers to author components complying with this new encapsulation mechanism. Let's dive into it.
 
 ## The `ShadowRoot` constructor
 
-The `ShadowRoot` is a constructor that has been introduced with shadow DOM. It extends for `EventTarget` and therefore it is capable to dispatch and listen for events like other DOM nodes.
+The `ShadowRoot` is a constructor that has been introduced with shadow DOM. It extends `EventTarget` and therefore it is capable to dispatch and listen for events like other DOM nodes.
 
 ```js
 const div = document.createElement("div");
@@ -67,25 +67,25 @@ Similar to how events work in the light DOM, events only bubble in the shadow DO
 
 By default, events don't propagate outside shadow trees. This default behavior ensures that internal DOM events don't inadvertently leak into the document.
 
-In the example, dispatching a bubbling event from the `div#d` propagates to `div#c` and `#shadow-root` and stops there. The event never reaches `div#a` since the element lives outside the shadow tree.
+In the example, dispatching a bubbling event from the `span#d` propagates to `p#c` and the shadow root, but it stops there. The event never reaches `div#a` since the element lives outside the shadow tree.
 
 <event-visualizer label="Single shadow tree" event-bubbles>
   <template>
     <div id="a">
       <template shadowroot="open">
-        <div id="c">
-          <div id="d" target></div>
-        </div>
-        <div id="e"></div>
+        <p id="c">
+          <span id="d" target></span>
+        </p>
+        <p id="e"></p>
       </template>
-      <div id="b"></div>
+      <img id="b"></img>
     </div>
   </template>
 </event-visualizer>
 
 **For an event to traverse shadow DOM boundaries, it has to be configured as a [`composed`](https://developer.mozilla.org/en-US/docs/Web/API/Event/composed)**: `new Event('test', { bubbles: true, composed: true })`. Going back to the previous example, if `composed` is enabled, you can see the event escaping the shadow tree and reaching to `div#a`.
 
-When the `composed` option is set to `true`, the dispatch event not only traverses its shadow boundary but also any other parent boundary. In the following example, the bubbling and composed event dispatch from `div#e` bubble to `div#c`, `div#a`, and their respective shadow roots.
+When the `composed` option is set to `true`, the dispatch event not only traverses its shadow boundary but also any other parent boundary. In the following example, the bubbling and composed event dispatch from `span#e` bubble to `div#c`, `div#a`, and their respective shadow roots.
 
 <event-visualizer label="Nested shadow trees" event-bubbles event-composed>
   <template>
@@ -93,12 +93,12 @@ When the `composed` option is set to `true`, the dispatch event not only travers
       <template shadowroot="open">
         <div id="c">
           <template shadowroot="open">
-            <div id="e" target></div>
+            <span id="e" target></span>
           </template>
-          <div id="d"></div>
+          <p id="d"></p>
         </div>
       </template>
-      <div id="b"></div>
+      <img id="b"></img>
     </div>
   </template>
 </event-visualizer>
@@ -147,12 +147,12 @@ To preserve shadow DOM encapsulation and avoid leaking component internals, the 
       <template shadowroot="open">
         <div id="c">
           <template shadowroot="open">
-            <div id="e" target></div>
+            <span id="e" target></span>
           </template>
-          <div id="d"></div>
+          <p id="d"></p>
         </div>
       </template>
-      <div id="b"></div>
+      <img id="b"></img>
     </div>
   </template>
 </event-visualizer>
@@ -165,21 +165,21 @@ One interesting side-effect of event retargeting is that once the event is done 
 
 Shadow DOM enables to slot content into a component using the `<slot>` tag. **When an event bubbles from a slotted node, the event propagates into the shadow tree first before propagating to the host element**. This is true whether the event is `composed` or not.
 
-<event-visualizer label="Event dispatching from slotted content" event-bubbles>
+<event-visualizer label="Slotted content" event-bubbles>
   <template>
     <div id="a">
       <template shadowroot="open">
         <div id="c">
           <slot id="d"></slot>
-          <div id="e"></div>
+          <img id="e"></img>
         </div>
       </template>
-      <div id="b" target></div>
+      <p id="b" target></p>
     </div>
   </template>
 </event-visualizer>
 
-In the example above, `div#b` is slotted into `div#a` shadow tree. When a bubbling event is dispatched from `div#b`, instead of propagating directly to `div#a` it first propagates throw all the elements in the shadow tree. It means that this event can be intercepted by `div#d`, `div#c`, or the shadow root before reaching `div#a`.
+In the example above, `p#b` is slotted into `div#a` shadow tree. When a bubbling event is dispatched from `p#b`, instead of propagating directly to `div#a` it first propagates throw all the elements in the shadow tree. It means that this event can be intercepted by `slot#d`, `div#c`, or the shadow root before reaching `div#a`.
 
 ## `Event.prototype.composedPath`
 
@@ -189,17 +189,17 @@ The [`Event.prototype.composedPath`](https://developer.mozilla.org/en-US/docs/We
   <template>
     <div id="a">
       <template shadowroot="open">
-        <div id="c">
-          <div id="d" target></div>
-        </div>
-        <div id="e"></div>
+        <p id="c">
+          <span id="d" target></span>
+        </p>
+        <p id="e"></p>
       </template>
-      <div id="b"></div>
+      <img id="b"></img>
     </div>
   </template>
 </event-visualizer>
 
-When a bubbling and composed event is dispatched from `div#d` the composed path contains `div#d`, `div#c`, shadow root, and `div#a`. Something important to note about the composed path is that it not only includes the node with listeners that are invoked by this event but all the nodes in the path. In the previous example when changing `bubbles` to `false` and leaving `composed` to `true`, the composed path remains identical even the event directly propagates from `div#d` to `div#a`.
+When a bubbling and composed event is dispatched from `span#d` the composed path contains `span#d`, `p#c`, shadow root, and `div#a`. Something important to note about the composed path is that it not only includes the node with listeners that are invoked by this event but all the nodes in the path. In the previous example when changing `bubbles` to `false` and leaving `composed` to `true`, the composed path remains identical even the event directly propagates from `span#d` to `div#a`.
 
 Careful readers might notice that the composed path remains identical as the event propagate, while the target is retargeted. The composed path offers an escape hatch to the shadow DOM encapsulation model as it gives you access to component internals. For example, as the event reaches `div#a`, its target is set to `div#a`. However, it is always possible to get a handle on the node which originally dispatched the event by looking up the first entry in the composed path.
 
@@ -213,35 +213,35 @@ Enforcing strict encapsulation can be enforced by setting the shadow root  to `c
       <template shadowroot="closed">
         <div id="c">
           <template shadowroot="closed">
-            <div id="e" target></div>
+            <span id="e" target></span>
           </template>
-          <div id="d"></div>
+          <p id="d"></p>
         </div>
       </template>
-      <div id="b"></div>
+      <img id="b"></img>
     </div>
   </template>
 </event-visualizer>
 
-The example above illustrates this behavior with nested shadow trees. When dispatched from `div#e` the composed path contains all the nodes in its path from `div#e` to `div#a`. But as it propagates to `div#c` and `div#a`, the composed path drops all the node from the closed shadow tree the event originate from.
+The example above illustrates this behavior with nested shadow trees. When dispatched from `span#e` the composed path contains all the nodes in its path from `span#e` to `div#a`. But as it propagates to `div#c` and `div#a`, the composed path drops all the node from the closed shadow tree the event originate from.
 
 Here is an even more contrived example with a closed shadow tree and slotted content.
 
-<event-visualizer label="Event dispatching from slotted content in closed shadow tree" event-bubbles>
+<event-visualizer label="Slotted content in closed shadow tree" event-bubbles>
   <template>
     <div id="a">
       <template shadowroot="closed">
         <div id="c">
           <slot id="d"></slot>
-          <div id="e"></div>
+          <img id="e"></img>
         </div>
       </template>
-      <div id="b" target></div>
+      <p id="b" target></p>
     </div>
   </template>
 </event-visualizer>
 
-When dispatched from `div#b` the event composed path only includes `div#b` and `div#a`. When the event enters into the closed shadow tree and reaches `slot#d` its composed path is updated to include the shadow tree node. The composed path is set again to its original value when it escapes the shadow tree and reaches `div#a`.  
+When dispatched from `p#b` the event composed path only includes `p#b` and `div#a`. When the event enters into the closed shadow tree and reaches `slot#d` its composed path is updated to include the shadow tree node. The composed path is set again to its original value when it escapes the shadow tree and reaches `div#a`.  
 
 ## Closing words
 
@@ -253,5 +253,7 @@ By now you should have a better idea of how eventing and shadow DOM work togethe
 - `Event.prototype.composedPath` returns all the nodes the event propagates through except when the shadow root `mode` is set to `closed`.
 
 If you are still uncertain how it works in a specific scenario not covered in this article you can always edit any of the event visualizations in [Codepen](https://codepen.io/pmdartus/pen/ZELJRyX?editors=1000).
+
+_Thanks to [Nolan Lawson](https://nolanlawson.com/) for feedback on the draft of this blog post._
 
 <script type="module" src="https://cdn.skypack.dev/pin/@pmdartus/event-visualizer@v2.0.1-8tgfm9q9ED4f45PRrGVC/mode=imports,min/optimized/@pmdartus/event-visualizer.js"></script>
