@@ -17,7 +17,7 @@ eleventyNavigation:
         </a>
 
         <aside>
-            <time datetime="{{ post.data.publishDate | formatdate('yyyy-MM-dd') }}">{{ post.data.publishDate | formatdate("MMM. dd, yyyy") }}</time>
+            <time datetime="{{ post.data.date | formatdate('yyyy-MM-dd') }}">{{ post.data.date | formatdate("MMM. dd, yyyy") }}</time>
         </aside>
 
         <p>{{ post.data.description }}</p>

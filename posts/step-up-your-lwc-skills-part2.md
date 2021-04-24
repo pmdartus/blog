@@ -1,6 +1,6 @@
 ---
 title: Step Up Your LWC skills - Part 2
-publishDate: 2020-10-27
+date: 2020-10-27
 description: "LWC tips: JavaScript best practices, testing & code quality."
 ---
 

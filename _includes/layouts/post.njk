@@ -1,13 +1,13 @@
 {% extends "layouts/base.njk" %}
 
-{%- set updateDate = updateDate or publishDate %}
+{%- set updateDate = updateDate or date %}
 {% block head %}
 <script type="application/ld+json">
   { 
     "@context": "https://schema.org", 
     "@type": "BlogPosting",
     "headline": "{{ title }}",
-    "datePublished": "{{ publishDate | formatdate("yyyy-MM-dd") }}",
+    "datePublished": "{{ date | formatdate("yyyy-MM-dd") }}",
     "dateModified": "{{ updateDate | formatdate("yyyy-MM-dd") }}",
     "author": {
       "@type": "Person",
@@ -23,7 +23,7 @@
 
     {%- set wc = content | striptags | wordcount %}
     {%- set wPerMinute = (wc / 240) + 1 %}
-    <aside>Published on <time datetime="{{ publishDate | formatdate('yyyy-MM-dd') }}">{{ publishDate | formatdate("MMM. dd, yyyy") }}</time> - {{ wPerMinute | round }} min read</aside>
+    <aside>Published on <time datetime="{{ date | formatdate('yyyy-MM-dd') }}">{{ date | formatdate("MMM. dd, yyyy") }}</time> - {{ wPerMinute | round }} min read</aside>
 
     <section class="content">
       {{ content | safe }}
