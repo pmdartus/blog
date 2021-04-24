@@ -39,8 +39,13 @@ function getLastModifiedDate(path) {
     }
 
     try {
-        const res = cp.execSync(`git log -1 --pretty="format:%ci" ${path}`);
-        lastModifiedDate = new Date(res.toString());
+        const res = cp.execSync(`git log -1 --pretty="format:%ci" ${path}`).toString();
+
+        if (!res.length) {
+            throw new Error(`Can't compute last modified date for ${path}`);
+        }
+
+        lastModifiedDate = new Date(res);
     } catch (error) {
         console.warn(error.message);
         console.error('Fallback to file system time.');
