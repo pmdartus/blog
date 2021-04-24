@@ -260,7 +260,7 @@ By now you should have a better idea of how eventing and shadow DOM work togethe
 - `Event.prototype.target` is set to the host element when traversing a shadow tree boundary.
 - `Event.prototype.composedPath` returns all the nodes the event propagates through except when the shadow root `mode` is set to `closed`.
 
-If you are still uncertain how it works in a specific scenario not covered in this article you can always edit any of the event visualizations in [Codepen](https://codepen.io/pmdartus/pen/ZELJRyX?editors=1000).
+If you are still uncertain how it works in a specific scenario not covered in this article you can always edit any of the event visualizations in [Codepen](https://codepen.io/pmdartus/pen/ZELJRyX?editors=1000). For the most curious ones, the interactive examples are indeed web components built using [lit](https://lit.dev/) and [Rough.js](https://roughjs.com/). The source code can be found [here](https://github.com/pmdartus/event-visualizer).
 
 _Thanks to [Nolan Lawson](https://nolanlawson.com/) for feedback on the draft of this blog post._
 
