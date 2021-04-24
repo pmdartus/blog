@@ -80,7 +80,7 @@ In the example, dispatching a bubbling event from the `span#d` propagates to `p#
 <event-visualizer label="Single shadow tree" event-bubbles>
   <template>
     <div id="a">
-      <template shadowroot="open">
+      <template data-shadowroot="open">
         <p id="c">
           <span id="d" target></span>
         </p>
@@ -98,9 +98,9 @@ When the `composed` option is set to `true`, the dispatched event not only trave
 <event-visualizer label="Nested shadow trees" event-bubbles event-composed>
   <template>
     <div id="a">
-      <template shadowroot="open">
+      <template data-shadowroot="open">
         <div id="c">
-          <template shadowroot="open">
+          <template data-shadowroot="open">
             <span id="e" target></span>
           </template>
           <p id="d"></p>
@@ -152,9 +152,9 @@ To preserve shadow DOM encapsulation and avoid leaking component internals, the 
 <event-visualizer label="Nested shadow trees" event-bubbles event-composed>
   <template>
     <div id="a">
-      <template shadowroot="open">
+      <template data-shadowroot="open">
         <div id="c">
-          <template shadowroot="open">
+          <template data-shadowroot="open">
             <span id="e" target></span>
           </template>
           <p id="d"></p>
@@ -176,7 +176,7 @@ Shadow DOM enables slotting content into a component using the `<slot>` tag. **W
 <event-visualizer label="Slotted content" event-bubbles>
   <template>
     <div id="a">
-      <template shadowroot="open">
+      <template data-shadowroot="open">
         <div id="c">
           <slot id="d"></slot>
           <img id="e"></img>
@@ -196,7 +196,7 @@ The [`Event.prototype.composedPath`](https://developer.mozilla.org/en-US/docs/We
 <event-visualizer label="Single shadow tree" event-bubbles event-composed>
   <template>
     <div id="a">
-      <template shadowroot="open">
+      <template data-shadowroot="open">
         <p id="c">
           <span id="d" target></span>
         </p>
@@ -218,9 +218,9 @@ Strict encapsulation can be enforced by setting the shadow root  to `closed`. In
 <event-visualizer label="Nested closed shadow trees" event-bubbles event-composed>
   <template>
     <div id="a">
-      <template shadowroot="closed">
+      <template data-shadowroot="closed">
         <div id="c">
-          <template shadowroot="closed">
+          <template data-shadowroot="closed">
             <span id="e" target></span>
           </template>
           <p id="d"></p>
@@ -238,7 +238,7 @@ Here is an even more contrived example with a closed shadow tree and slotted con
 <event-visualizer label="Slotted content in closed shadow tree" event-bubbles>
   <template>
     <div id="a">
-      <template shadowroot="closed">
+      <template data-shadowroot="closed">
         <div id="c">
           <slot id="d"></slot>
           <img id="e"></img>
@@ -264,4 +264,4 @@ If you are still uncertain how it works in a specific scenario not covered in th
 
 _Thanks to [Nolan Lawson](https://nolanlawson.com/) for feedback on the draft of this blog post._
 
-<script type="module" src="https://cdn.skypack.dev/pin/@pmdartus/event-visualizer@v2.0.1-8tgfm9q9ED4f45PRrGVC/mode=imports,min/optimized/@pmdartus/event-visualizer.js"></script>
+<script type="module" src="https://cdn.skypack.dev/pin/@pmdartus/event-visualizer@v3.0.0-1NQp6WHFWM5X1NeR4b3Q/mode=imports,min/optimized/@pmdartus/event-visualizer.js"></script>
