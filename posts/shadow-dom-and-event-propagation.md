@@ -264,4 +264,5 @@ If you are still uncertain how it works in a specific scenario not covered in th
 
 _Thanks to [Nolan Lawson](https://nolanlawson.com/) for feedback on the draft of this blog post._
 
-<script type="module" src="https://cdn.skypack.dev/pin/@pmdartus/event-visualizer@v3.0.0-1NQp6WHFWM5X1NeR4b3Q/mode=imports,min/optimized/@pmdartus/event-visualizer.js"></script>
+<!-- This URL is loading the source code non-minified. As of today, Skypack fails to minify some of the file resulting in requests timing out. -->
+<script type="module" src="https://cdn.skypack.dev/pin/@pmdartus/event-visualizer@v3.0.0-1NQp6WHFWM5X1NeR4b3Q/mode=imports/optimized/@pmdartus/event-visualizer.js"></script>
