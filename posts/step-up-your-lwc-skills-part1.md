@@ -400,4 +400,4 @@ An alternative way to design this view is to create a `<product-view>` component
 
 ## Final words
 
-That’s it for the LWC-specific tips. The [next article](/blog/step-up-your-lwc-skills-part-2) in this series discusses how to make your JavaScript code more resilient and how to improve your code quality.
+That’s it for the LWC-specific tips. The [next article](/blog/step-up-your-lwc-skills-part-2/) in this series discusses how to make your JavaScript code more resilient and how to improve your code quality.

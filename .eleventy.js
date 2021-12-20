@@ -14,23 +14,6 @@ const markdownItFootNote = require('markdown-it-footnote');
 
 const __PROD__ = process.env.NODE_ENV === 'production';
 
-function compileScss(file) {
-    return new Promise((resolve, reject) => {
-        sass.render(
-            {
-                file,
-                outputStyle: __PROD__ ? 'compressed' : 'expanded',
-            },
-            (err, res) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve(res);
-            },
-        );
-    });
-}
-
 const LAST_MODIFIED_DATE_CACHE = new Map();
 function getLastModifiedDate(path) {
     let lastModifiedDate = LAST_MODIFIED_DATE_CACHE.get(path);
@@ -86,8 +69,8 @@ module.exports = function (eleventyConfig) {
     // ---------------------------------------------------------------------------------------------
     eleventyConfig.addWatchTarget('scss');
     eleventyConfig.addAsyncShortcode('scss', async function (file) {
-        const res = await compileScss(file);
-        return res.css.toString();
+        const res = await sass.compileAsync(file, { style: __PROD__ ? 'compressed' : 'expanded' });
+        return res.css;
     });
 
     // Markdown configuration
@@ -95,9 +78,9 @@ module.exports = function (eleventyConfig) {
     const mdLibConfig = {
         html: true,
     };
+
     const mdAnchorConfig = {
-        permalink: true,
-        permalinkSymbol: '#',
+        permalink: markdownItAnchor.permalink.linkInsideHeader(),
     };
 
     const mdLib = markdownIt(mdLibConfig)
