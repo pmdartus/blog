@@ -9,11 +9,7 @@ eleventyNavigation:
 
 # About me
 
-<picture>
-    <source srcset="{{ '/img/profile-picture.avif' | url }}" type="image/avif">
-    <source srcset="{{ '/img/profile-picture.webp' | url }}" type="image/webp">
-    <img src="{{ '/img/profile-picture.jpg' | url }}"  alt="Profile picture" width="300" height="300" />
-</picture>
+{% image "./img/profile-picture-small.jpg", "Profile picture", "100vw" %}
 
 Hi! I am Pierre-Marie Dartus, software engineer based out of Paris, France.
 

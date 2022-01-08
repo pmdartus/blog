@@ -4,8 +4,9 @@ const cp = require('child_process');
 const sass = require('sass');
 const dateFns = require('date-fns');
 
-const eleventyNavigationPlugin = require('@11ty/eleventy-navigation');
-const syntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
+const imagePlugin = require("@11ty/eleventy-img");
+const navigationPlugin = require('@11ty/eleventy-navigation');
+const syntaxHighlightPlugin = require('@11ty/eleventy-plugin-syntaxhighlight');
 
 const markdownIt = require('markdown-it');
 const markdownItAnchor = require('markdown-it-anchor');
@@ -41,16 +42,32 @@ function getLastModifiedDate(path) {
     return lastModifiedDate;
 }
 
+async function imageShortCode(src, alt, sizes) {
+    const metadata = await imagePlugin(src, {
+        widths: [300, 600, null],
+        formats: ["avif", "webp", "jpeg"],
+        outputDir: '_site/img'
+    });
+
+    return imagePlugin.generateHTML(metadata, {
+        alt,
+        sizes,
+        loading: "lazy",
+        decoding: "async",
+    });
+}
+
 module.exports = function (eleventyConfig) {
     // Eleventy plugins
     // ---------------------------------------------------------------------------------------------
-    eleventyConfig.addPlugin(syntaxHighlight);
-    eleventyConfig.addPlugin(eleventyNavigationPlugin);
+    eleventyConfig.addPlugin(syntaxHighlightPlugin);
+    eleventyConfig.addPlugin(navigationPlugin);
 
     // Custom filters
     // ---------------------------------------------------------------------------------------------
-    eleventyConfig.addFilter('absoluteurl', (url, base) => {
-        return new URL(url, base).href;
+    eleventyConfig.addFilter('absoluteurl', function (url) {
+        const { url: baseUrl } = this.ctx.env;
+        return new URL(url, baseUrl).href;
     });
     eleventyConfig.addFilter('formatdate', (date, format) => {
         return dateFns.format(date, format);
@@ -58,6 +75,10 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.addFilter('lastmodifiedgitdate', (path) => {
         return getLastModifiedDate(path);
     });
+
+    // Custom short codes
+    // ---------------------------------------------------------------------------------------------
+    eleventyConfig.addShortcode("image", imageShortCode);
 
     // Static assets
     // ---------------------------------------------------------------------------------------------
