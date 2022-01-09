@@ -4,9 +4,11 @@ const cp = require('child_process');
 const sass = require('sass');
 const dateFns = require('date-fns');
 
-const imagePlugin = require('@11ty/eleventy-img');
-const navigationPlugin = require('@11ty/eleventy-navigation');
-const syntaxHighlightPlugin = require('@11ty/eleventy-plugin-syntaxhighlight');
+const pluginImage = require('@11ty/eleventy-img');
+const pluginRss = require("@11ty/eleventy-plugin-rss");
+const pluginNav = require('@11ty/eleventy-navigation');
+const pluginSyntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
+
 
 const markdownIt = require('markdown-it');
 const markdownItAnchor = require('markdown-it-anchor');
@@ -43,13 +45,13 @@ function getLastModifiedDate(path) {
 }
 
 async function imageShortCode(src, alt, sizes) {
-    const metadata = await imagePlugin(src, {
+    const metadata = await pluginImage(src, {
         widths: [300, 600, null],
         formats: ['avif', 'webp', 'jpeg'],
         outputDir: '_site/img',
     });
 
-    return imagePlugin.generateHTML(metadata, {
+    return pluginImage.generateHTML(metadata, {
         alt,
         sizes,
         loading: 'lazy',
@@ -104,8 +106,9 @@ function setupMarkdown(eleventyConfig) {
 }
 
 module.exports = function (eleventyConfig) {
-    eleventyConfig.addPlugin(syntaxHighlightPlugin);
-    eleventyConfig.addPlugin(navigationPlugin);
+    eleventyConfig.addPlugin(pluginNav);
+    eleventyConfig.addPlugin(pluginRss);
+    eleventyConfig.addPlugin(pluginSyntaxHighlight);
 
     eleventyConfig.addPassthroughCopy({
         'static': '.',
