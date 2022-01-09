@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "clean": "rm -rf _site/",
+    "prestart": "npm run clean",
     "start": "eleventy --serve",
+    "prebuild": "npm run clean",
     "build": "eleventy"
   },
   "keywords": [],
