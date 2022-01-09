@@ -1,7 +1,6 @@
 ---
 title: About me
 description: Pierre-Marie Dartus is a software engineer working at Salesforce. He primarily works on web platform tooling and performance optimizations.
-permalink: /index.html
 layout: layouts/base.njk
 eleventyNavigation:
   key: About
@@ -10,7 +9,7 @@ eleventyNavigation:
 
 # About me
 
-{% image "./img/profile-picture-small.jpg", "Profile picture", "100vw" %}
+{% image "./static/img/profile-picture-small.jpg", "Profile picture", "100vw" %}
 
 Hi! I am Pierre-Marie Dartus, software engineer based out of Paris, France.
 

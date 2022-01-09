@@ -4,7 +4,7 @@ const cp = require('child_process');
 const sass = require('sass');
 const dateFns = require('date-fns');
 
-const imagePlugin = require("@11ty/eleventy-img");
+const imagePlugin = require('@11ty/eleventy-img');
 const navigationPlugin = require('@11ty/eleventy-navigation');
 const syntaxHighlightPlugin = require('@11ty/eleventy-plugin-syntaxhighlight');
 
@@ -45,26 +45,19 @@ function getLastModifiedDate(path) {
 async function imageShortCode(src, alt, sizes) {
     const metadata = await imagePlugin(src, {
         widths: [300, 600, null],
-        formats: ["avif", "webp", "jpeg"],
-        outputDir: '_site/img'
+        formats: ['avif', 'webp', 'jpeg'],
+        outputDir: '_site/img',
     });
 
     return imagePlugin.generateHTML(metadata, {
         alt,
         sizes,
-        loading: "lazy",
-        decoding: "async",
+        loading: 'lazy',
+        decoding: 'async',
     });
 }
 
-module.exports = function (eleventyConfig) {
-    // Eleventy plugins
-    // ---------------------------------------------------------------------------------------------
-    eleventyConfig.addPlugin(syntaxHighlightPlugin);
-    eleventyConfig.addPlugin(navigationPlugin);
-
-    // Custom filters
-    // ---------------------------------------------------------------------------------------------
+function setupCustomFilters(eleventyConfig) {
     eleventyConfig.addFilter('absoluteurl', function (url) {
         const { url: baseUrl } = this.ctx.env;
         return new URL(url, baseUrl).href;
@@ -75,27 +68,23 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.addFilter('lastmodifiedgitdate', (path) => {
         return getLastModifiedDate(path);
     });
+}
 
-    // Custom short codes
-    // ---------------------------------------------------------------------------------------------
-    eleventyConfig.addShortcode("image", imageShortCode);
+function setupShortCodes(eleventyConfig) {
+    eleventyConfig.addShortcode('image', imageShortCode);
+}
 
-    // Static assets
-    // ---------------------------------------------------------------------------------------------
-    eleventyConfig.addPassthroughCopy('CNAME');
-    eleventyConfig.addPassthroughCopy('img');
-    eleventyConfig.addPassthroughCopy('fonts');
-
-    // SCSS
-    // ---------------------------------------------------------------------------------------------
-    eleventyConfig.addWatchTarget('scss');
+function setupSass(eleventyConfig) {
+    eleventyConfig.addWatchTarget('src/scss');
     eleventyConfig.addAsyncShortcode('scss', async function (file) {
-        const res = await sass.compileAsync(file, { style: __PROD__ ? 'compressed' : 'expanded' });
+        const res = await sass.compileAsync(`src/${file}`, {
+            style: __PROD__ ? 'compressed' : 'expanded',
+        });
         return res.css;
     });
+}
 
-    // Markdown configuration
-    // ---------------------------------------------------------------------------------------------
+function setupMarkdown(eleventyConfig) {
     const mdLibConfig = {
         html: true,
     };
@@ -112,4 +101,24 @@ module.exports = function (eleventyConfig) {
         .use(markdownItFootNote);
 
     eleventyConfig.setLibrary('md', mdLib);
+}
+
+module.exports = function (eleventyConfig) {
+    eleventyConfig.addPlugin(syntaxHighlightPlugin);
+    eleventyConfig.addPlugin(navigationPlugin);
+
+    eleventyConfig.addPassthroughCopy({
+        'static': '.',
+    });
+
+    setupCustomFilters(eleventyConfig);
+    setupShortCodes(eleventyConfig);
+    setupSass(eleventyConfig);
+    setupMarkdown(eleventyConfig);
+
+    return {
+        dir: {
+            input: 'src',
+        },
+    };
 };
