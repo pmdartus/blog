@@ -18,13 +18,15 @@
       <meta property="og:description" content="{{ desc | escape }}">
     {% endif %}
 
-    <meta name="og:image" content="{{ '/img/profile-picture.jpg' | url | absoluteurl(env.url) }}">
+    <meta name="og:image" content="{{ '/img/profile-picture.jpg' | absoluteurl }}">
 
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:site" content="@{{ metadata.twitterHandle }}">
-    <meta name="twitter:creator" content="@{{ metadata.twitterHandle }}">
+    <meta name="twitter:site" content="{{ metadata.author.twitterHandle }}">
+    <meta name="twitter:creator" content="{{ metadata.author.twitterHandle }}">
 
     <link rel="icon" href="/img/favicon.svg">
+
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed for pm.dartus.fr" href="/feed.xml" />
 
     {% if env.isProd %}
       <script async src="https://www.googletagmanager.com/gtag/js?id={{ metadata.googleAnalyticsId }}"></script>

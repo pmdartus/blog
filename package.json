@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "clean": "rm -rf _site/",
+    "prestart": "npm run clean",
     "start": "eleventy --serve",
+    "prebuild": "npm run clean",
     "build": "eleventy"
   },
   "keywords": [],
@@ -12,7 +15,9 @@
   "license": "MIT",
   "devDependencies": {
     "@11ty/eleventy": "^1.0.0-beta.8",
+    "@11ty/eleventy-img": "^1.0.0",
     "@11ty/eleventy-navigation": "^0.3.2",
+    "@11ty/eleventy-plugin-rss": "^1.1.2",
     "@11ty/eleventy-plugin-syntaxhighlight": "^3.1.3",
     "date-fns": "^2.27.0",
     "markdown-it-anchor": "^8.4.1",

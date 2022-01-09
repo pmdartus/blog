@@ -11,7 +11,7 @@
     "dateModified": "{{ updateDate | formatdate("yyyy-MM-dd") }}",
     "author": {
       "@type": "Person",
-      "name": "Pierre-Marie Dartus"
+      "name": "{{metadata.author.name}}"
     }
   }
 </script>
@@ -31,10 +31,10 @@
   </article>
 
   <ul class="pagination">
-    {%- set nextPost = collections.posts | getNextCollectionItem(page) %}
-    {%- if nextPost %}<li><a href="{{ nextPost.url | url }}">← {{ nextPost.data.title }}</a></li>{% endif %}
+    {%- set nextPost = collections.posts | getPreviousCollectionItem(page) %}
+    {%- if nextPost %}<li><a href="{{ nextPost.url }}">← {{ nextPost.data.title }}</a></li>{% endif %}
 
-    {%- set previousPost = collections.posts | getPreviousCollectionItem(page) %}
-    {%- if previousPost %}<li><a href="{{ previousPost.url | url }}">{{ previousPost.data.title }} →</a></li>{% endif %}
+    {%- set previousPost = collections.posts | getNextCollectionItem(page) %}
+    {%- if previousPost %}<li><a href="{{ previousPost.url }}">{{ previousPost.data.title }} →</a></li>{% endif %}
   </ul>
 {% endblock main %}
