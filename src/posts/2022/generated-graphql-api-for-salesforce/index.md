@@ -22,11 +22,13 @@ As you might expect, the response is yes. During the winter break I started work
 
 The GraphQL endpoint is a standalone server setting between the client and a Salesforce org. During the startup, the endpoint retrieve the Salesforce org metadata for a predefined set of standard and custom object and build a GraphQL schema in memory. It accepts a GraphQL queries on the `/graphql` endpoint.
 
+{% image "./overview.png", "Architecture overview", "100vw" %}
+
 ### Generating a GraphQL schema using Salesforce metadata
 
 Schema is a core concept of GraphQL. It defines a model of the data that can requested from the server. GraphQL schema is usually expressed via the schema definition language (SDL), a textual representation of objects exposed in the Graph.
 
-```gql
+```graphql
 type Person__c {
     Id: ID
     Name: String
@@ -37,11 +39,32 @@ Before accepting any query, the GraphQL endpoint has to build this schema in mem
 
 We can retrieve the sobject metadata using the [describeSOjbect](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_sobject_describe.htm) REST API. It returns a complete description of an entity including the fields and child relationships.
 
-The schema definition language works well whenever you know in advance the data domain you are working with. This is not the case here as we
+Defining the GraphQL schema via the schema definition language works well whenever you know in advance the data domain you are working with. SDL is not well suited for generating dynamic schemas. An alternative approach is to generate the schema programmatically via [`graphql/type`](https://graphql.org/graphql-js/type/) module.
+
+```js
+import { GraphQLObjectType } from 'graphql/type';
+
+/** Create a GraphQL type from an SObject metadata. */
+function buildSObjectType(sObject) {
+    return new GraphQLObjectType({
+        name: sObject.name,
+        field: Object.fromEntries(field => {
+            return [field.name, {
+                type: buildSObjectField(sObject, field)
+            }]
+        })
+    })
+}
+
+/** Create a GraphQL field object type  */
+function buildSObjectField(sObject, field) {
+    /* */
+}
+```
 
 GraphQL comes with a predefined list of [scalar types](https://graphql.org/learn/schema/#scalar-types). Scalars represents leaf values in the graph. This list includes: `Int`, `Float`, `String`, `Boolean` and `ID`. On the other hand, Salesforce offers a lot more [field types](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/field_types.htm). Fortunately GraphQL allows the definition of custom scalar, that can be used to serialize, deserialize and validate the missing Salesforce field types.
 
-```gql
+```graphql
 scalar Date
 scalar Email
 
@@ -53,17 +76,9 @@ type Person__c {
 
 Now that we have a better idea of how the GraphQL schema is generated, let's dive into the actual query execution.
 
-To access the graph, 
-
 ### Resolving GraphQL query
 
 After being validated against the schema, a GraphQL query is executed by the GraphQL server. The GraphQL server relies on function called *resolvers* to execute a GraphQL query. The resolvers are functions that can be attached to any field on the schema. The function is in charge of retrieving the data for its field. The GraphQL execution will keep going until all the fields for the query are resolved.
-
-```gql
-query getMovieAndActors {
-    Movies__c:
-}
-```
 
 #### The naive approach
 
