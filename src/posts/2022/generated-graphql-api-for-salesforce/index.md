@@ -99,12 +99,34 @@ Now that we have a better idea of how the GraphQL schema is generated, let's div
 
 After being validated against the schema, a GraphQL query is executed by the GraphQL server. The GraphQL server relies on function called [resolvers](https://graphql.org/learn/execution/#root-fields-resolvers) to execute a GraphQL query. The resolvers are functions that can be attached to any field on the schema. The function is in charge of retrieving the data for its field. The GraphQL execution will keep going until all the fields for the query are resolved.
 
+One of the main performance bottleneck with GraphQL is the N+1 query issue. GraphQL queries usually involves joining multiple tables when accessing nested data. Let me give a concrete example to illustrate this.
 
+```graphql
+query {
+    Actor__c {              # retrieve actors (1 query)
+        Name
+        Bio
+        Role__r {           # retrieve the roles for each actors (N queries for N actors)
+            Name
+        }
+    }
+}
+```
 
-#### Optimized queries using SOQL
+In the case above, the server need to do `1` request to Salesforce to retrieve all the actors. Subsequently, the server need to make `N` requests to Salesforce to retrieve the actors roles for the `N` actors. This approach leads to `N+1` roundtrips to Salesforce to resolve the GraphQL query. If there were 50 actors, the server would need to issue 51 queries to Salesforce. As you can imagine, this is not viable as the number of requests needed grows exponentially with the depth of the query.
 
-### Filtering
+A common answer to the GraphQL N+1 problem is to use batching. Instead of fetching each roles independently, the roles for all the actors could be fetched in a single roundtrip by combining all the requests into a single one. Utilities like [DataLoader](https://github.com/graphql/dataloader) helps you achieve this. 
+
+Great we are making progress, from 51 request are now down to 2 requests to Salesforce to resolve the GraphQL query. That said, we can optimize this further by changing the approach we are taking for data fetching. Instead of making multiple roundtrips we can compile the GraphQL incoming query a SOQL query. This approach allows resolving data at any depth with a single SOQL query.
+
+{% image "./ast-generation.png", "Query compilation: GraphQL query -> GraphQL AST -> SOQL AST -> SOQL query", "100vw" %}
+
+GraphQL queries are parsed and transformed into an in memory representation called [abstract syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (AST). The GraphQL AST than then be turned into a SOQL AST with the help of the previously generated schema. Then the SOQL AST is serialized to a SOQL query before being set to Salesforce.
+
+The code related to SOQL AST generation and serialization can be found under [`src/graphql/resolvers.ts`](https://github.com/pmdartus/sfdc-graphql-endpoint/blob/6fbe50366a8d6392a77e6b58bfb0689bf1680c5f/src/graphql/resolvers.ts) and [`src/sfdc/soql.ts`](https://github.com/pmdartus/sfdc-graphql-endpoint/blob/6fbe50366a8d6392a77e6b58bfb0689bf1680c5f/src/sfdc/soql.ts). 
 
 ## Things that I am excited about
+
+
 
 ## Closing words
