@@ -139,3 +139,5 @@ I am quite excited by the new capabilities GraphQL has to offer. I can foresee i
 This proof-of-concept is far from being production-ready. It is missing some key features including authentication/authorization, object/field-level security, polymorphic relationships support, mutation. But it's a good starting point.
 
 As a follow-up, I am interested to see how the generated GraphQL schema could be extended to incorporate custom logic. For example, extending generated GraphQL objects with custom fields baked by Apex and Salesforce functions. Another interesting idea worth exploring is how [schema stitching](https://www.graphql-tools.com/docs/schema-stitching/stitch-combining-schemas) could be used to query multiple GraphQL services.
+
+> 📣 By the way, **Salesforce is currently working on an official GraphQL endpoint**. As of this writing, Salesforce hasn't released yet any public documentation. That said, the official GraphQL endpoint is quite similar to the one described in this post, with some other nice features 🎉. You can contact [Ben Sklar](mailto:bsklar@salesforce.com) if you would like to try it out.
