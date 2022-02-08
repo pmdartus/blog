@@ -8,7 +8,7 @@ description: 'Exploring how to automatically generate a GraphQL API for a Salesf
 
 ----
 
-Back in 2016 [Robin Ricard](https://twitter.com/r_ricard) and I presented at Dreamforce a talk about how to leverage GraphQL to query Salesforce data ([recording](https://www.youtube.com/watch?v=efEBcCtfARo)). For this presentation, we built a demo application for browsing your favorite movies. The data was stored on Salesforce as custom object. This was built on React native to retrieve the data by the intermediary of a GraphQL endpoint hosted on Heroku.
+Back in 2016 [Robin Ricard](https://twitter.com/r_ricard) and I presented at Dreamforce a talk about how to leverage GraphQL to query Salesforce data ([recording](https://www.youtube.com/watch?v=efEBcCtfARo)). For this presentation, we built a demo application for browsing your favorite movies. The data was stored on Salesforce as custom objects. This was built on React native to retrieve the data by the intermediary of a GraphQL endpoint hosted on Heroku.
 
 For this demo, we had to handcraft [a GraphQL schema](https://github.com/rricard/movieql/blob/cfd5e6ba8a4f319b18517be0ecc5e92f87878c5e/data/definitions.js#L3-L65) and hardcode [SOQL queries](https://github.com/rricard/movieql/blob/cfd5e6ba8a4f319b18517be0ecc5e92f87878c5e/data/loaders.js#L26-L39) to retrieve the data on our Salesforce org. This approach works great for a demo application, but is unmaintainable in complex applications:
 
@@ -18,7 +18,7 @@ For this demo, we had to handcraft [a GraphQL schema](https://github.com/rricard
 
 The GraphQL ecosystem is moving fast, and a lot happened over last 5 years. We have seen a proliferation of tools making its adoption easier. I am amazed how easy it is today to create a GraphQL API. Projects like [PostGraphile](https://www.graphile.org/) or [Hasura GraphQL Engine](https://hasura.io/docs/latest/graphql/core/index.html) generates a GraphQL endpoint on top of a SQL database with minimal configurations. Those tools connect to the database of your choice (eg. Postgres, MySQL) and generate a GraphQL API based on the DB schema.
 
-Taking a step back, Salesforce is a database under steroids. If we are capable to generate GraphQL APIs on top of industry standard databases, could we replicate this with Salesforce? Is it possible to generate a GraphQL API based on the Salesforce schema?
+Taking a step back, Salesforce is a database under steroids. If we are capable to generate GraphQL APIs on top of industry-standard databases, could we replicate this with Salesforce? Is it possible to generate a GraphQL API based on the Salesforce schema?
 
 During the winter break, I started working on a prototype of such a service. The source code is located at [pmdartus/sfdc-graphql-endpoint](https://github.com/pmdartus/sfdc-graphql-endpoint). In the rest of this blog post, I will present at a high level how this service works, how to generate a GraphQL schema from Salesforce metadata, and finally how to efficiently query Salesforce APIs to resolve GraphQL queries.
 
@@ -30,7 +30,7 @@ At a high level, the GraphQL server is a standalone application server sitting b
 
 {% image "./overview.png", "Architecture overview", "100vw" %}
 
-After starting the app, the server retrieves the Salesforce org metadata to build a GraphQL schema. The schema is currently cached in memory for the entire life time of the application. Once done, the server can start processing GraphQL queries. The incoming queries are validated against the GraphQL schema, and the resolved by querying Salesforce via the REST APIs.
+After starting the app, the server retrieves the Salesforce org metadata to build a GraphQL schema. The schema is currently cached in memory for the entire life-time of the application. Once done, the server can start processing GraphQL queries. The incoming queries are validated against the GraphQL schema, and resolved by querying Salesforce via the REST APIs.
 
 ### Generating a GraphQL schema using Salesforce metadata
 
@@ -55,10 +55,10 @@ The SObject metadata can be retrieved using the [describeSOjbect](https://develo
 
 Each SObject can be represented via a [GraphQL object types](https://graphql.org/learn/schema/#object-types-and-fields). SObject fields types can be grouped into 2 buckets: scalar fields and relationship fields.
 
--   GraphQL comes with a predefined list of [scalar types](https://graphql.org/learn/schema/#scalar-types). Scalars represent leaf values in the graph. This list includes: `Int`, `Float`, `String`, `Boolean` and `ID`. However, Salesforce offers a lot more [field types](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/field_types.htm), eg. `Date`, `Phone` or `Currency`. Fortunately, GraphQL allows the definition of custom scalar. A custom GraphQL scalar type can be created for each of the missing Salesforce scalar field types.
+-   GraphQL comes with a predefined list of [scalar types](https://graphql.org/learn/schema/#scalar-types). Scalars represent leaf values in the graph. This list includes: `Int`, `Float`, `String`, `Boolean`, and `ID`. However, Salesforce offers a lot more [field types](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/field_types.htm), eg. `Date`, `Phone`, or `Currency`. Fortunately, GraphQL allows the definition of custom scalar. A custom GraphQL scalar type can be created for each of the missing Salesforce scalar field types.
 -   GraphQL type system allows defining fields referring to other GraphQL object types in the schema. Salesforce lookups and master-detail relationships can be represented in GraphQL by creating a field and setting its type to the associated GraphQL object type.
 
-Finally the GraphQL schema should define a [`Query` type](https://graphql.org/learn/schema/#the-query-and-mutation-types). This type defines the entry points into the graph. For each exposed SObject, we generate 2 fields the `Query` type:
+Finally, the GraphQL schema should define a [`Query` type](https://graphql.org/learn/schema/#the-query-and-mutation-types). This type defines the entry points into the graph. For each exposed SObject, we generate 2 fields the `Query` type:
 
 -   a field named `[SObject_name]_by_id` returning a single record. This field accepts a required `ID` argument.
 -   a field named `[SObject]` returning a list of records. This field accepts optional arguments limit, filter, and order the list.
@@ -117,7 +117,7 @@ query {
         Name
         Bio
         Role__r {
-            # retrieve the roles for each actors (N queries for N actors)
+            # retrieve the roles for each actor (N queries for N actors)
             Name
         }
     }
@@ -138,9 +138,11 @@ GraphQL queries are parsed and transformed into an in-memory representation call
 
 The code related to SOQL AST generation and serialization can be found under [`src/graphql/resolvers.ts`](https://github.com/pmdartus/sfdc-graphql-endpoint/blob/6fbe50366a8d6392a77e6b58bfb0689bf1680c5f/src/graphql/resolvers.ts) and [`src/sfdc/soql.ts`](https://github.com/pmdartus/sfdc-graphql-endpoint/blob/6fbe50366a8d6392a77e6b58bfb0689bf1680c5f/src/sfdc/soql.ts).
 
-### Processing the SOQL result
+### Processing the SOQL query result
 
-> TODO
+The Salesforce [Query REST API](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_query.htm) endpoint, executes a SOQL query and returns an array of records. Prior sending the GraphQL response, the service transforms the record array to match with the GraphQL schema. Luckily, the SOQL response shape is quite similar to the GraphQL schema, with record lookups represented as nested objects in the response.
+
+The GraphQL resolvers can be used to map the SOQL response to GraphQL response. Those resolvers are assigned to each GraphQL object type field during schema generation: [scalar resolver](https://github.com/pmdartus/sfdc-graphql-endpoint/blob/6fbe50366a8d6392a77e6b58bfb0689bf1680c5f/src/graphql/schema.ts#L106-L108), [lookup resolver](https://github.com/pmdartus/sfdc-graphql-endpoint/blob/6fbe50366a8d6392a77e6b58bfb0689bf1680c5f/src/graphql/schema.ts#L106-L108), and master-detail [relationships resolver](https://github.com/pmdartus/sfdc-graphql-endpoint/blob/6fbe50366a8d6392a77e6b58bfb0689bf1680c5f/src/graphql/schema.ts#L156-L159).
 
 ## Closing words
 
