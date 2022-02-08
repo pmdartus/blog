@@ -1,14 +1,14 @@
 const fs = require('fs');
+const path = require('path');
 const cp = require('child_process');
 
 const sass = require('sass');
 const dateFns = require('date-fns');
 
 const pluginImage = require('@11ty/eleventy-img');
-const pluginRss = require("@11ty/eleventy-plugin-rss");
+const pluginRss = require('@11ty/eleventy-plugin-rss');
 const pluginNav = require('@11ty/eleventy-navigation');
 const pluginSyntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
-
 
 const markdownIt = require('markdown-it');
 const markdownItAnchor = require('markdown-it-anchor');
@@ -45,8 +45,9 @@ function getLastModifiedDate(path) {
 }
 
 async function imageShortCode(src, alt, sizes) {
-    const metadata = await pluginImage(src, {
-        widths: [300, 600, null],
+    const resolvedPath = path.resolve(path.dirname(this.page.inputPath), src);
+    const metadata = await pluginImage(resolvedPath, {
+        widths: [300, 600, 900, null],
         formats: ['avif', 'webp', 'jpeg'],
         outputDir: '_site/img',
     });
@@ -111,7 +112,7 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.addPlugin(pluginSyntaxHighlight);
 
     eleventyConfig.addPassthroughCopy({
-        'static': '.',
+        static: '.',
     });
 
     setupCustomFilters(eleventyConfig);

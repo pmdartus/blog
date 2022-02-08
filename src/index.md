@@ -9,7 +9,7 @@ eleventyNavigation:
 
 # About me
 
-{% image "./static/img/profile-picture-small.jpg", "Profile picture", "100vw" %}
+{% image "../static/img/profile-picture-small.jpg", "Profile picture", "100vw" %}
 
 Hi! I am Pierre-Marie Dartus, software engineer based out of Paris, France.
 
