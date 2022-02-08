@@ -4,7 +4,11 @@ date: 2022-01-06
 description: 'Exploring how to automatically generate a GraphQL API for a Salesforce organization.'
 ---
 
-Back in 2016 [Robin Ricard](https://twitter.com/r_ricard) and I presented at Dreamforce a talk about how to leverage GraphQL to query Salesforce data ([recording](https://www.youtube.com/watch?v=efEBcCtfARo)). For this presentation, we built a demo application for browsing your favorite movies. The data was stored on Salesforce as custom object. The was built on React native retrieve the data by the intermediary of GraphQL endpoint hosted on Heroku.
+> 📣 Here is a small announcement before diving into this post, **Salesforce is currently working on an official GraphQL endpoint**. As of this writing, Salesforce hasn't yet released any public documentation. That said, the official GraphQL endpoint is quite similar to the one presented in this post, with some other nice features 🎉. You can contact [Ben Sklar](mailto:bsklar@salesforce.com) if you would like to try it out.
+
+----
+
+Back in 2016 [Robin Ricard](https://twitter.com/r_ricard) and I presented at Dreamforce a talk about how to leverage GraphQL to query Salesforce data ([recording](https://www.youtube.com/watch?v=efEBcCtfARo)). For this presentation, we built a demo application for browsing your favorite movies. The data was stored on Salesforce as custom object. This was built on React native to retrieve the data by the intermediary of a GraphQL endpoint hosted on Heroku.
 
 For this demo, we had to handcraft [a GraphQL schema](https://github.com/rricard/movieql/blob/cfd5e6ba8a4f319b18517be0ecc5e92f87878c5e/data/definitions.js#L3-L65) and hardcode [SOQL queries](https://github.com/rricard/movieql/blob/cfd5e6ba8a4f319b18517be0ecc5e92f87878c5e/data/loaders.js#L26-L39) to retrieve the data on our Salesforce org. This approach works great for a demo application, but is unmaintainable in complex applications:
 
@@ -12,7 +16,7 @@ For this demo, we had to handcraft [a GraphQL schema](https://github.com/rricard
 -   exposing new types on the schema requires adding new SOQL queries or updating the existing ones
 -   no out-of-the-box support for filtering and sorting
 
-The GraphQL ecosystem is moving fast, and lot happened over last 5 years. We have seen a proliferation of tools making its adoption easier. I am amazed how easy it is today to create a GraphQL API. Projects like [PostGraphile](https://www.graphile.org/) or [Hasura GraphQL Engine](https://hasura.io/docs/latest/graphql/core/index.html) generates a GraphQL endpoint on top of a SQL database with minimal configurations. Those tools connect to the database of your choice (eg. Postgres, MySQL) and generate a GraphQL API based on the DB schema.
+The GraphQL ecosystem is moving fast, and a lot happened over last 5 years. We have seen a proliferation of tools making its adoption easier. I am amazed how easy it is today to create a GraphQL API. Projects like [PostGraphile](https://www.graphile.org/) or [Hasura GraphQL Engine](https://hasura.io/docs/latest/graphql/core/index.html) generates a GraphQL endpoint on top of a SQL database with minimal configurations. Those tools connect to the database of your choice (eg. Postgres, MySQL) and generate a GraphQL API based on the DB schema.
 
 Taking a step back, Salesforce is a database under steroids. If we are capable to generate GraphQL APIs on top of industry standard databases, could we replicate this with Salesforce? Is it possible to generate a GraphQL API based on the Salesforce schema?
 
@@ -30,7 +34,7 @@ After starting the app, the server retrieves the Salesforce org metadata to buil
 
 ### Generating a GraphQL schema using Salesforce metadata
 
-[Schema](https://graphql.org/learn/schema/) is a core concept of GraphQL. It defines the data model exposed by the endpoint. Typical the schema is defined via the schema definition language (SDL). It is a textual representation of the data model.
+[Schema](https://graphql.org/learn/schema/) is a core concept of GraphQL. It defines the data model exposed by the endpoint. Typically the schema is defined via the schema definition language (SDL). It is a textual representation of the data model.
 
 ```graphql
 type Actor__c {
@@ -98,7 +102,7 @@ type Query {
 
 The source code for the GraphQL schema generation can be found in [`src/graphql/schema.ts`](https://github.com/pmdartus/sfdc-graphql-endpoint/blob/6fbe50366a8d6392a77e6b58bfb0689bf1680c5f/src/graphql/schema.ts) and [`src/graphql/types.ts`](https://github.com/pmdartus/sfdc-graphql-endpoint/blob/6fbe50366a8d6392a77e6b58bfb0689bf1680c5f/src/graphql/types.ts).
 
-### Executing GraphQL query
+### The N+1 query problem
 
 Now that we have a better idea of how to generate the GraphQL schema, let's dive into the actual query execution.
 
@@ -124,6 +128,8 @@ In the case above, the server needs to do `1` request to Salesforce to retrieve 
 
 A common answer to the GraphQL N+1 problem is to use batching. Instead of fetching each role independently, the roles for all the actors could be fetched in a single roundtrip by combining all the requests into a single one. Utilities like [DataLoader](https://github.com/graphql/dataloader) help you achieve this.
 
+### Transforming GraphQL queries to SOQL
+
 Great we are making progress, from 51 requests are now down to 2 requests to Salesforce to resolve the GraphQL query. That said, we can optimize this further by changing the approach we are taking for data fetching. Instead of making several roundtrips, we can compile the GraphQL incoming query as a SOQL query. This approach allows resolving data at any depth with a single SOQL query.
 
 {% image "./ast-generation.png", "Query compilation: GraphQL query -> GraphQL AST -> SOQL AST -> SOQL query", "100vw" %}
@@ -132,12 +138,14 @@ GraphQL queries are parsed and transformed into an in-memory representation call
 
 The code related to SOQL AST generation and serialization can be found under [`src/graphql/resolvers.ts`](https://github.com/pmdartus/sfdc-graphql-endpoint/blob/6fbe50366a8d6392a77e6b58bfb0689bf1680c5f/src/graphql/resolvers.ts) and [`src/sfdc/soql.ts`](https://github.com/pmdartus/sfdc-graphql-endpoint/blob/6fbe50366a8d6392a77e6b58bfb0689bf1680c5f/src/sfdc/soql.ts).
 
+### Processing the SOQL result
+
+> TODO
+
 ## Closing words
 
 I am quite excited by the new capabilities GraphQL has to offer. I can foresee it changing the way developers build applications on top of the Salesforce platform. By embracing a standard API language, developers will be capable to leverage projects and tools created by the GraphQL community.
 
-This proof-of-concept is far from being production-ready. It is missing some key features including authentication/authorization, object/field-level security, polymorphic relationships support, mutation. But it's a good starting point.
+This proof-of-concept is far from being production-ready. It is missing some key features including authentication/authorization, object/field-level security, polymorphic relationships support, and mutation. But it's a good starting point.
 
 As a follow-up, I am interested to see how the generated GraphQL schema could be extended to incorporate custom logic. For example, extending generated GraphQL objects with custom fields baked by Apex and Salesforce functions. Another interesting idea worth exploring is how [schema stitching](https://www.graphql-tools.com/docs/schema-stitching/stitch-combining-schemas) could be used to query multiple GraphQL services.
-
-> 📣 By the way, **Salesforce is currently working on an official GraphQL endpoint**. As of this writing, Salesforce hasn't released yet any public documentation. That said, the official GraphQL endpoint is quite similar to the one described in this post, with some other nice features 🎉. You can contact [Ben Sklar](mailto:bsklar@salesforce.com) if you would like to try it out.
