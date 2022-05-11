@@ -1,6 +1,6 @@
-# pmdartus.github.io
+# Personal website and blog
 
-Personal website and blog.
+Live at [https://pm.dartus.fr](https://pm.dartus.fr).
 
 ```sh
 npm install
