@@ -1,8 +1,6 @@
 {
-  "name": "pmdartus.github.io",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "@pmdartus/blog",
+  "private": true,
   "scripts": {
     "clean": "rm -rf _site/",
     "prestart": "npm run clean",
