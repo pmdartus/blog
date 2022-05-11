@@ -27,3 +27,13 @@ I primarily work on the web platform and JavaScript runtimes APIs, developer too
 -   [rcast](https://github.com/pmdartus/rcast): PWA podcast player written with LWC
 -   [snapline](https://github.com/pmdartus/snapline): Convert screenshots stored in devtool performance trace into GIFs
 -   [speedline](https://github.com/paulirish/speedline): Calculate the speed index from devtools performance trace
+
+## Talks
+
+{% for talk in talks %}
+- {{talk.year}} - **{{ talk.title }}**
+  {%- if talk.event %} _@ {{talk.event}}_{% endif %}
+  [{%- for link in talk.links -%}
+    [{{link[0]}}]({{link[1]}}){%- if forloop.last == false %} / {% endif -%}
+  {%- endfor -%}]
+{%- endfor -%}
