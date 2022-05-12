@@ -44,7 +44,7 @@ function getLastModifiedDate(path) {
     return lastModifiedDate;
 }
 
-async function imageShortCode(src, alt, sizes) {
+async function imageShortCode(src, alt, sizes, loading) {
     const resolvedPath = path.resolve(path.dirname(this.page.inputPath), src);
     const metadata = await pluginImage(resolvedPath, {
         widths: [300, 600, 900, null],
@@ -55,7 +55,7 @@ async function imageShortCode(src, alt, sizes) {
     return pluginImage.generateHTML(metadata, {
         alt,
         sizes,
-        loading: 'lazy',
+        loading: loading ?? 'lazy',
         decoding: 'async',
     });
 }
