@@ -40,4 +40,11 @@
     "links": {
         "slides": "/content/slides/2022-Whats_New_with_Lightning_Web_Components.pdf"
     }
+}, {
+    "year": "2023",
+    "title": "The Art of Analyzing Front-end Performance",
+    "event": "Meetup Takima",
+    "links": {
+        "slides": "https://docs.google.com/presentation/d/1eyITq0zur9ImiCi9yQGB5xdzRTmo3a51bCeFh0U_nQk"
+    }
 }]
