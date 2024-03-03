@@ -28,8 +28,7 @@ jobs:
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ variables.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ variables.CLOUDFLARE_PROJECT_NAME }}
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ vars.CLOUDFLARE_PROJECT_NAME }}
           directory: _build
           wranglerVersion: '3'
