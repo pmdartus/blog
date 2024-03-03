@@ -3,7 +3,7 @@
     "title": "Leverage GraphQL to Efficiently Query Data Relationships",
     "event": "Dreamforce'16",
     "links": {
-        "slides": "/content/slides/2016-Leverage_GraphQL_to_Efficiently_Query_Data_Relationships.pdf",
+        "slides": "https://drive.google.com/file/d/1QPJ6ymIkcTrnm2EXZVV52TRouRNcfwy_/view?usp=sharing",
         "recording": "https://www.youtube.com/watch?v=efEBcCtfARo"
     }
 }, {
@@ -11,34 +11,34 @@
     "title": "Aura performance analysis & Best practices",
     "event": "Paris Salesforce Developer group",
     "links": {
-        "slides": "/content/slides/2017-Aura_Performance_Analysis_and_Best_Practices.pdf"
+        "slides": "https://drive.google.com/file/d/17tHo68FgZiJwT1xG3rYJI7uMdy2OqszX/view?usp=sharing"
     }
 }, {
     "year": "2019",
     "title": "Build Lightning Web Components that Run Anywhere",
     "event": "TrailheadDX'19",
     "links": {
-        "slides": "/content/slides/2019-Build_Lightning_Web_Components_that_Run_Anywhere.pdf"
+        "slides": "https://drive.google.com/file/d/1Cwlkb9qt31vdafsVlIuyMyPBkDyL6Tyq/view?usp=sharing"
     }
 }, {
     "year": "2019",
     "title": "How Does Salesforce Build Lightning Web Components?",
     "event": "Salesforce Paris World Tour",
     "links": {
-        "slides": "/content/slides/2019-How_Does_Salesforce_Build_Lightning_Web_Components.pdf"
+        "slides": "https://drive.google.com/file/d/1c2vqFfAIA1e0y0pVf56gYW4KNYcAacgu/view?usp=sharing"
     }
 }, {
     "year": "2020",
     "title": "How to tame your JavaScript code using ASTs",
     "links": {
-        "slides": "/content/slides/2020-How_to_tame_your_JavaScript_code_using_ASTs.pdf"
+        "slides": "https://drive.google.com/file/d/1ISwbeKt26c3Jv0lX7mgiyQD-watRkofL/view?usp=sharing"
     }
 }, {
     "year": "2022",
     "title": "What's new with Lightning Web Components?",
     "event": "TrailblazerDX'22",
     "links": {
-        "slides": "/content/slides/2022-Whats_New_with_Lightning_Web_Components.pdf"
+        "slides": "https://drive.google.com/file/d/1IISTvQrjLSOFKCXdoKIUtsrjwVDIw2fI/view?usp=sharing"
     }
 }, {
     "year": "2023",
