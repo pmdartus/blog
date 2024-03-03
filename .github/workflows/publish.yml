@@ -3,9 +3,14 @@ on: [push]
 jobs:
   publish:
     runs-on: ubuntu-latest
+    
     permissions:
       contents: read
       deployments: write
+
+    environment:
+      name: production
+
     name: Publish to Cloudflare Pages
     steps:
       - name: Checkout
@@ -30,5 +35,6 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           projectName: ${{ vars.CLOUDFLARE_PROJECT_NAME }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           directory: _build
           wranglerVersion: '3'
