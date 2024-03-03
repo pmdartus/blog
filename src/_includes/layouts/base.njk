@@ -28,17 +28,6 @@
 
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for pm.dartus.fr" href="/feed.xml" />
 
-    {% if env.isProd %}
-      <script async src="https://www.googletagmanager.com/gtag/js?id={{ metadata.googleAnalyticsId }}"></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', '{{ metadata.googleAnalyticsId }}');
-      </script>
-    {% endif %}
-
     <style>
         {% scss 'scss/index.scss' %}
     </style>
