@@ -1,0 +1,11 @@
+# Mark all images as immutable
+/img/*
+    Cache-Control: public, max-age=604800, immutable
+
+# Cache fonts for 1 day and revalidate for 1 month.
+/fonts/*
+    Cache-Control: public, max-age=86400, stale-while-revalidate=2592000 
+
+# Prevent pages.dev to show in search results
+https://:project.pages.dev/*
+    X-Robots-Tag: noindex
