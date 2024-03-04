@@ -14,9 +14,6 @@ jobs:
       contents: read
       deployments: write
 
-    environment:
-      name: production
-
     name: Publish to Cloudflare Pages
     steps:
       - name: Checkout
