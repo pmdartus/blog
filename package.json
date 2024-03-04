@@ -4,9 +4,10 @@
   "scripts": {
     "clean": "rm -rf _site/",
     "prestart": "npm run clean",
-    "start": "eleventy --serve",
+    "dev": "eleventy --serve",
     "prebuild": "npm run clean",
-    "build": "eleventy"
+    "build": "eleventy",
+    "serve": "wrangler pages dev _site"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +22,7 @@
     "markdown-it-anchor": "^8.4.1",
     "markdown-it-container": "^3.0.0",
     "markdown-it-footnote": "^3.0.3",
-    "sass": "^1.45.0"
+    "sass": "^1.45.0",
+    "wrangler": "^3.30.1"
   }
 }

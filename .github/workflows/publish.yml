@@ -14,9 +14,6 @@ jobs:
       contents: read
       deployments: write
 
-    environment:
-      name: production
-
     name: Publish to Cloudflare Pages
     steps:
       - name: Checkout
@@ -43,5 +40,4 @@ jobs:
           projectName: ${{ vars.CLOUDFLARE_PROJECT_NAME }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           directory: _site
-          branch: main
           wranglerVersion: '3'
