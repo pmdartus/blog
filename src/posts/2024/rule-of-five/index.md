@@ -22,7 +22,7 @@ But what if I told you that you can gain valuable insights from a mere five obse
 
 In his book [“How to Measure Anything - Finding the Value of Intangibles in Business”](https://hubbardresearch.com/publications/how-to-measure-anything-book/), Douglas Hubbard presents a rule of thumb called the “Rule of Five”, which is defined as follows.
 
-> **\*Rule of Five:** There is a 93.75% chance that the median of a population is between the smallest and largest values in any random sample of five from that population.\*
+> **Rule of Five:** There is a 93.75% chance that the median of a population is between the smallest and largest values in any random sample of five from that population.
 
 In other words, there's a greater than 90% probability that the true population median lies between the minimum and maximum values of five randomly selected observations.
 
@@ -76,12 +76,16 @@ With the uniform distribution, the success rate is **93.82%**, very close to the
 
 Now that we've seen it work with a simple uniform distribution, let's test it against other known data distributions:
 
-|                         Dataset                          |                                          Distribution                                          |                                   Cumulative Success Rate                                    |
-| :------------------------------------------------------: | :--------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: |
-|   **Normal distribution** <br/> (success rate: 93.68%)   |     {% image "./normal_density.png", "Normal probability density distribution", "100vw" %}     |     {% image "./normal_success-rate.png", "Normal Rule of Five success rate", "100vw" %}     |
-| **Triangular distribution** </br> (success rate: 93.64%) | {% image "./triangular_density.png", "Triangular probability density distribution", "100vw" %} | {% image "./triangular_success-rate.png", "Triangular Rule of Five success rate", "100vw" %} |
+**Normal distribution:** (success rate: 93.68%)
+| Distribution | Cumulative Success Rate |
+| :--------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: |
+| {% image "./normal_density.png", "Normal probability density distribution", "50vw" %} | {% image "./normal_success-rate.png", "Normal Rule of Five success rate", "50vw" %} |
 
-<br/>
+**Triangular distribution** (success rate: 93.64%)
+
+|                                          Distribution                                          |                                   Cumulative Success Rate                                    |
+| :--------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: |
+| {% image "./triangular_density.png", "Triangular probability density distribution", "100vw" %} | {% image "./triangular_success-rate.png", "Triangular Rule of Five success rate", "100vw" %} |
 
 For those still skeptical (like me), let's run the experiment on real-world data:
 
@@ -89,13 +93,23 @@ For those still skeptical (like me), let's run the experiment on real-world data
 - Hourly energy consumption in the state of Virginia ([dataset](https://www.kaggle.com/datasets/robikscube/hourly-energy-consumption) - 116,189 entries)
 - Heart rate of a Fitbit user ([dataset](https://www.kaggle.com/datasets/arashnic/fitbit) - 285,461 entries)
 
-|                       Dataset                       | Distribution | Cumulative Success Rate |
-| :-------------------------------------------------: | :----------: | :---------------------: |
-|   **Avocado Price** <br/> (success rate: 93.64%)    | {% image "./avocado_density.png", "Avocado price probability density distribution", "100vw" %}     |     {% image "./avocado_success-rate.png", "Avocado price Rule of Five success rate", "100vw" %}     |
-| **Energy Consumption** <br/> (success rate: 93.57%) | {% image "./energy_density.png", "Energy price probability density distribution", "100vw" %}     |     {% image "./energy_success-rate.png", "Energy price Rule of Five success rate", "100vw" %}     |
-|     **Heart Rate** <br/> (success rate: 92.71%)     | {% image "./heart-rate_density.png", "Heart rate probability density distribution", "100vw" %}     |     {% image "./heart-rate_success-rate.png", "Heart rate Rule of Five success rate", "100vw" %}     |
+**Avocado Price** (success rate: 93.64%)
 
-<br/>
+|                                          Distribution                                          |                                   Cumulative Success Rate                                    |
+| :--------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: |
+| {% image "./avocado_density.png", "Avocado price probability density distribution", "100vw" %} | {% image "./avocado_success-rate.png", "Avocado price Rule of Five success rate", "100vw" %} |
+
+**Energy Consumption** (success rate: 93.57%)
+
+|                                         Distribution                                         |                                  Cumulative Success Rate                                   |
+| :------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: |
+| {% image "./energy_density.png", "Energy price probability density distribution", "100vw" %} | {% image "./energy_success-rate.png", "Energy price Rule of Five success rate", "100vw" %} |
+
+**Heart Rate** (success rate: 92.71%)
+
+|                                          Distribution                                          |                                   Cumulative Success Rate                                    |
+| :--------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: |
+| {% image "./heart-rate_density.png", "Heart rate probability density distribution", "100vw" %} | {% image "./heart-rate_success-rate.png", "Heart rate Rule of Five success rate", "100vw" %} |
 
 In other words, think twice the next time you consider buying an Apple Watch to monitor your median heart rate. You might be better off taking your pulse five times throughout the day. Also if you want to try it out yourself, you can find the code for the analysis at this [link](https://github.com/pmdartus/rule-of-five).
 
@@ -105,8 +119,9 @@ While it may seem counter-intuitive at first, it appears that the "Rule of Five"
 
 With the median being the midpoint of a given dataset, there is an equal probability of picking a random value below or above the median value. Similar to flipping a coin, there is a 50/50 chance of getting heads or tails. Applying the "Rule of Five" and picking five random values above the median is like incorrectly predicting the coin side five times in a row. There is a 3.125% probability of such an event occurring:
 
+<!-- Converted using: https://temml.org/ -->
 <!-- P(\text{all observations are above the median}) = (\dfrac{1}{2})^5 = 0.03125 -->
-<math display="block" class="tml-display" style="display:block math;">
+<math class="overflow-wrapper">
   <mrow>
     <mi>P</mi>
     <mo form="prefix" stretchy="false">(</mo>
@@ -129,15 +144,12 @@ With the median being the midpoint of a given dataset, there is an equal probabi
   </mrow>
 </math>
 
-<br/>
-
 The same reasoning can be applied to picking five random samples from the population and having all of them below the median value. There is also a 3.125% chance that all five observations are below the median.
 
 Since _“all observations are *above* the median”_ and _“all observations are *below* the median”_ are mutually exclusive, the probability of the union, _“all observations either are *above or below* the median”,_ is equal to the total probability of each independent event: 6.25%
 
-<!-- Converted using: https://temml.org/ -->
 <!-- P(\text{all observation are above or below the median}) = 0.03125 + 0.03125 = 0.0625 -->
-<math display="block" class="tml-display" style="display:block math;">
+<math class="overflow-wrapper">
   <mrow>
     <mi>P</mi>
     <mo form="prefix" stretchy="false">(</mo>
@@ -152,12 +164,10 @@ Since _“all observations are *above* the median”_ and _“all observations a
   </mrow>
 </math>
 
-<br/>
-
 This is how the "Rule of Five" can assert that there is a 93.75% chance for the population median to be within the minimum and maximum values of the five-item sample:
 
 <!-- P(\text{median is between sample's min and max}) = 1 - 0.0625 = 0.9375 -->
-<math display="block" class="tml-display" style="display:block math;">
+<math class="overflow-wrapper">
   <mrow>
     <mi>P</mi>
     <mo form="prefix" stretchy="false">(</mo>
@@ -176,11 +186,13 @@ This is how the "Rule of Five" can assert that there is a 93.75% chance for the 
 
 You may be wondering why the number five was chosen for the "Rule of Five" instead of four or six. I believe that Douglas Hubbard, the author of this rule, picked the number five for two reasons. First, it is a memorable number. But most importantly, it is the smallest sample size with a probability greater than 90%. When it comes to estimating something, having a 90% confidence about is usually sufficient.
 
+<div class="overflow-wrapper">
+
 | Sample Size |   2    |   3    |   4    |   **5**    |   6    |   7    |   8    |
 | :---------: | :----: | :----: | :----: | :--------: | :----: | :----: | :----: |
 | Probability | 50.00% | 75.00% | 87.50% | **93.75%** | 96.88% | 98.44% | 99.22% |
 
-<br/>
+</div>
 
 Before concluding, something that I haven’t talked about much in this article is the sample selection. This “Rule of Five” only works when the selection samples are truly random. Don’t try to estimate the median cheese consumption per capita worldwide by surveying your French friends.
 

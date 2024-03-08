@@ -148,11 +148,23 @@ table {
     text-align: justify;
     width: 100%;
     border-collapse: collapse;
+    margin-bottom: 2.5rem;
+
+    img {
+        margin-bottom: unset;
+    }
 }
 
 td, th {
     padding: 0.5em;
     border-bottom: 1px solid $color-bg-alt;
+}
+
+/* Math */
+
+math {
+    display: block math;
+    margin-bottom: 2.5rem;
 }
 
 /* Buttons, forms and input */
