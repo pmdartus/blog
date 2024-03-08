@@ -106,19 +106,71 @@ While it may seem counter-intuitive at first, it appears that the "Rule of Five"
 With the median being the midpoint of a given dataset, there is an equal probability of picking a random value below or above the median value. Similar to flipping a coin, there is a 50/50 chance of getting heads or tails. Applying the "Rule of Five" and picking five random values above the median is like incorrectly predicting the coin side five times in a row. There is a 3.125% probability of such an event occurring:
 
 <!-- P(\text{all observations are above the median}) = (\dfrac{1}{2})^5 = 0.03125 -->
-{% image "./equation-1.png", "Probability all observations are above the median", "100vw" %}
+<math display="block" class="tml-display" style="display:block math;">
+  <mrow>
+    <mi>P</mi>
+    <mo form="prefix" stretchy="false">(</mo>
+    <mtext>all observations are above the median</mtext>
+    <mo form="postfix" stretchy="false">)</mo>
+    <mo>=</mo>
+    <mo form="prefix" stretchy="false">(</mo>
+    <mstyle displaystyle="true" scriptlevel="0">
+      <mfrac>
+        <mn>1</mn>
+        <mn>2</mn>
+      </mfrac>
+    </mstyle>
+    <msup>
+      <mo form="postfix" stretchy="false">)</mo>
+      <mn>5</mn>
+    </msup>
+    <mo>=</mo>
+    <mn>0.03125</mn>
+  </mrow>
+</math>
+
+<br/>
 
 The same reasoning can be applied to picking five random samples from the population and having all of them below the median value. There is also a 3.125% chance that all five observations are below the median.
 
 Since _“all observations are *above* the median”_ and _“all observations are *below* the median”_ are mutually exclusive, the probability of the union, _“all observations either are *above or below* the median”,_ is equal to the total probability of each independent event: 6.25%
 
+<!-- Converted using: https://temml.org/ -->
 <!-- P(\text{all observation are above or below the median}) = 0.03125 + 0.03125 = 0.0625 -->
-{% image "./equation-2.png", "Probability all observation are above or below the median", "100vw" %}
+<math display="block" class="tml-display" style="display:block math;">
+  <mrow>
+    <mi>P</mi>
+    <mo form="prefix" stretchy="false">(</mo>
+    <mtext>all observation are above or below the median</mtext>
+    <mo form="postfix" stretchy="false">)</mo>
+    <mo>=</mo>
+    <mn>0.03125</mn>
+    <mo>+</mo>
+    <mn>0.03125</mn>
+    <mo>=</mo>
+    <mn>0.0625</mn>
+  </mrow>
+</math>
+
+<br/>
 
 This is how the "Rule of Five" can assert that there is a 93.75% chance for the population median to be within the minimum and maximum values of the five-item sample:
 
 <!-- P(\text{median is between sample's min and max}) = 1 - 0.0625 = 0.9375 -->
-{% image "./equation-3.png", "Probability median is between sample's min and max", "100vw" %}
+<math display="block" class="tml-display" style="display:block math;">
+  <mrow>
+    <mi>P</mi>
+    <mo form="prefix" stretchy="false">(</mo>
+    <mtext>median is between sample’s min and max</mtext>
+    <mo form="postfix" stretchy="false">)</mo>
+    <mo>=</mo>
+    <mn>1</mn>
+    <mo>−</mo>
+    <mn>0.0625</mn>
+    <mo>=</mo>
+    <mn>0.9375</mn>
+  </mrow>
+</math>
 
 ## Conclusion
 
