@@ -1,0 +1,58 @@
+---
+import { Image } from "astro:assets";
+
+import Layout from "../layouts/Layout.astro";
+import RecentPosts from "../components/RecentPosts.astro";
+import SocialAccounts from "../components/SocialAccounts.astro";
+
+import profilePicture from "../assets/profile-picture.jpg";
+---
+
+<Layout title="Blog">
+  <h1>Hi, I am Pierre-Marie Dartus 👋</h1>
+  
+  <div class="profile-section">
+    <Image
+      class="profile-picture"
+      src={profilePicture}
+      alt="Profile Picture"
+      width={150}
+      height={150}
+      densities={[2, 3]}
+    />
+  </div>
+
+  <p>
+    I am software engineer based out of Paris, France. Currently working at
+    Salesforce as a Software Architect, I work on tools and frameworks for
+    developers to build and scale the next generation of web applications on the
+    Salesforce platform.
+  </p>
+  
+  <p>
+    Find me on: <SocialAccounts />
+  </p>
+
+  <h2>Recent Posts</h2>
+  <RecentPosts limit={3} showDescription={false} />
+</Layout>
+
+<style>
+  h1 {
+    text-wrap: balance;
+  }
+
+  .profile-picture {
+    border-radius: var(--border-radius);
+  }
+
+  .profile-section {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    & > * {
+      margin: 0;
+    }
+  }
+</style>

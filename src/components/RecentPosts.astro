@@ -1,0 +1,63 @@
+---
+import FormattedDate from "./FormattedDate.astro";
+
+import { getPosts } from "../utils/data";
+
+export interface Props {
+  limit?: number;
+  showDescription?: boolean;
+}
+
+const { limit, showDescription } = Astro.props;
+
+const posts = await getPosts({
+  limit: limit,
+});
+---
+
+<ol>
+  {
+    posts.map((post) => (
+      <li>
+        <div class="title">
+          <FormattedDate date={post.data.publishDate} class="time" />
+          <h3>
+            <a href={`/posts/${post.slug}`}>{post.data.title}</a>
+          </h3>
+        </div>
+
+        {showDescription && <p>{post.data.description}</p>}
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  ol {
+    list-style: none;
+    padding: 0;
+  }
+
+  .title {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+
+    * {
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .time {
+      color: var(--color-text-alt);
+      font-size: 0.9em;
+      
+      /* Set min-width to the min number of characters a date contains. */
+      min-width: 11ch;
+    }
+  }
+
+  p {
+    margin: 0 0 1.5em 0;
+  }
+</style>

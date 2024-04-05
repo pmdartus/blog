@@ -1,0 +1,27 @@
+---
+interface Props {
+  name: string;
+  class?: string;
+}
+
+const { name: iconName, ...rest } = Astro.props;
+const { default: svgString } = await import(`../assets/icons/${iconName}.svg?raw`);
+---
+
+<span {...rest}>
+  <Fragment set:html={svgString} />
+</span>
+
+<style>
+  span {
+    stroke-width: 1.5;
+    fill: currentColor;
+  }
+  
+  span :global(svg) {
+    position: relative;
+    width: 1.3em;
+    height: 1.3em;
+    top: .3em;
+  }
+</style>

@@ -1,0 +1,242 @@
+/* Inspired by Sakura.css */
+/* https://github.com/oxalorg/sakura */
+
+/* Body */
+
+html {
+  font-family: var(--font-family-base);
+  line-height: var(--font-line-height-base);
+  font-weight: var(--font-weight-base);
+  
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+  background-color: var(--color-bg);
+}
+
+body {
+  min-height: 100vh;
+  max-width: 38em;
+  margin: auto;
+  padding: 0 0.8rem;
+
+  display: flex;
+  flex-direction: column;
+
+  & > main {
+    flex: 1;
+  }
+}
+
+@media (max-width: 684px) {
+  body {
+    font-size: var(--font-size-base) * 0.85;
+  }
+}
+@media (max-width: 382px) {
+  body {
+    font-size: var(--font-size-base) * 0.75;
+  }
+}
+
+/* Text */
+p {
+  margin: var(--content-spacing) 0;
+}
+
+small,
+sub,
+sup {
+  font-size: .85em;
+}
+
+strong {
+  font-weight: var(--font-weight-bold);
+}
+
+a {
+  color: var(--color-text);
+  text-decoration-color: var(--color-primary);
+  text-underline-offset: 0.2em;
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+/* Heading */
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  line-height: var(--font-line-height-heading);
+
+  /* Force line wrap to avoid overflow */
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+h1 {
+  font-size: 2.35em;
+  margin-top: 0;
+  margin-bottom: 0.6em;
+}
+
+h2 {
+  font-size: 1.8em;
+  margin-top: 1.5em;
+  margin-bottom: 0.6em;
+}
+
+h3 {
+  font-size: 1.6em;
+  margin-top: 1.4em;
+  margin-bottom: 0.5em;
+}
+
+h4 {
+  font-size: 1.3em;
+  margin-top: 1.3em;
+  margin-bottom: 0.4em;
+}
+
+:is(h2, h3, h4) + * {
+  margin-top: 0;
+}
+
+.subheading-anchor {
+  display: none;
+  text-decoration: none;
+  color: var(--color-primary);
+
+  &::after {
+    margin-left: .25ch;
+    content: "#";
+  }
+
+  :where(h1, h2, h3, h4):hover & {
+    display: inline-block;
+  }
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  margin: 2.8em 0;
+}
+
+
+/* Lists */
+
+ul,
+ol {
+  padding-left: 1.4em;
+  margin: var(--content-spacing) 0;
+
+  p {
+    margin: var(--content-spacing-small) 0;
+  }
+}
+
+:is(ul, ol) :is(ul, ol) {
+  margin: var(--content-spacing-small) 0;
+}
+
+li {
+  margin: 0.4em 0;
+  
+  &::marker {
+    color: var(--color-text-alt);
+  }
+}
+
+/* Quote */
+
+blockquote {
+  margin: var(--content-spacing) 0;
+  padding-left: 1em;
+  font-style: italic;
+  border-left: 5px solid var(--color-primary);
+
+  & p {
+    margin: 0;
+  }
+}
+
+/*  Media. */
+
+img,
+video {
+  height: auto;
+  max-width: 100%;
+  margin: var(--content-spacing) 0;
+}
+
+figure {
+  margin: var(--content-spacing) 0;
+
+  img {
+    margin: 0;
+  }
+
+  figcaption {
+    font-size: 0.8em;
+    line-height: 1.5;
+  }
+}
+
+/* Pre and Code */
+
+pre {
+  font-size: var(--font-size-code);
+  background-color: var(--color-bg-alt);
+  border-radius: var(--border-radius);
+  margin: var(--content-spacing) 0;
+  display: block;
+  padding: 1em;
+  overflow-x: auto;
+}
+
+code,
+kbd,
+samp {
+  font-size: var(--font-size-code);
+  padding: 0.25em 0.5em;
+  background-color: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  white-space: pre-wrap;
+}
+
+pre > code {
+  padding: 0;
+  background-color: transparent;
+  white-space: pre;
+  font-size: 1em;
+  border: 0;
+}
+
+/* Tables */
+
+table {
+  text-align: start;
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--content-spacing) 0;
+
+  td,
+  th {
+    padding: 0.5em 1em;
+  }
+
+  thead,
+  tbody tr {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  tr:last-child {
+    border-bottom: none;
+  }
+}

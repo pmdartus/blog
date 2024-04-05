@@ -1,0 +1,56 @@
+---
+import { getCollection } from "astro:content";
+import type { InferGetStaticPropsType } from "astro";
+
+import Layout from "../../layouts/Layout.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
+
+import { computeReadTime } from "../../utils/readTime";
+
+export async function getStaticPaths() {
+  const postEntries = await getCollection("posts");
+
+  return postEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+const readTime = computeReadTime(entry.body);
+---
+
+<Layout title={entry.data.title}>
+  <h1>{entry.data.title}</h1>
+
+  <aside>
+    <span>Published on <FormattedDate date={entry.data.publishDate} /></span>
+    {
+      entry.data.updateDate && (
+        <span>
+          • Updated on <FormattedDate date={entry.data.updateDate} />
+        </span>
+      )
+    }
+    <span>• {readTime} minute{readTime > 1 ? "s" : ""} read</span>
+  </aside>
+
+  <div class="content">
+    <Content />
+  </div>
+
+  <p>
+    <a href="/posts">← Back to posts</a>
+  </p>
+</Layout>
+
+<style>
+  aside {
+    color: var(--color-text-alt);
+    font-size: 0.9em;
+  }
+</style>

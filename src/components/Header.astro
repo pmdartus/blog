@@ -1,0 +1,73 @@
+---
+import { NAVIGATION } from "../site";
+import logo from "../assets/logo.svg?raw";
+
+const currentPath = Astro.url.pathname;
+
+const navItems = NAVIGATION.map((item) => ({
+  ...item,
+  current: item.url === currentPath,
+}));
+---
+
+<header>
+  <a href="/" class="logo" aria-label="Homepage">
+    <Fragment set:html={logo} />
+  </a>
+
+  <nav>
+    <ul>
+      {
+        navItems.map((item) => (
+          <li>
+            <a href={item.url} class:list={[{ current: item.current }]}>
+              {item.title}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<style>
+  header {
+    margin: var(--content-spacing) var(--content-spacing-small);
+    font-family: var(--font-family-heading);
+    font-weight: 700;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  a {
+    text-decoration-line: none;
+  }
+
+  .logo {
+    vertical-align: middle;
+    fill: var(--color-primary);
+  }
+
+  nav {
+    ul {
+      display: flex;
+      gap: 1rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    a.current {
+      text-decoration-line: underline;
+      text-decoration-thickness: 2px;
+    }
+  }
+</style>
