@@ -8,9 +8,13 @@ import SocialAccounts from "../components/SocialAccounts.astro";
 import profilePicture from "../assets/profile-picture.jpg";
 ---
 
-<Layout title="Blog">
+<Layout
+  pageType="page"
+  title="Home"
+  description="Pierre-Marie Dartus is a software engineer working at Salesforce. He primarily works on web platform tooling and performance optimizations."
+>
   <h1>Hi, I am Pierre-Marie Dartus 👋</h1>
-  
+
   <div class="profile-section">
     <Image
       class="profile-picture"
@@ -28,7 +32,7 @@ import profilePicture from "../assets/profile-picture.jpg";
     developers to build and scale the next generation of web applications on the
     Salesforce platform.
   </p>
-  
+
   <p>
     Find me on: <SocialAccounts />
   </p>

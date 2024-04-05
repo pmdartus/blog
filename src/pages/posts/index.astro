@@ -3,7 +3,11 @@ import Layout from "../../layouts/Layout.astro";
 import RecentPosts from "../../components/RecentPosts.astro";
 ---
 
-<Layout title="Posts">
+<Layout
+  pageType="page"
+  title="Posts"
+  description="Ready my collection of posts and the things that interest me"
+>
   <h1>Posts</h1>
   <RecentPosts showDescription />
 </Layout>

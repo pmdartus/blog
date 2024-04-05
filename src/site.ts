@@ -1,13 +1,18 @@
-import type { Site, NavigationList, SocialAccounts } from "./types";
+import type { NavigationList, SocialAccounts } from "./types";
 
-export const SITE: Site = {
+export const SITE = {
   title: "pmdartus",
   author: {
     name: "Pierre-Marie Dartus",
     username: "pmdartus",
+    twitterHandle: "@pmdartus",
   },
   description:
     "Pierre-Marie Dartus is a software engineer working at Salesforce. He primarily works on web platform tooling and performance optimizations.",
+  locale: {
+    lang: "en",
+    ogLocale: "en_US",
+  },
 };
 
 export const NAVIGATION: NavigationList = [

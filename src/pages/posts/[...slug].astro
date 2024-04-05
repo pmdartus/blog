@@ -22,9 +22,16 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 
 const readTime = computeReadTime(entry.body);
+const articleDate =
+  entry.data.updateDate?.toISOString() ?? entry.data.publishDate.toISOString();
 ---
 
-<Layout title={entry.data.title}>
+<Layout
+  pageType="article"
+  title={entry.data.title}
+  description={entry.data.description}
+  publishDate={articleDate}
+>
   <h1>{entry.data.title}</h1>
 
   <aside>

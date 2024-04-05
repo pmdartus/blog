@@ -1,12 +1,3 @@
-export interface Site {
-  author: {
-    name: string;
-    username: string;
-  };
-  description: string;
-  title: string;
-}
-
 export interface Navigation {
   title: string;
   url: string;
