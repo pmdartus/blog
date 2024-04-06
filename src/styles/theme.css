@@ -248,12 +248,6 @@ table {
 /* Math */
 
 math {
-  display: block;
-  margin: var(--content-spacing) 0;
-  padding: 1em;
   font-family: var(--font-family-mathml);
   font-size: var(--font-size-math);
-
-  background-color: var(--color-bg-alt);
-  border-radius: var(--border-radius);
 }
