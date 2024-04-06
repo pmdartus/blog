@@ -4,8 +4,6 @@ publishDate: 2024-03-04
 description: "A rule of thumb that can be used for making quick estimations when data is limited."
 ---
 
-{% image "./hero.png", "The rule of five", "100vw" %}
-
 We frequently make decisions based on imprecise information. This is true for executives who must choose between projects with different potential returns on investment and engineers who prioritize bug fixes over new features based on anticipated customer impact.
 
 Data is necessary for making informed decisions. Often, we lack the time or resources to run a thorough data analysis. Usually what happens is that we rely primarily on intuition. After all, we're experts in our fields, right? We should be able to make educated guesses mostly based on experience.
@@ -77,15 +75,12 @@ With the uniform distribution, the success rate is **93.82%**, very close to the
 Now that we've seen it work with a simple uniform distribution, let's test it against other known data distributions:
 
 **Normal distribution:** (success rate: 93.68%)
-| Distribution | Cumulative Success Rate |
-| :--------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: |
-| ![Normal probability density distribution](./normal_density.png) | ![Normal Rule of Five success rate](./normal_success-rate.png) |
+
+![Normal density distribution and cumulative success rate](./normal.png)
 
 **Triangular distribution** (success rate: 93.64%)
 
-|                                          Distribution                                          |                                   Cumulative Success Rate                                    |
-| :--------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: |
-| ![Triangular probability density distribution](./triangular_density.png) | ![Triangular Rule of Five success rate](./triangular_success-rate.png) |
+![Triangular density distribution and cumulative success rate](./triangular.png)
 
 For those still skeptical (like me), let's run the experiment on real-world data:
 
@@ -95,21 +90,15 @@ For those still skeptical (like me), let's run the experiment on real-world data
 
 **Avocado Price** (success rate: 93.64%)
 
-|                                          Distribution                                          |                                   Cumulative Success Rate                                    |
-| :--------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: |
-| ![Avocado price probability density distribution](./avocado_density.png) | ![Avocado price Rule of Five success rate](./avocado_success-rate.png) |
+![Avocado price density distribution and cumulative success rate](./avocado.png)
 
 **Energy Consumption** (success rate: 93.57%)
 
-|                                         Distribution                                         |                                  Cumulative Success Rate                                   |
-| :------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: |
-| ![Energy price probability density distribution](./energy_density.png) | ![Energy price Rule of Five success rate](./energy_success-rate.png) |
+![Energy price density distribution and cumulative success rate](./energy.png)
 
 **Heart Rate** (success rate: 92.71%)
 
-|                                          Distribution                                          |                                   Cumulative Success Rate                                    |
-| :--------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: |
-| ![Heart rate probability density distribution](./heart-rate_density.png) | ![Heart rate Rule of Five success rate](./heart-rate_success-rate.png) |
+![Heart rate price density distribution and cumulative success rate](./heart-rate.png)
 
 In other words, think twice the next time you consider buying an Apple Watch to monitor your median heart rate. You might be better off taking your pulse five times throughout the day. Also if you want to try it out yourself, you can find the code for the analysis at this [link](https://github.com/pmdartus/rule-of-five).
 
