@@ -4,7 +4,7 @@ publishDate: 2020-10-27
 description: "LWC tips: getting started, LWC specific idioms, component communication."
 ---
 
-> 📝 This post has originally been published to the Salesforce developer blog: [https://developer.salesforce.com/blogs/2020/10/step-up-your-lwc-skills-part-1.html](https://developer.salesforce.com/blogs/2020/10/step-up-your-lwc-skills-part-1.html)
+> 📝 This post has originally been published to the Salesforce developer blog: [link](https://developer.salesforce.com/blogs/2020/10/step-up-your-lwc-skills-part-1.html)
 
 Over the past two years, I've had the opportunity to review hundreds of Lightning Web Components developed by internal Salesforce developers and by customers and partners building on the Salesforce platform. This post is the first post of a two parts series covering some of my common observations and feedback.
 
