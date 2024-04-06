@@ -97,9 +97,9 @@ type Query {
     where: Movie__cWhere
     order_by: [Movie__cOrderBy]
   ): [Movie__c]
-  
+
   Movie__c_by_id(id: ID): Movie__c
-  
+
   Role__c(
     limit: Int
     offset: Int
@@ -108,7 +108,7 @@ type Query {
   ): [Role__c]
 
   Role__c_by_id(id: ID): Role__c
-  
+
   Actor__c(
     limit: Int
     offset: Int
