@@ -1,11 +1,11 @@
 # Handle redirects for old blog URLs
 
-/blog/step-up-your-lwc-skills-part-1                        /posts/2020/step-up-your-lwc-skills-part1/          301
-/blog/step-up-your-lwc-skills-part-2                        /posts/2020/step-up-your-lwc-skills-part2/          301
-/blog/a-complete-guide-on-shadow-dom-and-event-propagation  /posts/2021/shadow-dom-and-event-propagation/       301
-/blog/generated-graphql-api-for-salesforce                  /posts/2022/generated-graphql-api-for-salesforce/   301
-/blog/the-rule-of-five-making-good-calls-from-limited-data  /posts/2024/rule-of-five/                           301
+/blog/step-up-your-lwc-skills-part-1*                       /posts/2020/step-up-your-lwc-skills-part1/          301
+/blog/step-up-your-lwc-skills-part-2*                       /posts/2020/step-up-your-lwc-skills-part2/          301
+/blog/a-complete-guide-on-shadow-dom-and-event-propagation* /posts/2021/shadow-dom-and-event-propagation/       301
+/blog/generated-graphql-api-for-salesforce*                 /posts/2022/generated-graphql-api-for-salesforce/   301
+/blog/the-rule-of-five-making-good-calls-from-limited-data* /posts/2024/rule-of-five/                           301
 
 # Redirect all other blog URLs to the blog page
 
-/blog /posts/ 301
+/blog* /posts/ 301
