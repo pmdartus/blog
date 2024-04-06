@@ -4,6 +4,8 @@ publishDate: 2024-03-04
 description: "A rule of thumb that can be used for making quick estimations when data is limited."
 ---
 
+![The rule of five banner image](./hero.png)
+
 We frequently make decisions based on imprecise information. This is true for executives who must choose between projects with different potential returns on investment and engineers who prioritize bug fixes over new features based on anticipated customer impact.
 
 Data is necessary for making informed decisions. Often, we lack the time or resources to run a thorough data analysis. Usually what happens is that we rely primarily on intuition. After all, we're experts in our fields, right? We should be able to make educated guesses mostly based on experience.
