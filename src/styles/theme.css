@@ -7,7 +7,7 @@ html {
   font-family: var(--font-family-base);
   line-height: var(--font-line-height-base);
   font-weight: var(--font-weight-base);
-  
+
   color: var(--color-text);
   font-size: var(--font-size-base);
   background-color: var(--color-bg);
@@ -46,7 +46,7 @@ p {
 small,
 sub,
 sup {
-  font-size: .85em;
+  font-size: 0.85em;
 }
 
 strong {
@@ -112,7 +112,7 @@ h4 {
   color: var(--color-primary);
 
   &::after {
-    margin-left: .25ch;
+    margin-left: 0.25ch;
     content: "#";
   }
 
@@ -126,7 +126,6 @@ hr {
   border-top: 1px solid var(--color-border);
   margin: 2.8em 0;
 }
-
 
 /* Lists */
 
@@ -146,7 +145,7 @@ ol {
 
 li {
   margin: 0.4em 0;
-  
+
   &::marker {
     color: var(--color-text-alt);
   }
@@ -185,6 +184,11 @@ figure {
     font-size: 0.8em;
     line-height: 1.5;
   }
+}
+
+p :where(img, video, figure):only-child {
+  /* Astro wrap images and figures into paragraphs tags. Remove margin when not needed. */
+  margin: 0;
 }
 
 /* Pre and Code */

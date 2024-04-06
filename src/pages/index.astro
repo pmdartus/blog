@@ -13,9 +13,12 @@ import profilePicture from "../assets/profile-picture.jpg";
   title="Home"
   description="Pierre-Marie Dartus is a software engineer working at Salesforce. He primarily works on web platform tooling and performance optimizations."
 >
-  <h1>Hi, I am Pierre-Marie Dartus 👋</h1>
-
-  <div class="profile-section">
+  <h1>
+    {/* Using a non breaking hyphen in my first name. */}
+    Hi, I am Pierre&#8209;Marie Dartus 👋
+  </h1>
+  
+  <section class="summary">
     <Image
       class="profile-picture"
       src={profilePicture}
@@ -24,20 +27,21 @@ import profilePicture from "../assets/profile-picture.jpg";
       height={150}
       densities={[2, 3]}
     />
-  </div>
 
-  <p>
-    I am software engineer based out of Paris, France. Currently working at
-    Salesforce as a Software Architect, I work on tools and frameworks for
-    developers to build and scale the next generation of web applications on the
-    Salesforce platform.
-  </p>
+    <p>
+      I am software engineer based out of Paris, France. Currently working at
+      Salesforce as a Software Architect, I work on tools and frameworks for
+      developers to build and scale the next generation of web applications on the
+      Salesforce platform.
+    </p>
+  </section>
 
   <p>
     Find me on: <SocialAccounts />
   </p>
 
   <h2>Recent Posts</h2>
+
   <RecentPosts limit={3} showDescription={false} />
 </Layout>
 
@@ -48,12 +52,17 @@ import profilePicture from "../assets/profile-picture.jpg";
 
   .profile-picture {
     border-radius: var(--border-radius);
+    
+    @media (width <= 684px){
+      display: none;
+    }
   }
 
-  .profile-section {
+  .summary {
     display: flex;
-    gap: 1rem;
     align-items: center;
+    gap: var(--content-spacing);
+    margin: var(--content-spacing) 0;
 
     & > * {
       margin: 0;
