@@ -1,3 +1,4 @@
+/* Standard text */
 @font-face {
   font-family: "Merriweather";
   font-style: normal;
@@ -44,4 +45,12 @@
   font-weight: 700;
   src: url("/fonts/merriweather-v22-latin-bold-italic.woff2") format("woff2");
   font-display: swap;
+}
+
+
+/* MathML text */
+
+@font-face {
+  font-family: Latin Modern Math;
+  src: url('/fonts/latinmodernmath.woff2') format("woff2");
 }
