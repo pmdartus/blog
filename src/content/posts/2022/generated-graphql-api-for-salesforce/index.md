@@ -1,20 +1,20 @@
 ---
 title: Generated GraphQL API for Salesforce
 publishDate: 2022-01-06
-description: 'Exploring how to automatically generate a GraphQL API for a Salesforce organization.'
+description: "Exploring how to automatically generate a GraphQL API for a Salesforce organization."
 ---
 
 > 📣 Here is a small announcement before diving into this post, **Salesforce is currently working on an official GraphQL endpoint**. As of this writing, Salesforce hasn't yet released any public documentation. That said, the official GraphQL endpoint is quite similar to the one presented in this post, with some other nice features 🎉. You can contact [Ben Sklar](mailto:bsklar@salesforce.com) if you would like to try it out.
 
-----
+---
 
 Back in 2016 [Robin Ricard](https://twitter.com/r_ricard) and I presented at Dreamforce a talk about how to leverage GraphQL to query Salesforce data ([recording](https://www.youtube.com/watch?v=efEBcCtfARo)). For this presentation, we built a demo application for browsing your favorite movies. The data was stored on Salesforce as custom objects. This was built on React native to retrieve the data by the intermediary of a GraphQL endpoint hosted on Heroku.
 
 For this demo, we had to handcraft [a GraphQL schema](https://github.com/rricard/movieql/blob/cfd5e6ba8a4f319b18517be0ecc5e92f87878c5e/data/definitions.js#L3-L65) and hardcode [SOQL queries](https://github.com/rricard/movieql/blob/cfd5e6ba8a4f319b18517be0ecc5e92f87878c5e/data/loaders.js#L26-L39) to retrieve the data on our Salesforce org. This approach works great for a demo application, but is unmaintainable in complex applications:
 
--   ensuring that the GraphQL schema is always in sync with the Salesforce schema is painful
--   exposing new types on the schema requires adding new SOQL queries or updating the existing ones
--   no out-of-the-box support for filtering and sorting
+- ensuring that the GraphQL schema is always in sync with the Salesforce schema is painful
+- exposing new types on the schema requires adding new SOQL queries or updating the existing ones
+- no out-of-the-box support for filtering and sorting
 
 The GraphQL ecosystem is moving fast, and a lot happened over last 5 years. We have seen a proliferation of tools making its adoption easier. I am amazed how easy it is today to create a GraphQL API. Projects like [PostGraphile](https://www.graphile.org/) or [Hasura GraphQL Engine](https://hasura.io/docs/latest/graphql/core/index.html) generates a GraphQL endpoint on top of a SQL database with minimal configurations. Those tools connect to the database of your choice (eg. Postgres, MySQL) and generate a GraphQL API based on the DB schema.
 
@@ -38,12 +38,12 @@ After starting the app, the server retrieves the Salesforce org metadata to buil
 
 ```graphql
 type Actor__c {
-    Id: ID
-    Name: String
+  Id: ID
+  Name: String
 }
 
 type query {
-    Actor__c_by_id(id: ID): Actor__c
+  Actor__c_by_id(id: ID): Actor__c
 }
 ```
 
@@ -55,16 +55,15 @@ The SObject metadata can be retrieved using the [describeSOjbect](https://develo
 
 Each SObject can be represented via a [GraphQL object types](https://graphql.org/learn/schema/#object-types-and-fields). SObject fields types can be grouped into 2 buckets: scalar fields and relationship fields.
 
--   GraphQL comes with a predefined list of [scalar types](https://graphql.org/learn/schema/#scalar-types). Scalars represent leaf values in the graph. This list includes: `Int`, `Float`, `String`, `Boolean`, and `ID`. However, Salesforce offers a lot more [field types](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/field_types.htm), eg. `Date`, `Phone`, or `Currency`. Fortunately, GraphQL allows the definition of custom scalar. A custom GraphQL scalar type can be created for each of the missing Salesforce scalar field types.
--   GraphQL type system allows defining fields referring to other GraphQL object types in the schema. Salesforce lookups and master-detail relationships can be represented in GraphQL by creating a field and setting its type to the associated GraphQL object type.
+- GraphQL comes with a predefined list of [scalar types](https://graphql.org/learn/schema/#scalar-types). Scalars represent leaf values in the graph. This list includes: `Int`, `Float`, `String`, `Boolean`, and `ID`. However, Salesforce offers a lot more [field types](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/field_types.htm), eg. `Date`, `Phone`, or `Currency`. Fortunately, GraphQL allows the definition of custom scalar. A custom GraphQL scalar type can be created for each of the missing Salesforce scalar field types.
+- GraphQL type system allows defining fields referring to other GraphQL object types in the schema. Salesforce lookups and master-detail relationships can be represented in GraphQL by creating a field and setting its type to the associated GraphQL object type.
 
 Finally, the GraphQL schema should define a [`Query` type](https://graphql.org/learn/schema/#the-query-and-mutation-types). This type defines the entry points into the graph. For each exposed SObject, we generate 2 fields the `Query` type:
 
--   a field named `[SObject_name]_by_id` returning a single record. This field accepts a required `ID` argument.
--   a field named `[SObject]` returning a list of records. This field accepts optional arguments limit, filter, and order the list.
+- a field named `[SObject_name]_by_id` returning a single record. This field accepts a required `ID` argument.
+- a field named `[SObject]` returning a list of records. This field accepts optional arguments limit, filter, and order the list.
 
 Here is an example of a Salesforce schema and its generated GraphQL schema.
-
 
 ![Salesforce schema](./salesforce-schema.png)
 
@@ -72,32 +71,52 @@ Here is an example of a Salesforce schema and its generated GraphQL schema.
 scalar TextArea
 
 type Movie__c {
-    Id: ID!
-    Name: String
-    Roles__r: [Role__c]
+  Id: ID!
+  Name: String
+  Roles__r: [Role__c]
 }
 
 type Role__c {
-    Id: ID!
-    Name: String
-    Actor__c: Actor__c!
-    Movie__c: Movie__c!
+  Id: ID!
+  Name: String
+  Actor__c: Actor__c!
+  Movie__c: Movie__c!
 }
 
 type Actor__c {
-    Id: ID!
-    Name: String
-    Bio__c: TextArea
-    Roles__r: [Role__c]
+  Id: ID!
+  Name: String
+  Bio__c: TextArea
+  Roles__r: [Role__c]
 }
 
 type Query {
-    Movie__c(limit: Int, offset: Int, where: Movie__cWhere, order_by: [Movie__cOrderBy]): [Movie__c]
-    Movie__c_by_id(id: ID): Movie__c
-    Role__c(limit: Int, offset: Int, where: Role__cWhere, order_by: [Role__cOrderBy]): [Role__c]
-    Role__c_by_id(id: ID): Role__c
-    Actor__c(limit: Int, offset: Int, where: Actor__cWhere, order_by: [Actor__cOrderBy]): [Actor__c]
-    Actor__c_by_id(id: ID): Actor__c
+  Movie__c(
+    limit: Int
+    offset: Int
+    where: Movie__cWhere
+    order_by: [Movie__cOrderBy]
+  ): [Movie__c]
+  
+  Movie__c_by_id(id: ID): Movie__c
+  
+  Role__c(
+    limit: Int
+    offset: Int
+    where: Role__cWhere
+    order_by: [Role__cOrderBy]
+  ): [Role__c]
+
+  Role__c_by_id(id: ID): Role__c
+  
+  Actor__c(
+    limit: Int
+    offset: Int
+    where: Actor__cWhere
+    order_by: [Actor__cOrderBy]
+  ): [Actor__c]
+
+  Actor__c_by_id(id: ID): Actor__c
 }
 ```
 
@@ -113,15 +132,15 @@ One of the main performance bottlenecks with GraphQL is the N+1 query issue. Gra
 
 ```graphql
 query {
-    Actor__c {
-        # retrieve actors (1 query)
-        Name
-        Bio
-        Role__r {
-            # retrieve the roles for each actor (N queries for N actors)
-            Name
-        }
+  Actor__c {
+    # retrieve actors (1 query)
+    Name
+    Bio
+    Role__r {
+      # retrieve the roles for each actor (N queries for N actors)
+      Name
     }
+  }
 }
 ```
 

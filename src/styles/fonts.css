@@ -47,10 +47,9 @@
   font-display: swap;
 }
 
-
 /* MathML text */
 
 @font-face {
   font-family: Latin Modern Math;
-  src: url('/fonts/latinmodernmath.woff2') format("woff2");
+  src: url("/fonts/latinmodernmath.woff2") format("woff2");
 }

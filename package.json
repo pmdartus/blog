@@ -6,7 +6,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "serve": "wrangler pages dev dist/"
+    "serve": "wrangler pages dev dist/",
+    "format": "prettier --write ."
   },
   "keywords": [],
   "author": "",

@@ -22,57 +22,57 @@ Let’s look at a simple example to illustrate this issue. This component tracks
 
 ```html
 <template>
-    <p>
-        Value: {value}
-        <template if:true="{isPositive}">(I am positive)</template>
-    </p>
-    <button onclick="{handleInc}">Inc.</button>
-    <button onclick="{handleDec}">Dec.</button>
+  <p>
+    Value: {value}
+    <template if:true="{isPositive}">(I am positive)</template>
+  </p>
+  <button onclick="{handleInc}">Inc.</button>
+  <button onclick="{handleDec}">Dec.</button>
 </template>
 ```
 
 ```js
-import { LightningElement } from 'lwc';
+import { LightningElement } from "lwc";
 
 export default class Test extends LightningElement {
-    value = 0;
-    isPositive = false;
+  value = 0;
+  isPositive = false;
 
-    handleInc() {
-        this.value++;
-        this.isPositive = this.value > 0;
-    }
-    handleDec() {
-        this.value--;
-        this.isPositive = this.value > 0;
-    }
+  handleInc() {
+    this.value++;
+    this.isPositive = this.value > 0;
+  }
+  handleDec() {
+    this.value--;
+    this.isPositive = this.value > 0;
+  }
 }
 ```
 
 This approach suffers from the fact that this component needs to deal with two fields, `value` and `isPositive`, when only a single property is actually needed.
 
--   Both the `handleInc` and `handleDec` methods need to make sure that `value` and `isPositive` stay in sync.
--   If the initial value of the `value` property is changed from `0` to `1`, the `isPositive` initial value must also be set to `true`.
--   If we added a reset functionality, both `value` and `isPositive` would need to be reset.
+- Both the `handleInc` and `handleDec` methods need to make sure that `value` and `isPositive` stay in sync.
+- If the initial value of the `value` property is changed from `0` to `1`, the `isPositive` initial value must also be set to `true`.
+- If we added a reset functionality, both `value` and `isPositive` would need to be reset.
 
 Let's refactor the example to use a single property. With this approach, the `isPositive` property is derived from `value` using a getter. By keeping a single tracked property, the component can’t be in an invalid state.
 
 ```js
-import { LightningElement } from 'lwc';
+import { LightningElement } from "lwc";
 
 export default class Test extends LightningElement {
-    value = 0;
+  value = 0;
 
-    get isPositive() {
-        return this.value > 0;
-    }
+  get isPositive() {
+    return this.value > 0;
+  }
 
-    handleInc() {
-        this.value++;
-    }
-    handleDec() {
-        this.value--;
-    }
+  handleInc() {
+    this.value++;
+  }
+  handleDec() {
+    this.value--;
+  }
 }
 ```
 
@@ -80,14 +80,14 @@ export default class Test extends LightningElement {
 
 With more than 1 million packages published on NPM, there is a high chance that someone has already released a library for what you’re trying to build. While reusing existing libraries greatly increases your productivity, keep in mind that this productivity boost comes with some trade-offs.
 
--   **Performance degradation:** Depending on the size, each library you load may impact end-user perceived performance.
--   **Locker integration issues:** The Locker Service enforces strict constraints for code that runs in Lightning. When using some third-party code, you lose control of which APIs are used, and those APIs may not be compatible with Locker. Debugging Locker related integration issue can be quite challenging. When you are lucky, an error is thrown at runtime. In some cases, the third-party library might fail silently. The easiest way to know if an issue is due to Locker is to load your library and reproduce the same code in the [Locker Console](https://developer.salesforce.com/docs/component-library/tools/locker-service-console), where you can turn Locker on and off.
+- **Performance degradation:** Depending on the size, each library you load may impact end-user perceived performance.
+- **Locker integration issues:** The Locker Service enforces strict constraints for code that runs in Lightning. When using some third-party code, you lose control of which APIs are used, and those APIs may not be compatible with Locker. Debugging Locker related integration issue can be quite challenging. When you are lucky, an error is thrown at runtime. In some cases, the third-party library might fail silently. The easiest way to know if an issue is due to Locker is to load your library and reproduce the same code in the [Locker Console](https://developer.salesforce.com/docs/component-library/tools/locker-service-console), where you can turn Locker on and off.
 
 Before integrating any third-party code into your application, ask yourself if you really need this code. Over the years, JavaScript and DOM APIs have added new features that make existing libraries less necessary. Here are some of the most popular JavaScript libraries that you might not need in [evergreen](https://www.techopedia.com/definition/31094/evergreen-browser) browsers.
 
--   **jQuery** (29 KB minified + gzip): https://github.com/nefe/You-Dont-Need-jQuery
--   **Lodash** (26 KB minified + gzip): https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore
--   **MomentJs** (core: 16 KB minified + gzip / core + locales: 61 KB minified + gzip): https://github.com/you-dont-need/You-Dont-Need-Momentjs
+- **jQuery** (29 KB minified + gzip): https://github.com/nefe/You-Dont-Need-jQuery
+- **Lodash** (26 KB minified + gzip): https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore
+- **MomentJs** (core: 16 KB minified + gzip / core + locales: 61 KB minified + gzip): https://github.com/you-dont-need/You-Dont-Need-Momentjs
 
 If you decide that you really need some third-party code, there are a couple of ways to load it in your LWC component.
 
@@ -103,8 +103,8 @@ Keep in mind that static resources are not processed by the LWC compiler. You ha
 
 I’ll leave you with two pieces of advice that can drive your decision when it comes to evaluating third-party code.
 
--   Always check the size of the third-party code. If the library size is greater than 30KB minified + gzip, ask yourself twice if this code is really needed.
--   Always favor self-contained libraries over libraries with external dependencies. I would always prefer a standalone carousel library (for example, [glidejs](https://glidejs.com/docs/)) over a jQuery plugin carousel (for example, [slick](https://kenwheeler.github.io/slick/)). Using a self-contained library will save you from some debugging interoperability nightmares.
+- Always check the size of the third-party code. If the library size is greater than 30KB minified + gzip, ask yourself twice if this code is really needed.
+- Always favor self-contained libraries over libraries with external dependencies. I would always prefer a standalone carousel library (for example, [glidejs](https://glidejs.com/docs/)) over a jQuery plugin carousel (for example, [slick](https://kenwheeler.github.io/slick/)). Using a self-contained library will save you from some debugging interoperability nightmares.
 
 ## Code Structure
 
@@ -114,29 +114,29 @@ It’s a good practice to group the class fields and methods in a consistent ord
 
 ```js
 export class Test extends LightningElement {
-    // Exposed properties using the @api decorator
-    @api publicFoo;
-    @api publicBar;
+  // Exposed properties using the @api decorator
+  @api publicFoo;
+  @api publicBar;
 
-    // Reactive field using @track decorator
-    @track reactiveFoo;
-    @track reactiveBar;
+  // Reactive field using @track decorator
+  @track reactiveFoo;
+  @track reactiveBar;
 
-    // Wired field
-    @wire(getObjectInfo, { objectApiName: ACCOUNT_OBJECT })
-    foo;
+  // Wired field
+  @wire(getObjectInfo, { objectApiName: ACCOUNT_OBJECT })
+  foo;
 
-    // LWC lifecycle hooks
-    connectedCallback() {}
-    renderedCallback() {}
+  // LWC lifecycle hooks
+  connectedCallback() {}
+  renderedCallback() {}
 
-    // Exposed methods using @api decorator
-    @api myMethod() {}
-    @api
-    get myAccessor() {}
-    set myAccessor(val) {}
+  // Exposed methods using @api decorator
+  @api myMethod() {}
+  @api
+  get myAccessor() {}
+  set myAccessor(val) {}
 
-    // The rest
+  // The rest
 }
 ```
 
@@ -148,54 +148,54 @@ Each developer has their own preferences for styling. This is the way I group my
 
 ```js
 // Bare module imports
-import { LightningElement } from 'lwc';
+import { LightningElement } from "lwc";
 
 // "lightning/*" imports
-import { createRecord } from 'lightning/uiRecordApi';
-import { createMessageContext } from 'lightning/messageService';
+import { createRecord } from "lightning/uiRecordApi";
+import { createMessageContext } from "lightning/messageService";
 
 // "@salesforce/*" imports grouped by type.
 // If you have a lot of them, don’t hesitate to separate them by a line return.
-import labelA from '@salesforce/label/c.labelA';
-import labelB from '@salesforce/label/c.labelB';
+import labelA from "@salesforce/label/c.labelA";
+import labelB from "@salesforce/label/c.labelB";
 
-import apexA from '@salesforce/apex/ApexController.apexA';
-import apexB from '@salesforce/apex/ApexController.apexB';
-import apexC from '@salesforce/apex/ApexController.apexC';
+import apexA from "@salesforce/apex/ApexController.apexA";
+import apexB from "@salesforce/apex/ApexController.apexB";
+import apexC from "@salesforce/apex/ApexController.apexC";
 
 // "c/*" imports
-import shared from 'c/shared';
-import { utilA, utilB } from 'c/utils';
+import shared from "c/shared";
+import { utilA, utilB } from "c/utils";
 
 // The rest of the relative imports
-import { relativeA } from './relativeA';
-import { relativeB } from './relativeB';
+import { relativeA } from "./relativeA";
+import { relativeB } from "./relativeB";
 ```
 
 When there are too many imports in a single file you can externalize them. This is a common approach when a component imports a LOT of labels. Instead of importing all the labels in the component file, import the labels in a separate file (`label.js`) and export them as a single object. To make all the labels accessible to the template, the component file (`cmp.js`) imports the object containing all the labels and assigns it to a property.
 
 ```js
 // labels.js
-import A from '@salesforce/label/c.labelA';
-import B from '@salesforce/label/c.labelB';
-import C from '@salesforce/label/c.labelC';
-import D from '@salesforce/label/c.labelD';
+import A from "@salesforce/label/c.labelA";
+import B from "@salesforce/label/c.labelB";
+import C from "@salesforce/label/c.labelC";
+import D from "@salesforce/label/c.labelD";
 
 export default {
-    A,
-    B,
-    C,
-    D,
+  A,
+  B,
+  C,
+  D,
 };
 ```
 
 ```js
 // cmp.js
-import { LightningElement } from 'LightningElement';
-import labels from './labels';
+import { LightningElement } from "LightningElement";
+import labels from "./labels";
 
 export default class Cmp extends LightningElement {
-    labels = labels;
+  labels = labels;
 }
 ```
 
@@ -211,44 +211,44 @@ Instead, LWC encourages writing [blackbox unit tests](https://en.wikipedia.org/w
 
 **Inputs** are what triggers a component to change:
 
--   public properties
--   events received from a child
--   global events
--   external side effects
+- public properties
+- events received from a child
+- global events
+- external side effects
 
 **Outputs** reflect how the component reacts to inputs:
 
--   DOM state
--   events
--   external side effects
+- DOM state
+- events
+- external side effects
 
 To illustrate, let’s use a simple example. Consider a component that displays a `<lightning-spinner>` while the data is being loaded. A private field named `isLoading` switches from `false` to `true` to display the spinner.
 
 ```html
 <template>
-    <template if:true="{isLoading}">
-        <lightning-spinner></lightning-spinner>
-    </template>
-    <template if:false="{isLoading}"> {data} </template>
+  <template if:true="{isLoading}">
+    <lightning-spinner></lightning-spinner>
+  </template>
+  <template if:false="{isLoading}"> {data} </template>
 </template>
 ```
 
 ```js
-import { LightningElement } from 'lwc';
-import { loadRecord } from 'c/recordUtils';
+import { LightningElement } from "lwc";
+import { loadRecord } from "c/recordUtils";
 
 export default class Loader extends LightningElement {
-    isLoading = false;
-    data = null;
+  isLoading = false;
+  data = null;
 
-    connectedCallback() {
-        (this.isLoading = true), (this.data = null);
+  connectedCallback() {
+    (this.isLoading = true), (this.data = null);
 
-        loadRecord().then((res) => {
-            this.isLoading = false;
-            this.data = res;
-        });
-    }
+    loadRecord().then((res) => {
+      this.isLoading = false;
+      this.data = res;
+    });
+  }
 }
 ```
 
@@ -261,33 +261,33 @@ We don’t want a component consumer to set the `isLoading` field. The `isLoadin
 This test, instead of checking the `isLoading` field value, queries the shadow root to see if the `<lightning-spinner>` is actually rendered. We’re testing what the software does, not how it does it. (For brevity, the code required to mock the `loadRecord` method isn’t present.)
 
 ```js
-import { createElement } from 'lwc';
-import Loader from 'c/Loader';
+import { createElement } from "lwc";
+import Loader from "c/Loader";
 
-it('renders a spinner when data is loading', () => {
-    // ... mock loadRecord() method invocation ...
+it("renders a spinner when data is loading", () => {
+  // ... mock loadRecord() method invocation ...
 
-    const elm = createElement('c-loader', { is: Loader });
-    document.body.appendChild(elm);
+  const elm = createElement("c-loader", { is: Loader });
+  document.body.appendChild(elm);
 
-    const spinner = elm.shadowRoot.querySelector('lightning-spinner');
-    expect(spinner).not.toBe(null);
+  const spinner = elm.shadowRoot.querySelector("lightning-spinner");
+  expect(spinner).not.toBe(null);
 });
 
-it('unrender the spinner when data is loaded', () => {
-    // ... mock loadRecord() method invocation ...
+it("unrender the spinner when data is loaded", () => {
+  // ... mock loadRecord() method invocation ...
 
-    const elm = createElement('c-loader', { is: Loader });
-    document.body.appendChild(elm);
+  const elm = createElement("c-loader", { is: Loader });
+  document.body.appendChild(elm);
 
-    return Promise.resolve()
-        .then(() => {
-            // ... resolve loadRecord promise with data ...
-        })
-        .then(() => {
-            const spinner = elm.shadowRoot.querySelector('lightning-spinner');
-            expect(spinner).toBe(null);
-        });
+  return Promise.resolve()
+    .then(() => {
+      // ... resolve loadRecord promise with data ...
+    })
+    .then(() => {
+      const spinner = elm.shadowRoot.querySelector("lightning-spinner");
+      expect(spinner).toBe(null);
+    });
 });
 ```
 
@@ -301,11 +301,11 @@ I recommend removing all the `console.*` usages in the code before you commit it
 
 Developer tools have come a long way since the `alert()` debugging days. To debug my components, I regularly use the following features instead of `console.*` APIs.
 
--   Conditional breakpoints: [Chrome](https://developers.google.com/web/tools/chrome-devtools/javascript/breakpoints) / [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Set_a_breakpoint) / [Safari](https://webkit.org/blog/5435/breakpoint-options/)
--   Pretty print file: [Chrome](https://developers.google.com/web/tools/chrome-devtools/javascript/reference#blackbox) / [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Pretty-print_a_minified_file)
--   Expression watch: [Chrome](https://developers.google.com/web/tools/chrome-devtools/javascript/reference#watch) / [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Examine,_modify,_and_watch_variables#Watch_an_expression)
--   Script black-boxing: [Chrome](https://developers.google.com/web/tools/chrome-devtools/javascript/reference#blackbox) / [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Black_box_a_source)
--   Watchpoint: [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Use_watchpoints)
+- Conditional breakpoints: [Chrome](https://developers.google.com/web/tools/chrome-devtools/javascript/breakpoints) / [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Set_a_breakpoint) / [Safari](https://webkit.org/blog/5435/breakpoint-options/)
+- Pretty print file: [Chrome](https://developers.google.com/web/tools/chrome-devtools/javascript/reference#blackbox) / [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Pretty-print_a_minified_file)
+- Expression watch: [Chrome](https://developers.google.com/web/tools/chrome-devtools/javascript/reference#watch) / [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Examine,_modify,_and_watch_variables#Watch_an_expression)
+- Script black-boxing: [Chrome](https://developers.google.com/web/tools/chrome-devtools/javascript/reference#blackbox) / [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Black_box_a_source)
+- Watchpoint: [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Use_watchpoints)
 
 ### Adopt a linter
 
@@ -321,9 +321,9 @@ Should you add a semicolon at the end of a statement in JavaScript? How many cha
 
 It’s beneficial to enforce a certain set of code styling rules, especially as the number of developers involved in a project increases. A well-defined set of code styling rules offers advantages.
 
--   Eases the onboarding of new team member.
--   Eliminates pointless code formatting arguments during code review.
--   Simplifies reviewing someone else’s code. This is especially true when the person is external to the project.
+- Eases the onboarding of new team member.
+- Eliminates pointless code formatting arguments during code review.
+- Simplifies reviewing someone else’s code. This is especially true when the person is external to the project.
 
 Going a step further, the code formatting might be delegated to a tool such as [Prettier](https://prettier.io/). Using such tools removes the need to worry about manually formatting code before submitting a code change.
 
@@ -333,10 +333,10 @@ Continuous integration automatically integrates the code changes of multiple con
 
 Things you can run as part of the CI:
 
--   Run your linter and make the build fail if the linter reports an error.
--   Run your code formatter and make the build fail if the code style guide isn’t respected.
--   Run unit and integration tests.
--   Deploy a canary version of the application for manual testing purposes.
+- Run your linter and make the build fail if the linter reports an error.
+- Run your code formatter and make the build fail if the code style guide isn’t respected.
+- Run unit and integration tests.
+- Deploy a canary version of the application for manual testing purposes.
 
 To find out how to set up your own CI, follow the [Continuous Integration Using Salesforce DX trail](https://trailhead.salesforce.com/en/content/learn/modules/sfdx_travis_ci).
 

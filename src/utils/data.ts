@@ -8,10 +8,9 @@ interface QueryOptions {
   offset?: number;
 }
 
-export async function getPosts({
-  limit,
-  offset = 0,
-}: QueryOptions): Promise<Post[]> {
+export async function getPosts(options: QueryOptions = {}): Promise<Post[]> {
+  const { limit, offset = 0 } = options;
+
   let posts = await getCollection("posts", ({ data }) => !data.draft);
 
   posts = posts.toSorted((a, b) => {

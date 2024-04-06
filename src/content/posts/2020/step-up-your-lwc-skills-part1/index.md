@@ -16,18 +16,18 @@ Lightning Web Components (LWC) is a framework for creating user interfaces using
 
 LWC relies heavily on language features that were introduced in ECMAScript 6 (aka ES6, aka ES2015). Aura offers support for ECMAScript 5 (aka ES5) features. With ES6, plenty of great features have been added to JavaScript. So if you’re coming from a Visualforce page or Lightning component (Aura) development background, I highly recommended that you brush-up on these modern JavaScript skills before starting your LWC journey:
 
--   Variable declarations using [`const`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) / [`let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)
--   [Arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
--   [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
--   [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
--   [Modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
--   Array ([`Array.prototype.map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map), [`Array.prototype.filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)) and Object ([`Object.keys`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys), [`Object.values`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values)) functional programming methods
+- Variable declarations using [`const`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) / [`let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)
+- [Arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+- [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+- [Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
+- [Modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
+- Array ([`Array.prototype.map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map), [`Array.prototype.filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)) and Object ([`Object.keys`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys), [`Object.values`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values)) functional programming methods
 
 When you’re familiar with those concepts, it’s easier to read and understand the LWC documentation and examples. If you’re interested in a refresher on ES5 features and if you want to learn about new ES6+ syntax, I recommend these resources:
 
--   [FreeCodeCamp - Introduction to JavaScript](https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/basic-javascript/)
--   [Trailhead trail - Learn to work with JavaScript](https://trailhead.salesforce.com/en/content/learn/trails/learn-to-work-with-javascript)
--   [Paying] [Pluralsight - JavaScript Path](https://www.pluralsight.com/paths/javascript)
+- [FreeCodeCamp - Introduction to JavaScript](https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/basic-javascript/)
+- [Trailhead trail - Learn to work with JavaScript](https://trailhead.salesforce.com/en/content/learn/trails/learn-to-work-with-javascript)
+- [Paying] [Pluralsight - JavaScript Path](https://www.pluralsight.com/paths/javascript)
 
 ### Start playing with native Web Components
 
@@ -37,9 +37,9 @@ LWC is an abstraction layer on top of the low-level Web Component APIs that make
 
 Here’s a list of resources to quickly get started on native Web Components:
 
--   [Google Web Fundamentals - Building components](https://developers.google.com/web/fundamentals/web-components)
--   [MDN - Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components)
--   [Dev.to - Web Components: from zero to hero](https://dev.to/thepassle/web-components-from-zero-to-hero-4n4m#-setting-properties)
+- [Google Web Fundamentals - Building components](https://developers.google.com/web/fundamentals/web-components)
+- [MDN - Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components)
+- [Dev.to - Web Components: from zero to hero](https://dev.to/thepassle/web-components-from-zero-to-hero-4n4m#-setting-properties)
 
 One of the greatest things about web components is that all the most modern browsers support them. To experiment with web components, you can just use your favorite online code editor (for example, [jsfiddle.net](http://jsfiddle.net/) or [glitch.com](http://glitch.com/)). You don’t need a complex setup or a convoluted build system.
 
@@ -55,7 +55,7 @@ For instance, in debug mode, the LWC engine validates the existence of all the p
 
 ```html
 <template>
-    <c-child foo="bar"></c-child>
+  <c-child foo="bar"></c-child>
 </template>
 ```
 
@@ -71,50 +71,50 @@ To illustrate, let's create a component that renders a text input whose value dr
 ```html
 <!-- Anti-pattern -->
 <template>
-    <input type="text" onchange="{handleInputChange}" />
-    <div style="width: 100px; height: 100px;"></div>
+  <input type="text" onchange="{handleInputChange}" />
+  <div style="width: 100px; height: 100px;"></div>
 </template>
 ```
 
 ```js
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track } from "lwc";
 
 export default class Test extends LightningElement {
-    handleInputChange(evt) {
-        const div = this.template.querySelector('div');
-        div.style.backgroundColor = `#${evt.target.value}`;
-    }
+  handleInputChange(evt) {
+    const div = this.template.querySelector("div");
+    div.style.backgroundColor = `#${evt.target.value}`;
+  }
 }
 ```
 
 There are several issues with this approach:
 
--   LWC isn’t aware of the `background-color` CSS property set on the `<div>` element. If for any reason the engine removes the existing `<div>` (for instance if the component is wrapped in an `if` block), the `background-color` CSS property is lost.
--   Using `querySelector` and `querySelectorAll` may be very slow, especially if the component has many children.
+- LWC isn’t aware of the `background-color` CSS property set on the `<div>` element. If for any reason the engine removes the existing `<div>` (for instance if the component is wrapped in an `if` block), the `background-color` CSS property is lost.
+- Using `querySelector` and `querySelectorAll` may be very slow, especially if the component has many children.
 
 A better approach is to use an event handler, a field, and a getter for the CSS property. Keep in mind that all fields are reactive if used in a template or in a getter that's used in a template, so when `bgColor` changes, the component rerenders.
 
 ```html
 <!-- Pattern -->
 <template>
-    <input type="text" value="{bgColor}" onchange="{handleInputChange}" />
-    <div style="{divStyle}"></div>
+  <input type="text" value="{bgColor}" onchange="{handleInputChange}" />
+  <div style="{divStyle}"></div>
 </template>
 ```
 
 ```js
-import { LightningElement } from 'lwc';
+import { LightningElement } from "lwc";
 
 export default class Test extends LightningElement {
-    bgColor = '';
+  bgColor = "";
 
-    handleInputChange(evt) {
-        this.bgColor = evt.target.value;
-    }
+  handleInputChange(evt) {
+    this.bgColor = evt.target.value;
+  }
 
-    get divStyle() {
-        return `width: 100px; height: 100px; background-color: #${this.bgColor};`;
-    }
+  get divStyle() {
+    return `width: 100px; height: 100px; background-color: #${this.bgColor};`;
+  }
 }
 ```
 
@@ -125,61 +125,61 @@ In some cases, data received by a component isn’t structured the way you want.
 However, certain objects in LWC are read-only and can’t be mutated. The code throws an error when debug mode is enabled.
 
 ```js
-import { LightningElement, api } from 'lwc';
-import { getRecord } from 'lightning/uiRecordApi';
+import { LightningElement, api } from "lwc";
+import { getRecord } from "lightning/uiRecordApi";
 
 export default class extends LightningElement {
-    contact;
+  contact;
 
-    @wire(getRecord, {
-        recordId: '123456',
-        fields: ['Contact.Name', 'Contact.Title'],
-    })
-    handleRecord({ err, data }) {
-        if (data) {
-            // 🚫 Error: Invalid mutation!
-            data.fields.Summary = {
-                value: `${data.fields.Name.value} (${data.fields.Title.value})`,
-            };
+  @wire(getRecord, {
+    recordId: "123456",
+    fields: ["Contact.Name", "Contact.Title"],
+  })
+  handleRecord({ err, data }) {
+    if (data) {
+      // 🚫 Error: Invalid mutation!
+      data.fields.Summary = {
+        value: `${data.fields.Name.value} (${data.fields.Title.value})`,
+      };
 
-            this.contact = data;
-        }
+      this.contact = data;
     }
+  }
 }
 ```
 
 There are two common cases where a component receives read-only objects:
 
--   A component receives data from its parent component via a public property (`@api`). To enforce the properties-down/events-up pattern (more on that later), LWC makes the passed object read-only to prevent children components from mutating objects that are owned by the parent component.
--   A component receives data from Lightning Data Service (LDS) via `@wire`. For performance reasons, if two Lightning Web Components request the same data from LDS, LDS shares the same objects between the two components. However, LDS prevents mutations of the emitted data by making the objects read-only. It does this because if one component mutates the object, all the components observe the mutation. This is called cache poisoning, and it creates challenges in understanding and debugging the application’s data flow and state, and can cause security issues.
+- A component receives data from its parent component via a public property (`@api`). To enforce the properties-down/events-up pattern (more on that later), LWC makes the passed object read-only to prevent children components from mutating objects that are owned by the parent component.
+- A component receives data from Lightning Data Service (LDS) via `@wire`. For performance reasons, if two Lightning Web Components request the same data from LDS, LDS shares the same objects between the two components. However, LDS prevents mutations of the emitted data by making the objects read-only. It does this because if one component mutates the object, all the components observe the mutation. This is called cache poisoning, and it creates challenges in understanding and debugging the application’s data flow and state, and can cause security issues.
 
 Since you can’t mutate read-only objects, the right approach to change the structure of read-only object is to make a copy of the read-only object and mutate the copy. However there is a good and a bad way to copy read-only objects!
 
 I’ve seen [numerous cases](https://salesforce.stackexchange.com/search?q=%5Blightning-web-components%5D+JSON.parse%28JSON.stringify%28) where components use `JSON.parse` and `JSON.stringify` to deep-copy objects to do some mutations.
 
 ```js
-import { LightningElement, api } from 'lwc';
-import { getRecord } from 'lightning/uiRecordApi';
+import { LightningElement, api } from "lwc";
+import { getRecord } from "lightning/uiRecordApi";
 
 export default class extends LightningElement {
-    contact;
+  contact;
 
-    @wire(getRecord, {
-        recordId: '123456',
-        fields: ['Contact.Name', 'Contact.Title'],
-    })
-    handleRecord({ err, data }) {
-        if (data) {
-            // 👎: This might be REALLY slow!
-            const copiedData = JSON.parse(JSON.stringify(data));
+  @wire(getRecord, {
+    recordId: "123456",
+    fields: ["Contact.Name", "Contact.Title"],
+  })
+  handleRecord({ err, data }) {
+    if (data) {
+      // 👎: This might be REALLY slow!
+      const copiedData = JSON.parse(JSON.stringify(data));
 
-            copiedData.fields.Summary = {
-                value: `${data.fields.Name.value} (${data.fields.Title.value})`,
-            };
+      copiedData.fields.Summary = {
+        value: `${data.fields.Name.value} (${data.fields.Title.value})`,
+      };
 
-            this.contact = copiedData;
-        }
+      this.contact = copiedData;
     }
+  }
 }
 ```
 
@@ -188,31 +188,31 @@ Deep-copying an object is REALLY slow and (effectively) doubles the amount of me
 A preferable approach is to make a shallow copy of the read-only object. The most straightforward way to make a shallow copy of an object in JavaScript is either via [object destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) or via [Object.assign()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign).
 
 ```js
-import { LightningElement, api } from 'lwc';
-import { getRecord } from 'lightning/uiRecordApi';
+import { LightningElement, api } from "lwc";
+import { getRecord } from "lightning/uiRecordApi";
 
 export default class extends LightningElement {
-    contact;
+  contact;
 
-    @wire(getRecord, {
-        recordId: '123456',
-        fields: ['Contact.Name', 'Contact.Title'],
-    })
-    handleRecord({ err, data }) {
-        if (data) {
-            const { fields } = data;
+  @wire(getRecord, {
+    recordId: "123456",
+    fields: ["Contact.Name", "Contact.Title"],
+  })
+  handleRecord({ err, data }) {
+    if (data) {
+      const { fields } = data;
 
-            // 👍: Only copy what is needed.
-            this.contact = {
-                fields: {
-                    ...fields,
-                    Summary: {
-                        value: `${fields.Name.value} (${fields.Title.value})`,
-                    },
-                },
-            };
-        }
+      // 👍: Only copy what is needed.
+      this.contact = {
+        fields: {
+          ...fields,
+          Summary: {
+            value: `${fields.Name.value} (${fields.Title.value})`,
+          },
+        },
+      };
     }
+  }
 }
 ```
 
@@ -223,27 +223,27 @@ All the fields in LWC are reactive, so assigning a value to a field might trigge
 To illustrate this, here’s an example of a component that has a `handleClick` handler which takes care of fetching data and setting it to a field. There is a bug in the following snippet. Try to spot it before going further.
 
 ```js
-import { LightningElement, track } from 'lwc';
-import { fetchData } from 'c/utils';
+import { LightningElement, track } from "lwc";
+import { fetchData } from "c/utils";
 
 export default class Child extends LightningElement {
-    isLoading = false;
-    data;
-    error;
+  isLoading = false;
+  data;
+  error;
 
-    handleClick() {
-        this.isLoading = true;
+  handleClick() {
+    this.isLoading = true;
 
-        fetchData()
-            .then((data) => {
-                this.isLoading = false;
-                this.data = data;
-            })
-            .catch((err) => {
-                this.isLoading = false;
-                this.error = err;
-            });
-    }
+    fetchData()
+      .then((data) => {
+        this.isLoading = false;
+        this.data = data;
+      })
+      .catch((err) => {
+        this.isLoading = false;
+        this.error = err;
+      });
+  }
 }
 ```
 
@@ -252,35 +252,35 @@ The important line in the previous snippet is when the `isLoading` field is rese
 If there is a logical relationship between different fields, it’s better to group them together into a single object rather than to manipulate each field individually. By grouping the fields into a single object, the developer intent is more clear and it’s harder to forget when to update dependent fields in a complex component.
 
 ```js
-import { LightningElement, track } from 'lwc';
-import { fetchData } from 'c/utils';
+import { LightningElement, track } from "lwc";
+import { fetchData } from "c/utils";
 
 export default class Child extends LightningElement {
-    dataState = {
-        isLoading: false,
-        data: undefined,
-        error: undefined,
+  dataState = {
+    isLoading: false,
+    data: undefined,
+    error: undefined,
+  };
+
+  load() {
+    this.dataState = {
+      isLoading: true,
     };
 
-    load() {
+    fetchData()
+      .then((data) => {
         this.dataState = {
-            isLoading: true,
+          isLoading: false,
+          data,
         };
-
-        fetchData()
-            .then((data) => {
-                this.dataState = {
-                    isLoading: false,
-                    data,
-                };
-            })
-            .catch((error) => {
-                this.dataState = {
-                    isLoading: false,
-                    error,
-                };
-            });
-    }
+      })
+      .catch((error) => {
+        this.dataState = {
+          isLoading: false,
+          error,
+        };
+      });
+  }
 }
 ```
 
@@ -288,9 +288,9 @@ export default class Child extends LightningElement {
 
 Generally speaking, LWC components should only deal with UI-related logic. Extracting the utilities (function, class, and shared state) outside the class body has the following advantages:
 
--   It creates a clear decoupling between UI-related logic and business logic
--   The utilities can be unit tested individually without creating and rendering a component
--   The utilities can be lifted into a [shared module](https://developer.salesforce.com/blogs/2019/05/lightning-web-components-service-components.html) to be reused by different components if needed.
+- It creates a clear decoupling between UI-related logic and business logic
+- The utilities can be unit tested individually without creating and rendering a component
+- The utilities can be lifted into a [shared module](https://developer.salesforce.com/blogs/2019/05/lightning-web-components-service-components.html) to be reused by different components if needed.
 
 ### Enable console formatter in Chrome
 
@@ -309,30 +309,30 @@ Let’s take a simple example where we want to develop a carousel component that
 ```js
 // Anti-pattern
 // carousel.js
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api } from "lwc";
 
 export default class Carousel extends LightningElement {
-    @api animate() {
-        /* ... */
-    }
+  @api animate() {
+    /* ... */
+  }
 }
 ```
 
 ```html
 <!-- parent.html -->
 <template>
-    <c-carousel></c-carousel>
+  <c-carousel></c-carousel>
 </template>
 ```
 
 ```js
 // parent.js
-import { LightningElement } from 'lwc';
+import { LightningElement } from "lwc";
 
 export default class Parent extends LightningElement {
-    renderedCallback() {
-        this.template.querySelector('c-carousel').animate();
-    }
+  renderedCallback() {
+    this.template.querySelector("c-carousel").animate();
+  }
 }
 ```
 
@@ -341,23 +341,23 @@ The same `<c-carousel>` component can be written in such a way to expose `animat
 ```js
 // Pattern
 // carousel.js
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api } from "lwc";
 
 export default class Carousel extends LigthningElement {
-    @api animate;
+  @api animate;
 }
 ```
 
 ```html
 <!-- parent.html -->
 <template>
-    <c-carousel animate></c-carousel>
+  <c-carousel animate></c-carousel>
 </template>
 ```
 
 ```js
 // parent.js
-import { LightningElement } from 'lwc';
+import { LightningElement } from "lwc";
 
 export default class Parent extends LightningElement {}
 ```
@@ -380,10 +380,10 @@ In short, use this pattern only as a last resort when attempting to communicate 
 
 If you want component `<c-sender>` to communicate with component `<c-receiver>`, here’s the list of questions you should ask yourself:
 
--   Is `<c-sender>` a child component of `<c-receiver>` (bottom-up communication)? If yes, use DOM events to communicate from the child to the parent component.
--   Otherwise, is `<c-sender>` a parent component of `<c-receiver>` (top-down communication)? If yes, use properties to communicate from the parent to the child component.
--   Otherwise, do `<c-sender>` and `<c-receiver>` have `<c-parent>` as a common ancestor that you control? If yes, lift your state to the `<c-parent>` component, use DOM events to communicate from `<c-sender>` to `<c-parent>` and use props to communicate from `<c-parent>` to `<c-receiver>`.
--   If none of the above conditions apply, it means that `<c-sender>` and `<c-receiver>` are living in two distinct subtrees with no common ancestor that you control. This is a valid use case for LMS or pubsub.
+- Is `<c-sender>` a child component of `<c-receiver>` (bottom-up communication)? If yes, use DOM events to communicate from the child to the parent component.
+- Otherwise, is `<c-sender>` a parent component of `<c-receiver>` (top-down communication)? If yes, use properties to communicate from the parent to the child component.
+- Otherwise, do `<c-sender>` and `<c-receiver>` have `<c-parent>` as a common ancestor that you control? If yes, lift your state to the `<c-parent>` component, use DOM events to communicate from `<c-sender>` to `<c-parent>` and use props to communicate from `<c-parent>` to `<c-receiver>`.
+- If none of the above conditions apply, it means that `<c-sender>` and `<c-receiver>` are living in two distinct subtrees with no common ancestor that you control. This is a valid use case for LMS or pubsub.
 
 ### Be careful to avoid over-modularizing your components
 
@@ -391,8 +391,8 @@ As discussed previously, one of the main use cases for LMS and the publish-subsc
 
 For instance, imagine that you design a product listing view and decide to create a page in Lightning App Builder by adding a `<product-filter>` component and a `<product-list>` component. LMS may look like a primary choice for those components to communicate. However, this example is a bad use case for LMS. The real issue is that these components are too granular to be exposed to Lightning App Builder. Ask yourself these questions:
 
--   What happens when there is no `<product-filter>` associated with `<product-list>`? Can the `<product-list>` be rendered by itself?
--   What if the admin adds two `<product-list>` components to the page? What’s the expected behavior of the application?
+- What happens when there is no `<product-filter>` associated with `<product-list>`? Can the `<product-list>` be rendered by itself?
+- What if the admin adds two `<product-list>` components to the page? What’s the expected behavior of the application?
 
 Components exposed to Lightning App Builder should be able to stand on their own. In the previous example, the `<product-filter>` is tightly coupled to the `<product-list>`. This strong dependency between the components was hidden behind the usage of a publish-subscribe pattern.
 
