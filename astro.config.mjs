@@ -7,9 +7,6 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
 export default defineConfig({
   site: "https://pm.dartus.fr",
-  // redirects: {
-  //     '/blog/[...slug]': '/posts/[...slug]',
-  // }
   integrations: [sitemap()],
   markdown: {
     remarkPlugins: [remarkToc],
