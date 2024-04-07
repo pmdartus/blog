@@ -8,38 +8,40 @@ import FormattedDate from "../../components/FormattedDate.astro";
 import { computeReadTime } from "../../utils/readTime";
 
 export async function getStaticPaths() {
-  const postEntries = await getCollection("posts");
+  const posts = await getCollection("posts");
 
-  return postEntries.map((entry) => ({
-    params: { slug: entry.slug },
-    props: { entry },
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
   }));
 }
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { entry } = Astro.props;
-const { Content } = await entry.render();
+const { post } = Astro.props;
+const { title, description, publishDate, updateDate } = post.data;
 
-const readTime = computeReadTime(entry.body);
-const articleDate =
-  entry.data.updateDate?.toISOString() ?? entry.data.publishDate.toISOString();
+const { Content } = await post.render();
+
+const readTime = computeReadTime(post.body);
+const formattedPublishData =
+  updateDate?.toISOString() ?? publishDate.toISOString();
 ---
 
 <Layout
   pageType="article"
-  title={entry.data.title}
-  description={entry.data.description}
-  publishDate={articleDate}
+  title={title}
+  description={description}
+  publishDate={formattedPublishData}
 >
-  <h1>{entry.data.title}</h1>
+  <h1>{title}</h1>
 
   <aside>
-    <span>Published on <FormattedDate date={entry.data.publishDate} /></span>
+    <span>Published on <FormattedDate date={publishDate} /></span>
     {
-      entry.data.updateDate && (
+      updateDate && (
         <span>
-          • Updated on <FormattedDate date={entry.data.updateDate} />
+          • Updated on <FormattedDate date={updateDate} />
         </span>
       )
     }
