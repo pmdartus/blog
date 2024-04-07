@@ -113,7 +113,7 @@ const talks = [
         "https://docs.google.com/presentation/d/1eyITq0zur9ImiCi9yQGB5xdzRTmo3a51bCeFh0U_nQk",
     },
   },
-];
+].toReversed();
 ---
 
 <Layout meta={meta}>
@@ -123,6 +123,7 @@ const talks = [
     class="profile-picture"
     src={profilePicture}
     alt="Profile picture"
+    loading="eager"
     width={300}
     height={300}
     densities={[2, 3]}
