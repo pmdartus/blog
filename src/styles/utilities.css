@@ -1,0 +1,10 @@
+.card-alt {
+  margin: var(--content-spacing) 0;
+  padding: 1em;
+  background-color: var(--color-bg-alt);
+  border-radius: var(--border-radius);
+}
+
+.overflow-wrapper {
+  overflow-x: auto;
+}

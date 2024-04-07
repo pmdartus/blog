@@ -1,0 +1,31 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import BaseHead from "../components/BaseHead.astro";
+import type { Meta } from "../types";
+
+import { SITE } from "../site";
+
+import "../styles/stylesheet.css";
+
+interface Props {
+  meta: Meta;
+}
+
+const { meta } = Astro.props;
+---
+
+<!doctype html>
+<html lang={SITE.locale.lang}>
+  <head>
+    <BaseHead {...meta} />
+  </head>
+
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

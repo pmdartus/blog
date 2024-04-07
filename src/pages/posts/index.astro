@@ -1,0 +1,16 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import RecentPosts from "../../components/RecentPosts.astro";
+
+const meta = {
+  type: "page",
+  title: "Posts",
+  description:
+    "In this blog, I share insights and knowledge on web development, JavaScript, developer tooling, and the future of web applications.",
+} as const;
+---
+
+<Layout meta={meta}>
+  <h1>Posts</h1>
+  <RecentPosts showDescription />
+</Layout>

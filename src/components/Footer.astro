@@ -1,0 +1,28 @@
+---
+import { SITE } from "../site";
+import SocialAccounts from "./SocialAccounts.astro";
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer>
+  <small>
+    Copyright © {currentYear} - {SITE.author.name}
+  </small>
+
+  <small>
+    <SocialAccounts />
+  </small>
+</footer>
+
+<style>
+  footer {
+    margin: var(--content-spacing) var(--content-spacing-small);
+    color: var(--color-text-alt);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+</style>

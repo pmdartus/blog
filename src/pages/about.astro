@@ -1,0 +1,213 @@
+---
+import { Image } from "astro:assets";
+
+import Layout from "../layouts/Layout.astro";
+import SocialAccounts from "../components/SocialAccounts.astro";
+
+import profilePicture from "../assets/profile-picture.jpg";
+
+const meta = {
+  type: "page",
+  title: "About",
+  description:
+    "I'm Pierre-Marie Dartus, a Software Architect. I currently work at Salesforce building tools and frameworks for developers.",
+} as const;
+
+const projects = [
+  {
+    name: "Lightning Web Components",
+    url: "https://github.com/salesforce/lwc",
+    description: "A lightweight Web component based UI framework.",
+  },
+  {
+    name: "jsdom",
+    url: "https://github.com/jsdom/jsdom",
+    description:
+      "A JavaScript implementation of various web standards, for use with Node.js.",
+  },
+  {
+    name: "observable-membrane",
+    url: "https://github.com/salesforce/observable-membrane",
+    description:
+      "A Javascript membrane implementation using Proxies to observe mutation on an object graph.",
+  },
+  {
+    name: "rcast",
+    url: "https://github.com/pmdartus/rcast",
+    description: "PWA podcast player written with LWC.",
+  },
+  {
+    name: "snapline",
+    url: "https://github.com/pmdartus/snapline",
+    description:
+      "Convert screenshots stored in devtool performance trace into GIFs.",
+  },
+  {
+    name: "speedline",
+    url: "https://github.com/paulirish/speedline",
+    description: "Calculate the speed index from devtools performance trace.",
+  },
+];
+
+const talks = [
+  {
+    year: "2016",
+    title: "Leverage GraphQL to Efficiently Query Data Relationships",
+    event: "Dreamforce'16",
+    links: {
+      slides:
+        "https://drive.google.com/file/d/1QPJ6ymIkcTrnm2EXZVV52TRouRNcfwy_/view?usp=sharing",
+      recording: "https://www.youtube.com/watch?v=efEBcCtfARo",
+    },
+  },
+  {
+    year: "2017",
+    title: "Aura performance analysis & Best practices",
+    event: "Paris Salesforce Developer group",
+    links: {
+      slides:
+        "https://drive.google.com/file/d/17tHo68FgZiJwT1xG3rYJI7uMdy2OqszX/view?usp=sharing",
+    },
+  },
+  {
+    year: "2019",
+    title: "Build Lightning Web Components that Run Anywhere",
+    event: "TrailheadDX'19",
+    links: {
+      slides:
+        "https://drive.google.com/file/d/1Cwlkb9qt31vdafsVlIuyMyPBkDyL6Tyq/view?usp=sharing",
+    },
+  },
+  {
+    year: "2019",
+    title: "How Does Salesforce Build Lightning Web Components?",
+    event: "Salesforce Paris World Tour",
+    links: {
+      slides:
+        "https://drive.google.com/file/d/1c2vqFfAIA1e0y0pVf56gYW4KNYcAacgu/view?usp=sharing",
+    },
+  },
+  {
+    year: "2020",
+    title: "How to tame your JavaScript code using ASTs",
+    links: {
+      slides:
+        "https://drive.google.com/file/d/1ISwbeKt26c3Jv0lX7mgiyQD-watRkofL/view?usp=sharing",
+    },
+  },
+  {
+    year: "2022",
+    title: "What's new with Lightning Web Components?",
+    event: "TrailblazerDX'22",
+    links: {
+      slides:
+        "https://drive.google.com/file/d/1IISTvQrjLSOFKCXdoKIUtsrjwVDIw2fI/view?usp=sharing",
+    },
+  },
+  {
+    year: "2023",
+    title: "The Art of Analyzing Front-end Performance",
+    event: "Meetup Takima",
+    links: {
+      slides:
+        "https://docs.google.com/presentation/d/1eyITq0zur9ImiCi9yQGB5xdzRTmo3a51bCeFh0U_nQk",
+    },
+  },
+];
+---
+
+<Layout meta={meta}>
+  <h1>About</h1>
+
+  <Image
+    class="profile-picture"
+    src={profilePicture}
+    alt="Profile picture"
+    width={300}
+    height={300}
+    densities={[2, 3]}
+  />
+
+  <p>
+    I am Pierre-Marie Dartus, a software engineer based out of Paris, France.
+    Currently working at Salesforce as a Software Architect, I work on tools and
+    frameworks for developers to build and scale the next generation of web
+    applications on the Salesforce platform.
+  </p>
+
+  <p>
+    I am pasionated about the Web platform and JavaScript runtimes, developer
+    tooling, and performance.
+  </p>
+
+  <p>
+    Open source enthusiast, I am a core contributor to jsdom. I also had the
+    opportunity to represent Salesforce as a part of the W3C Web Component
+    working group.
+  </p>
+
+  <p>
+    To get in touch, here is my <a href="mailto:pm@dartus.fr">email</a>.<br />
+    You can also find me on: <SocialAccounts />
+  </p>
+
+  <h2>Projects</h2>
+
+  <ul>
+    {
+      projects.map((project) => (
+        <li>
+          <a href={project.url} target="_blank" rel="noopener">
+            <strong>{project.name}</strong>
+          </a>
+          {" - "}
+          {project.description}
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>Talks</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Title</th>
+        <th>Links</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        talks.map((talk) => (
+          <tr>
+            <td>{talk.year}</td>
+            <td>
+              <strong>{talk.title}</strong> {talk.event && ` (${talk.event})`}
+            </td>
+            <td>
+              {talk.links.slides && (
+                <a href={talk.links.slides} target="_blank" rel="noopener">
+                  Slides
+                </a>
+              )}
+              {talk.links.recording && (
+                <a href={talk.links.recording} target="_blank" rel="noopener">
+                  Recording
+                </a>
+              )}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</Layout>
+
+<style>
+  .profile-picture {
+    display: block;
+    margin: 0 auto;
+    border-radius: var(--border-radius);
+  }
+</style>

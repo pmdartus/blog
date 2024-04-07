@@ -1,0 +1,74 @@
+---
+import { Image } from "astro:assets";
+
+import Layout from "../layouts/Layout.astro";
+import RecentPosts from "../components/RecentPosts.astro";
+import SocialAccounts from "../components/SocialAccounts.astro";
+
+import profilePicture from "../assets/profile-picture.jpg";
+
+const meta = {
+  type: "page",
+  title: "Home",
+  description:
+    "I'm Pierre-Marie Dartus, a Software Architect. This website is my space to share thoughts on web development, JavaScript, and open source projects.",
+} as const;
+---
+
+<Layout meta={meta}>
+  <h1>
+    {/* Using a non breaking hyphen in my first name. */}
+    Hi, I am Pierre&#8209;Marie Dartus 👋
+  </h1>
+
+  <section class="summary">
+    <Image
+      class="profile-picture"
+      src={profilePicture}
+      alt="Profile Picture"
+      width={150}
+      height={150}
+      densities={[2, 3]}
+    />
+
+    <p>
+      I am software engineer based out of Paris, France. Currently working at
+      Salesforce as a Software Architect, I work on tools and frameworks for
+      developers to build and scale the next generation of web applications on
+      the Salesforce platform.
+    </p>
+  </section>
+
+  <p>
+    Find me on: <SocialAccounts />
+  </p>
+
+  <h2>Recent Posts</h2>
+
+  <RecentPosts limit={3} showDescription={false} />
+</Layout>
+
+<style>
+  h1 {
+    text-wrap: balance;
+  }
+
+  .profile-picture {
+    border-radius: var(--border-radius);
+
+    @media (width <= 684px) {
+      display: none;
+    }
+  }
+
+  .summary {
+    display: flex;
+    align-items: center;
+    gap: var(--content-spacing);
+    margin: var(--content-spacing) 0;
+
+    & > * {
+      margin: 0;
+    }
+  }
+</style>

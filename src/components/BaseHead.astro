@@ -1,0 +1,100 @@
+---
+import { SITE } from "../site";
+import profilePicture from "../assets/profile-picture.jpg";
+
+import type { Meta } from "../types";
+
+type Props = Meta;
+
+const { props } = Astro;
+const { title, description, ogImage } = props;
+
+const siteTitle = `${title} • ${SITE.title}`;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const socialImageConfig = ogImage
+  ? {
+      url: new URL(ogImage, Astro.site).href,
+      width: "1200",
+      height: "630",
+    }
+  : {
+      url: profilePicture.src,
+    };
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width" />
+
+<title>{siteTitle}</title>
+
+{/* Main meta tags */}
+<meta content={siteTitle} name="title" />
+<meta content={description} name="description" />
+<meta content={SITE.author.name} name="author" />
+
+{/* Favicon */}
+<link href="/favicon.ico" rel="icon" sizes="any" />
+<link href="/icon.svg" rel="icon" type="image/svg+xml" />
+<link href="/apple-touch-icon.png" rel="apple-touch-icon" />
+<link href="/manifest.webmanifest" rel="manifest" />
+
+{/* Theme Colour */}
+<meta content="" name="theme-color" />
+
+{/* Canonical URL */}
+<link href={canonicalURL} rel="canonical" />
+
+{/* Open Graph / Facebook */}
+<meta
+  content={props.type === "post" ? "article" : "website"}
+  property="og:type"
+/>
+<meta content={title} property="og:title" />
+<meta content={description} property="og:description" />
+<meta content={canonicalURL} property="og:url" />
+<meta content={SITE.title} property="og:site_name" />
+<meta content={SITE.locale.ogLocale} property="og:locale" />
+<meta content={socialImageConfig.url} property="og:image" />
+{
+  socialImageConfig.width && (
+    <meta content={socialImageConfig.width} property="og:image:width" />
+  )
+}
+{
+  socialImageConfig.height && (
+    <meta content={socialImageConfig.height} property="og:image:height" />
+  )
+}
+{
+  props.type === "post" && (
+    <>
+      <meta content={SITE.author.name} property="article:author" />
+      <meta
+        content={props.publishDate.toISOString()}
+        property="article:published_time"
+      />
+    </>
+  )
+}
+
+{/* Twitter */}
+<meta content="summary_large_image" property="twitter:card" />
+<meta content={SITE.author.twitterHandle} property="twitter:site" />
+<meta content={SITE.author.twitterHandle} property="twitter:creator" />
+<meta content={canonicalURL} property="twitter:url" />
+<meta content={title} property="twitter:title" />
+<meta content={description} property="twitter:description" />
+<meta content={socialImageConfig.url} property="twitter:image" />
+
+{/* Sitemap */}
+<link href="/sitemap-index.xml" rel="sitemap" />
+
+{/* RSS auto-discovery */}
+<link
+  href="/feed.xml"
+  rel="alternate"
+  title={SITE.title}
+  type="application/rss+xml"
+/>
