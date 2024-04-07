@@ -1,6 +1,6 @@
-# Mark all Astro generate assets as immutable
+# Mark all Astro generate assets as immutable for 1 year
 /_astro/*
-    Cache-Control: public, max-age=604800, immutable
+    Cache-Control: public, max-age=31536000, immutable
 
 # Cache fonts for 1 day and revalidate for 1 month.
 /fonts/*
