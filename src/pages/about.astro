@@ -6,6 +6,12 @@ import SocialAccounts from "../components/SocialAccounts.astro";
 
 import profilePicture from "../assets/profile-picture.jpg";
 
+const meta = {
+  type: "page",
+  title: "About",
+  description: "I'm Pierre-Marie Dartus, a Software Architect. I currently work at Salesforce building tools and frameworks for developers.",
+} as const;
+
 const projects = [
   {
     name: "Lightning Web Components",
@@ -109,7 +115,7 @@ const talks = [
 ];
 ---
 
-<Layout title="About" pageType="page" description="">
+<Layout meta={meta}>
   <h1>About</h1>
 
   <Image

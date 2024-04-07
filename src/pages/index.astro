@@ -6,13 +6,16 @@ import RecentPosts from "../components/RecentPosts.astro";
 import SocialAccounts from "../components/SocialAccounts.astro";
 
 import profilePicture from "../assets/profile-picture.jpg";
+
+const meta = {
+  type: "page",
+  title: "Home",
+  description:
+    "I'm Pierre-Marie Dartus, a Software Architect. This website is my space to share thoughts on web development, JavaScript, and open source projects.",
+} as const;
 ---
 
-<Layout
-  pageType="page"
-  title="Home"
-  description="Pierre-Marie Dartus is a software engineer working at Salesforce. He primarily works on web platform tooling and performance optimizations."
->
+<Layout meta={meta}>
   <h1>
     {/* Using a non breaking hyphen in my first name. */}
     Hi, I am Pierre&#8209;Marie Dartus 👋

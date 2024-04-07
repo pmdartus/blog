@@ -22,7 +22,7 @@ const posts = await getPosts({
         <div class="title">
           <FormattedDate date={post.data.publishDate} class="time" />
           <h3>
-            <a href={`/posts/${post.slug}`}>{post.data.title}</a>
+            <a href={`/posts/${post.slug}/`}>{post.data.title}</a>
           </h3>
         </div>
 

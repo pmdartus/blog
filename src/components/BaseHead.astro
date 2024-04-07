@@ -1,0 +1,79 @@
+---
+import { SITE } from "../site";
+import type { Meta } from '../types';
+
+type Props = Meta;
+
+const { props } = Astro;
+const { title, description, ogImage } = props;
+
+const siteTitle = `${title} • ${SITE.title}`;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const socialImageURL = new URL(ogImage ?? "/social-card.png", Astro.site)
+  .href;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width" />
+
+<title>{siteTitle}</title>
+
+{/* Main meta tags */}
+<meta content={siteTitle} name="title" />
+<meta content={description} name="description" />
+<meta content={SITE.author.name} name="author" />
+
+{/* Favicon */}
+<link href="/favicon.ico" rel="icon" sizes="any" />
+<link href="/icon.svg" rel="icon" type="image/svg+xml" />
+<link href="/apple-touch-icon.png" rel="apple-touch-icon" />
+<link href="/manifest.webmanifest" rel="manifest" />
+
+{/* Theme Colour */}
+<meta content="" name="theme-color" />
+
+{/* Canonical URL */}
+<link href={canonicalURL} rel="canonical" />
+
+{/* Open Graph / Facebook */}
+<meta
+    content={props.type === "post" ? "article" : "website"}
+    property="og:type"
+/>
+<meta content={title} property="og:title" />
+<meta content={description} property="og:description" />
+<meta content={canonicalURL} property="og:url" />
+<meta content={SITE.title} property="og:site_name" />
+<meta content={SITE.locale.ogLocale} property="og:locale" />
+<meta content={socialImageURL} property="og:image" />
+<meta content="1200" property="og:image:width" />
+<meta content="630" property="og:image:height" />
+{
+    props.type === "post" && (
+    <>
+        <meta content={SITE.author.name} property="article:author" />
+        <meta content={props.publishDate.toISOString()} property="article:published_time" />
+    </>
+    )
+}
+
+{/* Twitter */}
+<meta content="summary_large_image" property="twitter:card" />
+<meta content={SITE.author.twitterHandle} property="twitter:site" />
+<meta content={SITE.author.twitterHandle} property="twitter:creator" />
+<meta content={canonicalURL} property="twitter:url" />
+<meta content={title} property="twitter:title" />
+<meta content={description} property="twitter:description" />
+<meta content={socialImageURL} property="twitter:image" />
+
+{/* Sitemap */}
+<link href="/sitemap-index.xml" rel="sitemap" />
+
+{/* RSS auto-discovery */}
+<link
+    href="/feed.xml"
+    rel="alternate"
+    title={SITE.title}
+    type="application/rss+xml"
+/>

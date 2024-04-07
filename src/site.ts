@@ -8,7 +8,7 @@ export const SITE = {
     twitterHandle: "@pmdartus",
   },
   description:
-    "Pierre-Marie Dartus is a software engineer working at Salesforce. He primarily works on web platform tooling and performance optimizations.",
+    "I'm Pierre-Marie Dartus, a Software Architect. This website is my space to share knowledge on web development, JavaScript, and performance.",
   locale: {
     lang: "en",
     ogLocale: "en_US",
@@ -22,11 +22,11 @@ export const NAVIGATION: NavigationList = [
   },
   {
     title: "Posts",
-    url: "/posts",
+    url: "/posts/",
   },
   {
     title: "About",
-    url: "/about",
+    url: "/about/",
   },
 ];
 

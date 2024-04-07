@@ -1,12 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+
+const meta = {
+  type: "page",
+  title: "Not found",
+  description: "Oops! You found a missing page!",
+} as const;
 ---
 
-<Layout
-  pageType="page"
-  title="Not found"
-  description="Oops! You found a missing page!"
->
+<Layout meta={meta}>
   <h1>Oops! You found a missing page!</h1>
   <p>
     Sorry about that! The page you're looking for doesn't exist. It's probably

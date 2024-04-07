@@ -1,6 +1,5 @@
 ---
 import { getCollection } from "astro:content";
-import type { InferGetStaticPropsType } from "astro";
 
 import Layout from "../../layouts/Layout.astro";
 import FormattedDate from "../../components/FormattedDate.astro";
@@ -16,24 +15,22 @@ export async function getStaticPaths() {
   }));
 }
 
-type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-
 const { post } = Astro.props;
 const { title, description, publishDate, updateDate } = post.data;
 
-const { Content } = await post.render();
+const meta = {
+  type: 'post',
+  title,
+  description,
+  ogImage: new URL(Astro.url.pathname + 'og.png', Astro.site),
+  publishDate: updateDate ?? publishDate,
+} as const;
 
+const { Content } = await post.render();
 const readTime = computeReadTime(post.body);
-const formattedPublishData =
-  updateDate?.toISOString() ?? publishDate.toISOString();
 ---
 
-<Layout
-  pageType="article"
-  title={title}
-  description={description}
-  publishDate={formattedPublishData}
->
+<Layout meta={meta}>
   <h1>{title}</h1>
 
   <aside>
@@ -53,7 +50,7 @@ const formattedPublishData =
   </div>
 
   <p>
-    <a href="/posts">← Back to posts</a>
+    <a href="/posts/">← Back to posts</a>
   </p>
 </Layout>
 
