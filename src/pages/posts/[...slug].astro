@@ -19,10 +19,10 @@ const { post } = Astro.props;
 const { title, description, publishDate, updateDate } = post.data;
 
 const meta = {
-  type: 'post',
+  type: "post",
   title,
   description,
-  ogImage: new URL(Astro.url.pathname + 'og.png', Astro.site),
+  ogImage: new URL(Astro.url.pathname + "og.png", Astro.site),
   publishDate: updateDate ?? publishDate,
 } as const;
 

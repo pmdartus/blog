@@ -1,4 +1,4 @@
-import path from 'node:path';
+import path from "node:path";
 import fs from "node:fs/promises";
 
 import { html } from "satori-html";
@@ -74,7 +74,7 @@ export const GET: APIRoute<Props> = async (ctx) => {
       month: "short",
       day: "numeric",
     },
-    );
+  );
 
   // Convert the profile picture to a base64-encoded data URL. This is bottleneck for og image
   // generation. This should be optimized in the future to avoid unnecessary base64 encoding.

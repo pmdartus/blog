@@ -10,7 +10,7 @@ interface AbstractMeta<T extends PageType> {
 export type PageMeta = AbstractMeta<"page">;
 export type PostMeta = AbstractMeta<"post"> & {
   publishDate: Date;
-}
+};
 
 export type Meta = PageMeta | PostMeta;
 

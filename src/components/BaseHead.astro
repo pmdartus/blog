@@ -1,6 +1,8 @@
 ---
 import { SITE } from "../site";
-import type { Meta } from '../types';
+import profilePicture from "../assets/profile-picture.jpg";
+
+import type { Meta } from "../types";
 
 type Props = Meta;
 
@@ -10,8 +12,16 @@ const { title, description, ogImage } = props;
 const siteTitle = `${title} • ${SITE.title}`;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const socialImageURL = new URL(ogImage ?? "/social-card.png", Astro.site)
-  .href;
+
+const socialImageConfig = ogImage
+  ? {
+      url: new URL(ogImage, Astro.site).href,
+      width: "1200",
+      height: "630",
+    }
+  : {
+      url: profilePicture.src,
+    };
 ---
 
 <meta charset="utf-8" />
@@ -38,24 +48,35 @@ const socialImageURL = new URL(ogImage ?? "/social-card.png", Astro.site)
 
 {/* Open Graph / Facebook */}
 <meta
-    content={props.type === "post" ? "article" : "website"}
-    property="og:type"
+  content={props.type === "post" ? "article" : "website"}
+  property="og:type"
 />
 <meta content={title} property="og:title" />
 <meta content={description} property="og:description" />
 <meta content={canonicalURL} property="og:url" />
 <meta content={SITE.title} property="og:site_name" />
 <meta content={SITE.locale.ogLocale} property="og:locale" />
-<meta content={socialImageURL} property="og:image" />
-<meta content="1200" property="og:image:width" />
-<meta content="630" property="og:image:height" />
+<meta content={socialImageConfig.url} property="og:image" />
 {
-    props.type === "post" && (
+  socialImageConfig.width && (
+    <meta content={socialImageConfig.width} property="og:image:width" />
+  )
+}
+{
+  socialImageConfig.height && (
+    <meta content={socialImageConfig.height} property="og:image:height" />
+  )
+}
+{
+  props.type === "post" && (
     <>
-        <meta content={SITE.author.name} property="article:author" />
-        <meta content={props.publishDate.toISOString()} property="article:published_time" />
+      <meta content={SITE.author.name} property="article:author" />
+      <meta
+        content={props.publishDate.toISOString()}
+        property="article:published_time"
+      />
     </>
-    )
+  )
 }
 
 {/* Twitter */}
@@ -65,15 +86,15 @@ const socialImageURL = new URL(ogImage ?? "/social-card.png", Astro.site)
 <meta content={canonicalURL} property="twitter:url" />
 <meta content={title} property="twitter:title" />
 <meta content={description} property="twitter:description" />
-<meta content={socialImageURL} property="twitter:image" />
+<meta content={socialImageConfig.url} property="twitter:image" />
 
 {/* Sitemap */}
 <link href="/sitemap-index.xml" rel="sitemap" />
 
 {/* RSS auto-discovery */}
 <link
-    href="/feed.xml"
-    rel="alternate"
-    title={SITE.title}
-    type="application/rss+xml"
+  href="/feed.xml"
+  rel="alternate"
+  title={SITE.title}
+  type="application/rss+xml"
 />
