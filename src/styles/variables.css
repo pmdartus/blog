@@ -21,8 +21,8 @@
   --font-weight-bold: 700;
 
   --font-family-base: "Merriweather", Georgia, "Times New Roman", Times, serif;
-  --font-family-heading: -apple-system, "Montserrat", "Helvetica Neue",
-    Helvetica, Arial, sans-serif;
+  --font-family-heading:
+    -apple-system, "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-family-mathml: "Latin Modern Math", math;
 
   --content-spacing: 1.5rem;

@@ -143,13 +143,13 @@ export const GET: APIRoute<Props> = async (ctx) => {
     fonts: [
       {
         name: "Merriweather",
-        data: Merriweather.buffer,
+        data: Merriweather,
         weight: 500,
         style: "normal",
       },
       {
         name: "Merriweather",
-        data: MerriweatherBold.buffer,
+        data: MerriweatherBold,
         weight: 700,
         style: "normal",
       },

@@ -124,9 +124,9 @@
  */
 
 :where(
-    button,
-    input:is([type="button" i], [type="reset" i], [type="submit" i])
-  ) {
+  button,
+  input:is([type="button" i], [type="reset" i], [type="submit" i])
+) {
   -webkit-appearance: button;
 }
 
