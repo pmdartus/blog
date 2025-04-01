@@ -1,0 +1,88 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getBooks, type Book } from "../utils/data";
+import Rating from "../components/Rating.astro";
+
+const meta = {
+  type: "page",
+  title: "Bookshelf",
+  description: "Books I've read and my thoughts on them",
+} as const;
+
+const books = await getBooks();
+
+const booksByYear = Object.groupBy<string, Book>(books, (book) => book.data.readingDate.getFullYear().toString());
+const sortedYears = Object.keys(booksByYear).sort((a, b) => Number(b) - Number(a));
+
+---
+
+<Layout meta={meta}>
+  <h1>Bookshelf</h1>
+  {
+    sortedYears.map((year) => (
+      <section>
+        <h2>{year}</h2>
+        <ul>
+          {booksByYear[year]!.map((book) => (
+            <li>
+              <div class="book">
+                <h3>
+                  {book.body?.length > 0 ? (
+                    <a href={`/books/${book.slug}/`}>{book.data.title}</a>
+                  ) : (
+                    book.data.title
+                  )}
+                </h3>
+                <span class="author">by {book.data.author}</span>
+                <Rating rating={book.data.rating} />
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</Layout>
+
+<style>
+  .year-section {
+    margin-bottom: 2rem;
+  }
+  .year-title {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .books-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .book {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+
+    * {
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .author {
+      color: var(--color-text-alt);
+      font-size: 0.9em;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+</style>
