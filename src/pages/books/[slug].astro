@@ -1,11 +1,12 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 
 import Rating from "../../components/Rating.astro";
+import Layout from "../../layouts/Layout.astro";
 
 export async function getStaticPaths() {
-  const books = await getCollection("books");
+  const books = await getCollection('books');
+  
   return books
     .filter((book) => book.body?.length > 0) // Only generate pages for books with content
     .map((book) => ({
@@ -14,71 +15,36 @@ export async function getStaticPaths() {
     }));
 }
 
-interface Props {
-  book: CollectionEntry<"books">;
-}
-
 const { book } = Astro.props;
+const { title, author, readingDate, rating } = book.data;
 
 const meta = {
   type: "page",
-  title: `${book.data.title} by ${book.data.author}`,
-  description: `My thoughts on ${book.data.title} by ${book.data.author}`,
+  title: `${title} by ${author}`,
+  description: `Notes on ${title} by ${author}`,
 } as const;
+
+const { Content } = await book.render();
 ---
 
 <Layout meta={meta}>
-  <article>
-    <header>
-      <h1>{book.data.title}</h1>
-      <div class="meta">
-        <span class="author">by {book.data.author}</span>
-        <span class="date"
-          >Read in {book.data.readingDate.toLocaleDateString()}</span
-        >
-        <Rating rating={book.data.rating} />
-      </div>
-    </header>
+  <h1>{title}</h1>
+  <aside>
+    <span>by {author}</span>
+    <span>• Read in {readingDate.getFullYear()}</span>
+    <span>• Rating:&nbsp;<Rating rating={rating} /></span>
+  </aside>
 
-    <div class="content" set:html={book.body} />
-  </article>
+  <Content />
+
+  <p>
+    <a href="/books/">← Back to books</a>
+  </p>
 </Layout>
 
 <style>
-  article {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0 1rem;
-  }
-
-  header {
-    margin-bottom: 2rem;
-  }
-
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-
-  .meta {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  aside {
     color: var(--color-text-alt);
     font-size: 0.9em;
   }
-
-  .content {
-    line-height: 1.6;
-  }
-
-  .content :global(h2) {
-    font-size: 1.5rem;
-    margin: 2rem 0 1rem;
-  }
-
-  .content :global(p) {
-    margin-bottom: 1rem;
-  }
 </style>
-
