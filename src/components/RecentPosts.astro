@@ -26,7 +26,7 @@ const posts = await getPosts({
           </h3>
         </div>
 
-        {showDescription && <p>{post.data.description}</p>}
+        {showDescription && <div class="description">{post.data.description}</div>}
       </li>
     ))
   }
@@ -38,13 +38,17 @@ const posts = await getPosts({
     padding: 0;
   }
 
+  li:has(> .description) {
+    margin-bottom: 1.5rem;
+  }
+
   .title {
     display: flex;
     align-items: baseline;
     gap: 1rem;
 
     * {
-      font-size: 1rem;
+      font-size: 1.1rem;
       margin: 0;
     }
 
@@ -57,7 +61,7 @@ const posts = await getPosts({
     }
   }
 
-  p {
-    margin: 0 0 1.5em 0;
+  .description {
+    font-size: 0.9em;
   }
 </style>

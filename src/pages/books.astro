@@ -1,7 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getBooks, type Book } from "../utils/data";
+import Icon from "../components/Icon.astro";
 import Rating from "../components/Rating.astro";
+import { getBooks, type Book } from "../utils/data";
 
 const meta = {
   type: "page",
@@ -11,30 +12,40 @@ const meta = {
 
 const books = await getBooks();
 
-const booksByYear = Object.groupBy<string, Book>(books, (book) => book.data.readingDate.getFullYear().toString());
-const sortedYears = Object.keys(booksByYear).sort((a, b) => Number(b) - Number(a));
-
+const booksByYear = Object.groupBy<string, Book>(books, (book) =>
+  book.data.readingDate.getFullYear().toString(),
+);
+const sortedYears = Object.keys(booksByYear).sort(
+  (a, b) => Number(b) - Number(a),
+);
 ---
 
 <Layout meta={meta}>
   <h1>Bookshelf</h1>
+
   {
     sortedYears.map((year) => (
       <section>
-        <h2>{year}</h2>
+        <h2>
+          {year}
+        </h2>
         <ul>
           {booksByYear[year]!.map((book) => (
             <li>
-              <div class="book">
-                <h3>
-                  {book.body?.length > 0 ? (
-                    <a href={`/books/${book.slug}/`}>{book.data.title}</a>
-                  ) : (
-                    book.data.title
-                  )}
-                </h3>
-                <span class="author">by {book.data.author}</span>
-                <Rating rating={book.data.rating} />
+              <h3 class="title">{book.data.title}</h3>
+              <div class="info">
+                <span>by {book.data.author}</span>
+                {book.body?.length > 0 && (
+                  <span>
+                    •&nbsp;
+                    <a href={`/books/${book.slug}/`}>
+                      <Icon name="page" /> Reading notes
+                    </a>
+                  </span>
+                )}
+                <span>
+                  • Rating: <Rating rating={book.data.rating} />
+                </span>
               </div>
             </li>
           ))}
@@ -45,44 +56,21 @@ const sortedYears = Object.keys(booksByYear).sort((a, b) => Number(b) - Number(a
 </Layout>
 
 <style>
-  .year-section {
-    margin-bottom: 2rem;
-  }
-  .year-title {
-    font-size: 1.5rem;
-    margin: 1rem 0;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-color);
-  }
-  .books-list {
+  ul {
     list-style: none;
     padding: 0;
+  }
+
+  li {
+    margin-bottom: 1.5rem;
+  }
+
+  .title {
+    font-size: 1.1rem;
     margin: 0;
   }
-  .book {
-    display: flex;
-    align-items: baseline;
-    gap: 1rem;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--border-color);
 
-    * {
-      font-size: 1rem;
-      margin: 0;
-    }
-
-    .author {
-      color: var(--color-text-alt);
-      font-size: 0.9em;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
+  .info {
+    font-size: 0.9rem;
   }
 </style>
