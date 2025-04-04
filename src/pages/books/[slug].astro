@@ -5,8 +5,8 @@ import Rating from "../../components/Rating.astro";
 import Layout from "../../layouts/Layout.astro";
 
 export async function getStaticPaths() {
-  const books = await getCollection('books');
-  
+  const books = await getCollection("books");
+
   return books
     .filter((book) => book.body?.length > 0) // Only generate pages for books with content
     .map((book) => ({
@@ -32,7 +32,14 @@ const { Content } = await book.render();
   <aside>
     <span>by {author}</span>
     <span>• Read in {readingDate.getFullYear()}</span>
-    {rating && <span>• Rating:&nbsp;<Rating rating={rating} /></span>}
+    {
+      rating && (
+        <span>
+          • Rating:&nbsp;
+          <Rating rating={rating} />
+        </span>
+      )
+    }
   </aside>
 
   <Content />

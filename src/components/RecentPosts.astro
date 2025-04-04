@@ -26,7 +26,9 @@ const posts = await getPosts({
           </h3>
         </div>
 
-        {showDescription && <div class="description">{post.data.description}</div>}
+        {showDescription && (
+          <div class="description">{post.data.description}</div>
+        )}
       </li>
     ))
   }

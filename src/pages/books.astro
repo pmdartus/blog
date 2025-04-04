@@ -26,9 +26,7 @@ const sortedYears = Object.keys(booksByYear).sort(
   {
     sortedYears.map((year) => (
       <section>
-        <h2>
-          {year}
-        </h2>
+        <h2>{year}</h2>
         <ul>
           {booksByYear[year]!.map((book) => (
             <li>

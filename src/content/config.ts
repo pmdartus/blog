@@ -12,7 +12,7 @@ const posts = defineCollection({
 });
 
 const books = defineCollection({
-  type: 'content',
+  type: "content",
   schema: z.object({
     title: z.string(),
     author: z.string(),
