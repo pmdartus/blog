@@ -11,6 +11,17 @@ const posts = defineCollection({
   }),
 });
 
+const books = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    author: z.string(),
+    readingDate: z.date(),
+    rating: z.number().min(1).max(5).optional(),
+  }),
+});
+
 export const collections = {
   posts,
+  books,
 };

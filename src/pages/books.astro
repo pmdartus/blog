@@ -1,0 +1,76 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
+import Rating from "../components/Rating.astro";
+import { getBooks, type Book } from "../utils/data";
+
+const meta = {
+  type: "page",
+  title: "Bookshelf",
+  description: "Books I've read and my thoughts on them",
+} as const;
+
+const books = await getBooks();
+
+const booksByYear = Object.groupBy<string, Book>(books, (book) =>
+  book.data.readingDate.getFullYear().toString(),
+);
+const sortedYears = Object.keys(booksByYear).sort(
+  (a, b) => Number(b) - Number(a),
+);
+---
+
+<Layout meta={meta}>
+  <h1>Bookshelf</h1>
+
+  {
+    sortedYears.map((year) => (
+      <section>
+        <h2>{year}</h2>
+        <ul>
+          {booksByYear[year]!.map((book) => (
+            <li>
+              <h3 class="title">{book.data.title}</h3>
+              <div class="info">
+                <span>by {book.data.author}</span>
+                {book.body?.length > 0 && (
+                  <span>
+                    •&nbsp;
+                    <a href={`/books/${book.slug}/`}>
+                      <Icon name="page" /> Reading notes
+                    </a>
+                  </span>
+                )}
+                {book.data.rating && (
+                  <span>
+                    • Rating: <Rating rating={book.data.rating} />
+                  </span>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</Layout>
+
+<style>
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 1.5rem;
+  }
+
+  .title {
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  .info {
+    font-size: 0.9rem;
+  }
+</style>

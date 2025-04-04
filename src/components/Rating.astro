@@ -1,0 +1,32 @@
+---
+interface Props {
+  rating: number;
+  max?: number;
+  class?: string;
+  style?: string;
+}
+
+const { rating, max = 5, class: className, ...rest } = Astro.props;
+---
+
+<div class={`rating ${className}`} {...rest}>
+  {
+    [...Array(max)].map((_, i) => (
+      <span class={`star ${i < rating ? "checked" : ""}`}>★</span>
+    ))
+  }
+</div>
+
+<style>
+  .rating {
+    display: inline;
+  }
+
+  .star {
+    color: #ccc;
+
+    &.checked {
+      color: #ffd700;
+    }
+  }
+</style>

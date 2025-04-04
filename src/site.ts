@@ -25,6 +25,10 @@ export const NAVIGATION: NavigationList = [
     url: "/posts/",
   },
   {
+    title: "Books",
+    url: "/books/",
+  },
+  {
     title: "About",
     url: "/about/",
   },

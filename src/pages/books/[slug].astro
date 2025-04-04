@@ -1,0 +1,57 @@
+---
+import { getCollection } from "astro:content";
+
+import Rating from "../../components/Rating.astro";
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+  const books = await getCollection("books");
+
+  return books
+    .filter((book) => book.body?.length > 0) // Only generate pages for books with content
+    .map((book) => ({
+      params: { slug: book.slug },
+      props: { book },
+    }));
+}
+
+const { book } = Astro.props;
+const { title, author, readingDate, rating } = book.data;
+
+const meta = {
+  type: "page",
+  title: `${title} by ${author}`,
+  description: `Notes on ${title} by ${author}`,
+} as const;
+
+const { Content } = await book.render();
+---
+
+<Layout meta={meta}>
+  <h1>{title}</h1>
+  <aside>
+    <span>by {author}</span>
+    <span>• Read in {readingDate.getFullYear()}</span>
+    {
+      rating && (
+        <span>
+          • Rating:&nbsp;
+          <Rating rating={rating} />
+        </span>
+      )
+    }
+  </aside>
+
+  <Content />
+
+  <p>
+    <a href="/books/">← Back to books</a>
+  </p>
+</Layout>
+
+<style>
+  aside {
+    color: var(--color-text-alt);
+    font-size: 0.9em;
+  }
+</style>
