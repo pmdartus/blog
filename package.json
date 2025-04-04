@@ -8,7 +8,8 @@
     "astro": "astro",
     "serve": "wrangler pages dev dist/",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
@@ -26,8 +27,13 @@
     "wrangler": "^3.30.1"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.8.2"
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
   }
 }
