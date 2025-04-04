@@ -20,8 +20,8 @@ const { title, author, readingDate, rating } = book.data;
 
 const meta = {
   type: "page",
-  title: `${title} by ${author}`,
-  description: `Notes on ${title} by ${author}`,
+  title: `Notes on "${title}" by ${author}`,
+  description: `Notes on "${title}" by ${author}`,
 } as const;
 
 const { Content } = await book.render();
