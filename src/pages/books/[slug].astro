@@ -32,7 +32,7 @@ const { Content } = await book.render();
   <aside>
     <span>by {author}</span>
     <span>• Read in {readingDate.getFullYear()}</span>
-    <span>• Rating:&nbsp;<Rating rating={rating} /></span>
+    {rating && <span>• Rating:&nbsp;<Rating rating={rating} /></span>}
   </aside>
 
   <Content />

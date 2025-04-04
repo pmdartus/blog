@@ -17,7 +17,7 @@ const books = defineCollection({
     title: z.string(),
     author: z.string(),
     readingDate: z.date(),
-    rating: z.number().min(1).max(5),
+    rating: z.number().min(1).max(5).optional(),
   }),
 });
 

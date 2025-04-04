@@ -43,9 +43,11 @@ const sortedYears = Object.keys(booksByYear).sort(
                     </a>
                   </span>
                 )}
-                <span>
-                  • Rating: <Rating rating={book.data.rating} />
-                </span>
+                {book.data.rating && (
+                  <span>
+                    • Rating: <Rating rating={book.data.rating} />
+                  </span>
+                )}
               </div>
             </li>
           ))}
