@@ -7,7 +7,8 @@ import { getBooks, type Book } from "../utils/data";
 const meta = {
   type: "page",
   title: "Bookshelf",
-  description: "Books I've read and my thoughts on them",
+  description:
+    "My personal bookshelf. Books I've recently read with my notes and thoughts on them.",
 } as const;
 
 const books = await getBooks();
