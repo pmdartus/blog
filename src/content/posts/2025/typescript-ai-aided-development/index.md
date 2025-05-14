@@ -26,7 +26,7 @@ This AI-driven workflow was incredibly effective…
 
 ![Looney Tunes signature closing sequence: That's all folks!](./thats-all-folks.png)
 
-…until the project grew. Things went smoothly when the entire codebase fit within a single file. However, as soon as I tasked the agent with refactoring the code into multiple files, hallucinations became more frequent. **Even though the entire codebase could easily fit into Claude 3.7 Sonnet's 200K context window, bugs started to creep in**.
+…until the project grew. Things went smoothly when the entire codebase fit within a single file. However, as soon as I tasked the agent with refactoring the code into multiple files in different directories, hallucinations became more frequent. **Even though the entire codebase could easily fit into Claude 3.7 Sonnet's 200K context window, bugs started to creep in**.
 
 Doubling down on unit tests and adopting a Test-Driven Development (TDD) approach resulted in slight improvements. This helped catch regressions introduced by the agent, but the fixes it generated were often of poor quality.
 
@@ -40,7 +40,7 @@ Cursor's "Iterate on lints" feature proved invaluable. When enabled, it captures
 
 ![Screenshot of Cursor setting's page](./iterate-on-lint.png)
 
-In the same way that type safety allows human software engineers to work effectively without needing to hold the entire codebase in their minds, coding agents aren't always required to load the entire project into their context window to generate valid and coherent code.
+In the same way that type safety allows human software engineers to work effectively with only a subset of the codebase in their minds, coding agents aren't always required to load the entire project into their context window to generate valid and coherent code.
 
 ## Polishing Your Types to Guide the AI
 
@@ -92,7 +92,7 @@ interface Highlight extends BaseAnnotation {
 type Annotation = Highlight | Note;
 ```
 
-After I refined the type definitions, Cursor began generating more accurate code in fewer attempts. Thanks to these stricter typings, the agent could also self-correct more effectively when it made mistakes, using TypeScript's error messages. Furthermore, the AI model improved code coverage by eliminating impossible test cases—now disallowed by the new types—and generating new unit tests for relevant edge cases.
+After redefining the type definitions, Cursor began generating more accurate code in fewer attempts. Thanks to these stricter typings, the agent could also self-correct more effectively when it made mistakes, using TypeScript's error messages. Furthermore, the AI model improved code coverage by eliminating impossible test cases—now disallowed by the new types—and generating new unit tests for relevant edge cases.
 
 Without necessarily going all the way into "[hyper-typing](https://pscanf.com/s/341/)", investing a little time in **refining AI-generated types to better capture their semantics quickly pays dividends**.
 
@@ -105,9 +105,7 @@ Highlight Hop utilizes a serverless architecture deployed on AWS, relying on sev
 - _Lambda_ – to transform Kindle exports into the requested formats and forward them to the sender.
 - _SQS (Simple Queue Service)_ – a message queue system to notify Lambda functions.
 
-Manually setting up and managing these services is incredibly tedious—it's no wonder services like Vercel or Netlify, which abstract these complexities away, are pricey.
-
-To fully automate this setup, I decided to try [Pulumi](https://www.pulumi.com/). Pulumi is an Infrastructure-as-Code (IaC) tool, similar to Terraform, but with a key difference: infrastructure is described using general-purpose languages like TypeScript, Python, or Java, rather than a proprietary Domain-Specific Language (DSL).
+Manually setting up and managing these services is incredibly tedious. To fully automate the infrastructure setup, I decided to try [Pulumi](https://www.pulumi.com/). Pulumi is an Infrastructure-as-Code (IaC) tool, similar to Terraform, but with a key difference: infrastructure is described using general-purpose languages like TypeScript, Python, or Java, rather than a proprietary Domain-Specific Language (DSL).
 
 For instance, the following Pulumi TypeScript snippet defines an AWS lambda function and an SQS queue and connects them together:
 
@@ -135,7 +133,7 @@ new aws.lambda.EventSourceMapping("lambda-trigger", {
 
 My experience combining Pulumi and Cursor was extremely positive. Given the PRD and a few prompts, Cursor generated a remarkably good Pulumi script. It even tackled one of my main frustrations: defining the correct IAM roles and policies.
 
-The fact that the infrastructure code is defined in TypeScript proved to be a significant advantage. Even though Pulumi might be less popular compared to Terraform, Cursor's Agent successfully pieced together the necessary configurations. When the AI hallucinated, the **TypeScript type system forced rapid iteration and correction**. There was no need for deployments to validate the script or to install additional VS Code plugins; the built-in TypeScript language server did most of the heavy lifting.
+The fact that the infrastructure code is defined in TypeScript proved to be a significant advantage. Even though Pulumi might be less known compared to Terraform, Cursor's Agent successfully pieced together the necessary configurations. When the AI hallucinated, the **TypeScript type system forced rapid iteration and correction**. There was no need for deployments to validate the script or to install additional VS Code plugins; the built-in TypeScript language server did most of the heavy lifting.
 
 While I haven't conducted a formal side-by-side analysis, Pulumi's approach using general-purpose languages appears to yield better results with AI coding agents compared to Terraform's DSL, judging by recent feedback on the official [Terraform VS Code plugin](https://marketplace.visualstudio.com/items?itemName=HashiCorp.terraform&ssr=false#review-details) page.
 
@@ -145,21 +143,21 @@ While I haven't conducted a formal side-by-side analysis, Pulumi's approach usin
 
 The Kindle applications on iOS and Android export highlights as HTML documents with a predefined, albeit somewhat quirky, structure. To parse these documents, I selected the [`html5parser`](https://github.com/acrazing/html5parser) library.
 
-While multiple high-quality HTML parsers are available on NPM—such as [`parse5`](https://github.com/inikulin/parse5), [`htmlparser2`](https://github.com/fb55/htmlparser2), or [`cheerio`](https://github.com/cheeriojs/cheerio)—I opted for `html5parser` because, as you might have guessed, it's dependency-free. And yes, I need to work with my therapist on how to get over my fear of NPM dependencies.
+While multiple high-quality HTML parsers are available on NPM—such as [`parse5`](https://github.com/inikulin/parse5), [`htmlparser2`](https://github.com/fb55/htmlparser2), or [`cheerio`](https://github.com/cheeriojs/cheerio)—I opted for `html5parser` because, as you might have guessed, it's dependency-free. _And yes, I need to work with my therapist on how to get over my fear of NPM dependencies._
 
 However, `html5parser` is significantly less popular than its counterparts. A quick comparison of NPM weekly downloads reveals this disparity: `html5parser` has 30K downloads, compared to 50M downloads for parse5.
 
-This lower popularity had a noticeable impact on the Agent's capability. Even though `html5parser` ships with type definitions, Cursor struggled to generate the parser logic. The AI frequently hallucinated, either using standard DOM APIs or borrowing APIs from other more popular parsing libraries.
+This lower popularity had a noticeable impact on the Agent's coding capability. Even though `html5parser` ships with type definitions, Cursor struggled to generate the parser logic. The AI frequently hallucinated, either using standard DOM APIs or borrowing APIs from other more popular parsing libraries.
 
 Cursor's performance in this specific task improved dramatically after explicitly adding the `html5parser` documentation to its context using Cursor's `@-mentions` feature for documentation.
 
 ![Screenshot of Cursor Agent mode with documentation injected in the context](./at-mention-doc.png)
 
-More details on using context like this can be found in the [official Cursor documentation](https://docs.cursor.com/context/@-symbols/@-docs).
+More details define custom documentation context can be found in the [official Cursor documentation](https://docs.cursor.com/context/@-symbols/@-docs).
 
 ## Types as an AI Enabler
 
-My experience with Highlight Hop reinforces the benefits TypeScript, or any other strongly typed language, brings to the table in a world where an increasing amount of code is generated by models. **Well-defined types act as guardrails and guides, not just for human developers, but for our AI partners too**, leading to more robust, maintainable, and correct software, faster.
+My experience with Highlight Hop reinforces the benefits TypeScript, or any other strongly typed language, brings to the table in a world where an increasing amount of code is produced by generative AI. **Well-defined types act as guardrails and guides, not just for human developers, but for our AI partners too**, leading to more robust, maintainable, and correct software, faster.
 
 Reflecting back on the comparison between Pulumi and Terraform, one of the primary reasons for creating a Domain-Specific Language (DSL) has often been to make tools simpler for beginners to adopt. However, this typically comes with a significant initial investment in building and maintaining an entire ecosystem around it (Language Server Protocol support, linters, CLIs, etc.).
 
