@@ -4,6 +4,7 @@ import sitemap from "@astrojs/sitemap";
 import remarkToc from "remark-toc";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeExternalLinks from "rehype-external-links";
 
 export default defineConfig({
   site: "https://pm.dartus.fr",
@@ -20,6 +21,13 @@ export default defineConfig({
             className: ["subheading-anchor"],
             ariaLabel: "Link to section",
           },
+        },
+      ],
+      [
+        rehypeExternalLinks,
+        {
+          target: "_blank",
+          rel: ["noopener", "noreferrer"],
         },
       ],
     ],
