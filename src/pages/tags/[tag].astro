@@ -1,0 +1,53 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
+import { getPosts, getPostsByTag } from "../../utils/data";
+import { slugify } from "../../utils/slug";
+
+export async function getStaticPaths() {
+  const all = await getPosts();
+  const tags = new Set(all.flatMap((p) => p.data.tags ?? []));
+  return Array.from(tags).map((tag) => ({
+    params: { tag: slugify(tag) },
+    props: { tag },
+  }));
+}
+
+const { tag } = Astro.props;
+const posts = await getPostsByTag(tag);
+
+const meta = {
+  type: "page",
+  title: `Posts tagged "${tag}"`,
+  description: `Posts tagged with ${tag}`,
+} as const;
+---
+
+<Layout meta={meta}>
+  <h1>Posts tagged "{tag}"</h1>
+  <ul>
+    {
+      posts.map((post) => (
+        <li>
+          <FormattedDate date={post.data.publishDate} class="time" />
+          <a href={`/posts/${post.slug}/`}>{post.data.title}</a>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>
+
+<style>
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 1rem;
+  }
+
+  .time {
+    margin-right: 0.5em;
+  }
+</style>

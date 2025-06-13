@@ -2,6 +2,12 @@
 title: The Unexpected Benefits of Using TypeScript with AI-Aided Development
 publishDate: 2025-05-14
 description: "Exploring how TypeScript provides guardrails for AI coding agents, resulting in higher quality code generation and fewer hallucinations."
+tags:
+  - TypeScript
+  - AI
+  - Code Generation
+  - Developer Tools
+  - JavaScript
 ---
 
 I really appreciate working in TypeScript. For me, developing with TypeScript feels like cycling on a road bike with training wheels: **you get the agility and speed of JavaScript, with the added security of type safety**.

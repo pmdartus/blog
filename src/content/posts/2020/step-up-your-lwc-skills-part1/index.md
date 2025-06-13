@@ -2,6 +2,12 @@
 title: Step Up Your LWC skills - Part 1
 publishDate: 2020-10-27
 description: "LWC tips: getting started, LWC specific idioms, component communication."
+tags:
+  - LWC
+  - JavaScript
+  - Salesforce
+  - Web Components
+  - Best Practices
 ---
 
 > 📝 This post was originally published on the Salesforce developer blog: [link](https://developer.salesforce.com/blogs/2020/10/step-up-your-lwc-skills-part-1.html)

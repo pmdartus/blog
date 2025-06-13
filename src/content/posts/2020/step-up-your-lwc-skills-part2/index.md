@@ -2,6 +2,12 @@
 title: Step Up Your LWC skills - Part 2
 publishDate: 2020-10-27
 description: "LWC tips: JavaScript best practices, testing & code quality."
+tags:
+  - LWC
+  - JavaScript
+  - Salesforce
+  - Testing
+  - Best Practices
 ---
 
 > 📝 This post was originally published on the Salesforce developer blog: [link](https://developer.salesforce.com/blogs/2020/10/step-up-your-lwc-skills-part-2.html)

@@ -2,6 +2,12 @@
 title: Generated GraphQL API for Salesforce
 publishDate: 2022-01-06
 description: "Exploring how to automatically generate a GraphQL API for a Salesforce organization."
+tags:
+  - Salesforce
+  - GraphQL
+  - API
+  - JavaScript
+  - Backend
 ---
 
 > 📣 Here is a small announcement before diving into this post, **Salesforce is currently working on an official GraphQL endpoint**. As of this writing, Salesforce hasn't yet released any public documentation. That said, the official GraphQL endpoint is quite similar to the one presented in this post, with some other nice features 🎉. You can contact [Ben Sklar](mailto:bsklar@salesforce.com) if you would like to try it out.

@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 
 import Layout from "../../layouts/Layout.astro";
 import FormattedDate from "../../components/FormattedDate.astro";
+import { slugify } from "../../utils/slug";
 
 import { computeReadTime } from "../../utils/readTime";
 
@@ -16,7 +17,7 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { title, description, publishDate, updateDate } = post.data;
+const { title, description, publishDate, updateDate, tags } = post.data;
 
 const meta = {
   type: "post",
@@ -47,6 +48,18 @@ const readTime = computeReadTime(post.body);
 
   <Content />
 
+  {
+    tags && (
+      <p class="tags">
+        {tags.map((tag) => (
+          <a href={`/tags/${slugify(tag)}/`} class="tag">
+            {tag}
+          </a>
+        ))}
+      </p>
+    )
+  }
+
   <p>
     <a href="/posts/">← Back to posts</a>
   </p>
@@ -56,5 +69,13 @@ const readTime = computeReadTime(post.body);
   aside {
     color: var(--color-text-alt);
     font-size: 0.9em;
+  }
+
+  .tags {
+    margin: 1em 0;
+  }
+
+  .tag {
+    margin-right: 0.5em;
   }
 </style>
