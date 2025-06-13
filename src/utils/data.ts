@@ -1,5 +1,6 @@
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
+import { slugify } from "./slug";
 
 export type Post = CollectionEntry<"posts">;
 export type Book = CollectionEntry<"books">;
@@ -19,6 +20,15 @@ export async function getPosts(options: QueryOptions = {}): Promise<Post[]> {
   });
 
   return posts.slice(offset, offset + (limit ?? posts.length));
+}
+
+export async function getPostsByTag(tag: string): Promise<Post[]> {
+  const slug = slugify(tag);
+
+  const posts = await getPosts();
+  return posts.filter((post) =>
+    post.data.tags?.some((t) => slugify(t) === slug),
+  );
 }
 
 export async function getBooks(): Promise<Book[]> {

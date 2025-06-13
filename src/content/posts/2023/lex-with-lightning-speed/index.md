@@ -2,6 +2,12 @@
 title: Lightning Experience with Lightning Speed (Are We There Yet?)
 publishDate: 2023-03-15
 description: "Get a closer look into Lightning Experience performance and the next steps planned in the next few releases."
+tags:
+  - Salesforce
+  - Lightning Experience
+  - Performance
+  - Web Performance
+  - Optimization
 ---
 
 > 📝 This post, written by [Bogdan Brinza](https://www.linkedin.com/in/bogdan-brinza/) and myself, was originally published on the Salesforce developer blog: [link](https://developer.salesforce.com/blogs/2023/03/lightning-experience-with-lightning-speed-are-we-there-yet)

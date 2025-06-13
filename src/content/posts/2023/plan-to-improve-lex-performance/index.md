@@ -2,6 +2,12 @@
 title: Our Detailed Plan to Improve Lightning Experience Performance
 publishDate: 2023-09-10
 description: "Current state of Lightning Experience performance, opportunities we have uncovered, and our next steps."
+tags:
+  - Salesforce
+  - Lightning Experience
+  - Performance
+  - Optimization
+  - Strategy
 ---
 
 > 📝 This post, written by [Bogdan Brinza](https://www.linkedin.com/in/bogdan-brinza/) and myself, was originally published on the Salesforce developer blog: [link](https://developer.salesforce.com/blogs/2023/09/our-detailed-plan-to-improve-lightning-experience-performance)

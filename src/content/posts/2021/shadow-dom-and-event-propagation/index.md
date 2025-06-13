@@ -2,6 +2,12 @@
 title: A complete guide on shadow DOM and event propagation
 publishDate: 2021-04-24
 description: "Explaining everything to know about shadow DOM and event propagation with interactive visuals."
+tags:
+  - Web Components
+  - JavaScript
+  - Shadow DOM
+  - Events
+  - Front-end
 ---
 
 <style>

@@ -2,6 +2,12 @@
 title: The Rule of Five - Making good calls from limited data
 publishDate: 2024-03-04
 description: "A rule of thumb that can be used for making quick estimations when data is limited."
+tags:
+  - Decision Making
+  - Statistics
+  - Estimation
+  - Data Analysis
+  - Productivity
 ---
 
 ![The rule of five banner image](./hero.png)
