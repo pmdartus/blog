@@ -3,6 +3,8 @@
   padding: 1em;
   background-color: var(--color-bg-alt);
   border-radius: var(--border-radius);
+  text-align: center;
+  font-size: 1.2rem;
 }
 
 .overflow-wrapper {
