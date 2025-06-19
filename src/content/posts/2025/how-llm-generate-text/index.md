@@ -6,9 +6,13 @@ description: Learn how LLMs generate text token by token, and understand tempera
 
 Ask the same question twice to any LLM and you'll get two similar yet subtly different responses. As software engineers without formal ML backgrounds and with limited knowledge of neural networks, the underlying mechanics can feel like magic.
 
-You've probably seen advice like _"Use a low temperature to make the output deterministic"_ from one of those popular prompt engineering guides. These sound like old recipes passed down through generations of AI engineers because I lack the mental model of how those parameters affect the generated output. But here's the thing: it's actually more straightforward than I originally expected!
+You've probably seen advice like _"Use a low temperature to make the output deterministic"_ from one of those popular prompt engineering guides. These sound like old family recipes passed down through generations of AI engineers.
 
-This article should give you a solid intuition for how these models select their tokens, and how parameters like `temperature`, `top-k`, and `top-p` influence the generated output. This doesn't go into the inference details, so if you're interested in the inner workings of the transformer architecture, sorry to disappoint; you can now close this tab.
+But here's the thing: it's actually more straightforward than I originally expected!
+
+This article should give you a solid intuition for how these models select tokens, and how parameters like `temperature`, `top-k`, and `top-p` influence the generated output. It doesn't go into the inference details, so if you're interested in the inner workings of the transformer architecture, sorry to disappoint; you can now close this tab.
+
+Let's get ourselves warmed-up with a recap on how LLM work.
 
 ## One token at a time...
 
@@ -20,11 +24,9 @@ LLMs don't directly manipulate raw text. Instead, LLMs operate on **tokens**. To
 
 Each model has a predefined set of tokens it understands, established during training. The set of all possible tokens is called the model's **vocabulary**. Modern open-weight models like Llama 3 have vocabularies composed of 128K tokens, while closed-source models exceed 200K.
 
-Now that we have a better understanding of the primitives LLMs manipulate, let's open the hood to see what's going on.
+## The Text Generation Pipeline
 
-## The LLM inner workings
-
-The LLM text generation pipeline breaks down into four distinct stages:
+At a very high level, the LLM text generation pipeline breaks down into four distinct stages:
 
 ![Four-stage LLM pipeline diagram showing tokenization of "I have a" into tokens, inference producing logits for vocabulary tokens, decoding selecting "dream" token, and detokenization converting back to text](./generation-pipeline.png)
 
@@ -42,7 +44,7 @@ Understanding this pipeline helped me clarify some misconceptions I had about ho
 
 **The inference stage doesn't pick tokens—it scores them.** I originally thought that the inference stage was in charge of selecting the next token, but that's not the case in practice. The inference phase produces a logit for each token in its vocabulary. If the model has a vocabulary composed of 128K tokens, the output layer produces a vector of 128K real values. Conceptually, it's like assigning a likelihood factor to all possible words in the dictionary every time we want to complete a sentence. At this stage, all potential tokens are still considered; they're just weighted with different scores.
 
-**Most of the process is deterministic.** I find it fascinating that the vast majority of this generation process is _mostly_ deterministic. Tokenization and detokenization are deterministic by design. But more surprisingly, given the same input sequence, the inference phase always produces the same logits. The randomness in text generation is introduced entirely during the decoding phase.
+**Most of the process is deterministic.** I find it fascinating that the vast majority of this generation process is _mostly_ deterministic. Tokenization and detokenization are deterministic by design. But more surprisingly, given the same input sequence, the inference phase always produces the same logits. The randomness in text generation is introduced during the decoding phase.
 
 **You only have limited control over the decoding.** As a developer, it's important to understand what you have control over. Major hosted LLM providers only expose parameters that influence the token selection in the decoding phase. You have no control over the (de)tokenization process or the inference. All the creative parameters you can tweak affect how the final token is selected from those pre-computed scores.
 
@@ -50,219 +52,101 @@ For the rest of the article, we will focus on the inner working of the decoding 
 
 ## Decoding strategies
 
-There are many ways to approach decoding. The most naive approach would be to always pick the most likely token each round. This approach is called **greedy search**. It turns out that the generated output is suboptimal—it's quite repetitive: they are highly repeative because of their deterministic nature. This is the reason why conversational LLM, introduces some randomness in the token selection process.
+There are many ways to approach decoding. The most naive approach would be to always pick the most likely token each round. This approach is called **greedy search**. It turns out that the generated output is suboptimal. It's quite repetitive because of its deterministic nature. This is the reason why conversational LLMs introduce some randomness in the token selection process.
+
+This section contains some math equations, but bear with me. We'll go over each concept step by step.
 
 ### From Scores to Probabilities: The Softmax Function
 
-During inference, the model outputs logits for every token in its vocabulary. These values can range from negative infinity to positive infinity. To select the next token, those values need to be normalized to a probability distribution first, where each value should be in the `[0, 1]` range and where the sum equals `1`.
+Before we can select a token, we need to convert those raw logit scores into probabilities. During inference, the model outputs logits for every token in its vocabulary—values that can range anywhere from negative infinity to positive infinity. To make sense of these scores, we need to normalize them into a proper probability distribution where each value falls between 0 and 1, and all values sum to exactly 1.
 
-![TODO](image-placeholder)
+![Diagram showing the conversion process from raw logit scores to probability distributions using normalization functions](./logits-to-probabilities.png)
 
-This section contains some math equations, but bear with me. We'll go over each of them step by step.
+The most straightforward approach would be simple division—take each logit score and divide it by the sum of all logits:
 
-The most straightforward, but naive, way to normalize each value is to divide each score by the sum of all the logits.
+$$
+\text{normalized}(z_i) = \frac{z_i}{\sum_{j=1}^{n} z_j}
+$$
 
-<div class="card-alt overflow-wrapper">
-  <math>
-    <mrow>
-      <mi>normalized</mi>
-      <mo form="prefix" stretchy="false">(</mo>
-      <msub>
-        <mi>z</mi>
-        <mi>i</mi>
-      </msub>
-      <mo form="postfix" stretchy="false">)</mo>
-      <mo>=</mo>
-      <mstyle displaystyle="true" scriptlevel="0">
-        <mfrac>
-          <msub>
-            <mi>z</mi>
-            <mi>i</mi>
-          </msub>
-          <mrow>
-            <mo>∑</mo>
-            <mo form="prefix" stretchy="false">(</mo>
-            <msub>
-              <mi>z</mi>
-              <mi>j</mi>
-            </msub>
-            <mo form="postfix" stretchy="false">)</mo>
-          </mrow>
-        </mfrac>
-      </mstyle>
-    </mrow>
-  </math>
-</div>
+This seems reasonable, but it falls short in practice for two important reasons. First, it only works with positive values, yet logits can be negative. Second, this approach has an unintended side effect: it tends to flatten the probability distribution when logit values are large. Here's what I mean:
 
-However, this approach falls short for two reasons, among others:
+| Logits            | Simple Normalization |
+| ----------------- | -------------------- |
+| `[10, 11, 12]`    | `[0.27, 0.33, 0.36]` |
+| `[100, 101, 102]` | `[0.33, 0.33, 0.34]` |
 
-- It only works with positive values. However, that's not the case—logits can be negative.
-- This naive approach has the tendency to soften the difference between values when the logit values increase.
+To solve these problems, LLMs use the **softmax function**. It's the standard normalization technique in machine learning and works similarly to simple division, but with a crucial twist that each logit is exponentiated before normalization:
 
-Let's take the following logits as an example:
+$$
+\text{softmax}(z_i) = \frac{e^{z_i}}{\sum_{j=1}^{n} e^{z_j}}
+$$
 
-- `[10, 11, 12]` -> simple normalization -> `[0.27, 0.33, 0.36]`
-- `[100, 101, 102]` -> simple normalization -> `[0.33, 0.33, 0.34]`
+Now let's compare both approaches using our previous example:
 
-To solve these issues, LLMs use the **softmax function**. It's often used in machine learning and closely resembles "simple normalization" with the key difference that each logit is exponentiated.
+| Logits            | Simple Normalization | Softmax              |
+| ----------------- | -------------------- | -------------------- |
+| `[10, 11, 12]`    | `[0.27, 0.33, 0.36]` | `[0.09, 0.24, 0.67]` |
+| `[100, 101, 102]` | `[0.33, 0.33, 0.34]` | `[0.09, 0.24, 0.67]` |
 
-<div class="card-alt overflow-wrapper">
-  <math>
-    <mrow>
-      <mi>softmax</mi>
-      <mo form="prefix" stretchy="false">(</mo>
-      <msub>
-        <mi>z</mi>
-        <mi>i</mi>
-      </msub>
-      <mo form="postfix" stretchy="false">)</mo>
-      <mo>=</mo>
-      <mstyle displaystyle="true" scriptlevel="0">
-        <mfrac>
-          <msup>
-            <mi>e</mi>
-            <msub>
-              <mi>z</mi>
-              <mi>i</mi>
-            </msub>
-          </msup>
-          <mrow>
-            <mo>∑</mo>
-            <mo form="prefix" stretchy="false">(</mo>
-            <msup>
-              <mi>e</mi>
-              <msub>
-                <mi>z</mi>
-                <mi>j</mi>
-              </msub>
-            </msup>
-            <mo form="postfix" stretchy="false">)</mo>
-          </mrow>
-        </mfrac>
-      </mstyle>
-    </mrow>
-  </math>
-</div>
+The softmax produces identical outputs for both rows, even though the logit values are completely different. This demonstrates the softmax function's translation invariance. Shifting all values by the same amount doesn't change the final probabilities.
 
-Let's take the same example as before and now apply the softmax function:
+More importantly, softmax preserves the relative differences between scores. It acts as a "soft argmax", amplifying the highest-scoring tokens while still maintaining a valid probability distribution where all values sum to 1.
 
-- `[10, 11, 12]` -> softmax -> `[0.09, 0.24, 0.67]`
-- `[100, 101, 102]` -> softmax -> `[0.09, 0.24, 0.67]`
+### `temperature`: The Creativity Dial
 
-The above example exhibits an interesting aspect of the softmax function. When all values are shifted by the same value, the softmax function produces the same output. This property in math is called translation invariance.
+Now we get to the fun part—controlling creativity! The magic of LLMs comes from occasionally selecting less likely tokens instead of always picking the most probable one. This behavior is controlled by the **`temperature` parameter**, which modifies our softmax function:
 
-The softmax effectively acts as a "soft argmax," highlighting the most probable tokens while maintaining a valid probability distribution.
+$$
+\text{softmax}(z_i) = \frac{e^{z_i/T}}{\sum_{j=1}^{n} e^{z_j/T}}
+$$
 
-### Temperature: The Creativity Dial
+Think of temperature as your creativity dial. Here's how it works:
 
-The creative nature of LLMs comes from occasionally selecting less likely tokens. This behavior is controlled by the **temperature** parameter, which modifies the softmax function:
+- **T < 1** (Low temperature ❄️): Sharpens the probability distribution, making high-probability tokens even more likely. Output becomes more predictable and deterministic.
+- **T = 1** (Default): No modification to the probabilities. This is what most providers use as their baseline.
+- **T > 1** (High temperature 🔥): Flattens the probability distribution, giving lower-probability tokens a better chance. Output becomes more creative and unpredictable.
 
-<div class="card-alt overflow-wrapper">
-  <math>
-    <mrow>
-      <msub>
-        <mi>p</mi>
-        <mi>i</mi>
-      </msub>
-      <mo>=</mo>
-      <mstyle displaystyle="true" scriptlevel="0">
-        <mfrac>
-          <msup>
-            <mi>e</mi>
-            <mrow>
-              <msub>
-                <mi>z</mi>
-                <mi>i</mi>
-              </msub>
-              <mo>/</mo>
-              <mi>T</mi>
-            </mrow>
-          </msup>
-          <mrow>
-            <mo>∑</mo>
-            <mo form="prefix" stretchy="false">(</mo>
-            <msup>
-              <mi>e</mi>
-              <mrow>
-                <msub>
-                  <mi>z</mi>
-                  <mi>j</mi>
-                </msub>
-                <mo>/</mo>
-                <mi>T</mi>
-              </mrow>
-            </msup>
-            <mo form="postfix" stretchy="false">)</mo>
-          </mrow>
-        </mfrac>
-      </mstyle>
-    </mrow>
-  </math>
-</div>
+![Visual comparison showing how different temperature values affect probability distributions - low temperature creates sharp peaks, high temperature flattens the distribution](./temperature-impact.png)
 
-Think of temperature as a scaling function for the probability distribution:
+As temperature approaches zero, the model always picking the most likely token. Which is effectively equivalent to **greedy search**. While being entirely deterministic on paper, floating-point precision and implementation details can still introduce tiny variations.
 
-- **T < 1**: Increases the gap between high and low probability tokens (more deterministic)
-- **T = 1**: Default behavior (most providers use this)
-- **T > 1**: Reduces the gap between probabilities (more creative/random)
+Provider constraints on the temperature value vary between provider. OpenAI and Google allow temperatures from 0 to 2, while Anthropic restricts it to 0 to 1. Interestingly, while most providers default to temperature 1, Ollama defaults to 0.8. On top of this individual models can override these defaults through their [`Modelfile`](https://github.com/ollama/ollama/blob/main/docs/modelfile.md#basic-modelfile) configuration.
 
-![Temperature Effects on Probability Distribution](image-placeholder)
+### `top-k` Sampling: Limiting the Playing Field
 
-Careful readers might have spotted that as the temperature tends toward `0`, the decoding becomes like **greedy search**, which is fully deterministic. However, even setting temperature to `0` doesn't guarantee completely deterministic output due to floating-point precision and implementation details.
+Sometimes even with `temperature` control, you want to completely eliminate unlikely tokens from consideration. That's where **`top-k` sampling** comes in—it restricts token selection to only the K most probable tokens, effectively removing the "long tail" of options that might produce nonsensical output.
 
-Most providers constrain temperature ranges. OpenAI and Google accept temperatures in the `[0, 2]` range, while Anthropic restricts it further to `[0, 1]`.
+![Illustration of top-k sampling showing how only the K most probable tokens are considered while the rest are eliminated from selection](./top-k-sampling.png)
 
-While `1` is the default temperature value for most LLM providers, it's not the case for Ollama, which defaults to `0.8`. Individual models can override the default API temperature through [`Modelfile`](https://github.com/ollama/ollama/blob/main/docs/modelfile.md#basic-modelfile).
+Here's how it works: if `k=3`, the model can only choose from the three top tokens, ignoring all other possibilities regardless of their actual probabilities. The probability mass gets redistributed among these top-k tokens, and then the selection happens normally.
 
-### Top-k Sampling: Limiting the Playing Field
-
-Top-k sampling restricts token selection to only the K most probable tokens. This removes the "long tail" of unlikely options that might produce nonsensical output.
-
-![TODO](image-placeholder)
-
-**Example**: If k=3 and the top tokens are ["the", "a", "an"], the model can only choose from these three, regardless of their actual probabilities.
-
-**The challenge**: Setting K appropriately. Too small, and you might discard good options when probabilities are evenly distributed. Too large, and you might include poor choices when probabilities are heavily skewed.
+The challenge is finding the correct value for k. Set it too small, and you might discard good options when probabilities are evenly distributed. Set it too large, and you might include poor choices when probabilities are heavily skewed toward a few tokens.
 
 _Note: OpenAI's API doesn't expose top-k, but Google and Anthropic do._
 
-### Top-p Sampling: Adaptive Token Selection
+### `top-p` Sampling: Adaptive Token Selection
 
-![TODO](image-placeholder)
+**`top-p` sampling**, also refered to as nucleus sampling in the literature, takes a different approach than `top-k` by using a cumulative probability threshold instead of a fixed number of tokens. The model selects from the smallest set of tokens whose cumulative probability exceeds the threshold p.
 
-Instead of a fixed number of tokens, top-p (nucleus sampling) uses a cumulative probability threshold. The model selects from the smallest set of tokens whose cumulative probability exceeds the threshold p.
+![Diagram demonstrating top-p sampling where tokens are selected until their cumulative probability reaches the threshold, adapting to different probability distributions](./top-p-sampling.png)
 
-**Example**: If p=0.9, the model considers tokens until their cumulative probability reaches 90%, then selects from that set.
+For example, if `p=0.8`, the model considers tokens until their cumulative probability reaches 80%, then selects from that set. This approach naturally adapts to different probability distributions.
 
-This approach adapts better to different probability distributions:
+When probabilities are uniform (spread out), it includes more tokens to reach the 80% threshold and when probabilities are skewed (concentrated), it focuses on fewer, high-probability tokens.
 
-- **Uniform distributions**: Includes more tokens
-- **Skewed distributions**: Focuses on fewer, high-probability tokens
-
-Top-p values should be between 0 and 1, where 1 has no effect on sampling.
+Top-p values should be between 0 and 1, where 1 has no effect on sampling (includes all tokens). While adaptive nature makes top-p often more practical than top-k for real-world applications, setting a correct p value requires trails and errors.
 
 ## Putting It All Together
 
-While not typically recommended, temperature, top-k, and top-p can be combined. They're applied in this order:
+While not typically recommended, temperature, top-k, and top-p can be combined. They're usually applied in this order:
 
 1. **Temperature scaling**: Adjust the probability distribution
 2. **Top-k and top-p filtering**: Limit the candidate token set
 3. **Renormalization**: Ensure probabilities sum to 1 for the filtered set
 4. **Random sampling**: Select the final token using a random number generator
 
-## Key Takeaways for Software Engineers
+## Conclusion
 
-- **LLMs are mostly deterministic**: The randomness comes entirely from the decoding step, not the core model computation
-- **Temperature is your primary creativity control**: Low values for consistency, higher values for creativity
-- **Top-k and top-p provide additional control**: They filter the candidate set before selection
-- **The heavy lifting is deterministic**: All the computational work happens in the predictable inference stage
+So there you have it—the mystery behind LLM text generation isn't so mysterious after all! The key insight is that LLMs are mostly deterministic machines. All the randomness and creativity you see comes entirely from the decoding step, not from the core model computation. Once you understand this, those cryptic parameters start making sense: `temperature` is your primary creativity dial (low for consistency, high for creativity), while `top-k` and `top-p` provide additional fine-tuning by filtering the candidate token set before selection.
 
-## Going Deeper
-
-Many LLM providers expose the underlying probability distributions through `logprobs` parameters. This opens up creative possibilities for classification tasks, confidence scoring, and quality assessment. Check out [OpenAI's logprobs cookbook](https://cookbook.openai.com/examples/using_logprobs) for practical examples.
-
-Understanding these mechanics gives you better intuition for prompt engineering and helps you make informed decisions about when and how to adjust generation parameters for your specific use cases.
-
----
-
-_The magic of LLMs isn't in their randomness—it's in how they learned to assign meaningful scores to tokens. The randomness just helps them avoid being boring._
+Understanding these mechanics gives you better intuition for prompt engineering and helps you make informed decisions about when and how to adjust generation parameters for your specific use cases. If you want to go deeper, many LLM providers expose the underlying probability distributions through `logprobs` parameters—this opens up creative possibilities for classification tasks, confidence scoring, and quality assessment. Check out [OpenAI's logprobs cookbook](https://cookbook.openai.com/examples/using_logprobs) for practical examples of what's possible when you peek under the hood.
