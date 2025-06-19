@@ -1,7 +1,7 @@
 ---
-title: TODO
+title: How LLM Generate Text for the Rest of Us
 publishDate: 2025-06-20
-description: TODO
+description: Learn how LLMs generate text token by token, and understand temperature, top-k, and top-p parameters. A practical guide for software engineers without ML background.
 ---
 
 Ask the same question twice to any LLM and you'll get two similar yet subtly different responses. As software engineers without formal ML background and with limited knowledge of neural network, the underlying mechanics can feel like magic.
@@ -10,27 +10,23 @@ You've probably seen advice like _"Use a low temperature to make the output dete
 
 This article should have a solid intuition for how these models select their tokens, and how parameters like `temperature`, `top-k`, and `top-p` influence the generated output. This doesn't goes into the inference details do if you are interested in the inner-working of the transformer architecture, sorry to disappoint you but this article isn't meant for you.
 
-## One token at a time
+## One token at a time ...
 
 Modern LLMs generate text one token at a time, using previously generated tokens as context for the next prediction. These are called **autoregressive models**. You can think of them as recursive functions that build results incrementally.
 
-![TODO](image-placeholder)
+![Diagram showing autoregressive text generation where LLM progressively builds "I have a dream" one token at a time, with each step using previously generated tokens as input context](./recursive-token-generation.png)
 
 LLMs don't directly manipulate raw text. Instead, LLMs operate on **tokens**. Token can represent words, word chunks, punctuation, or even special control sequences for tool calls or end-of-text markers. Each token is defined by its unique identifier.
-
-This is why any text can be represented into a list of token identifiers and vice-versa. Converting text to tokens is called **tokenization**, and the reverse is **detokenization**. This is fairly cheap operation has it consists of string manipulation and look-up table. You can experiment with this process using [OpenAI's tokenizer](https://platform.openai.com/tokenizer).
-
-![TODO](image-placeholder)
 
 Each model has a predefined set of tokens it understands, established during training. The set of all the possible tokens is called the model's **vocabulary**. Modern open weight models like Llama 3 have vocabularies composed of 128K tokens, while closed-source models exceed 200K.
 
 Now that we have a better understanding of primitives LLM manipulates, let open the hood to see what is going on.
 
-## A multi-staged pipeline
+## The LLM inner workings
 
 The LLM text generation pipeline breaks down into four distinct stages:
 
-![LLM Pipeline Stages](image-placeholder)
+![Four-stage LLM pipeline diagram showing tokenization of "I have a" into tokens, inference producing logits for vocabulary tokens, decoding selecting "dream" token, and detokenization converting back to text](./generation-pipeline.png)
 
 **Stage 1 - Tokenization:** The input text is converted into a token sequence. This step is fairly straight forward as it primarily consists of simple string manipulation and searching the correct token in a lookup table.
 
@@ -50,24 +46,50 @@ I also find it fascinating that vast majority of this generation process is _mos
 
 I also think it's important to understand what you as a developer has control over. Major Hosted LLM provider like OpenAI or Anthropic only expose parameters that influence the token-selection distribution in the decoding phase. You have no control over the tokens or the inference.
 
-## From Scores to Probabilities: The Softmax Function
+## Decoding stategies
 
-During inference, the model outputs raw scores (logits) for every token in its vocabulary. These scores can range from negative infinity to positive infinity, with higher scores indicating higher likelihood.
+There are many ways to approach decoding. The most naive approach would is to always pick the most likely token each round. This approach is called a **greedy search**. It turns out that the generated output is suboptimal it is quite repeative.
 
-To make selection decisions, these raw scores must be converted to probabilities using the **softmax function**:
+### From Scores to Probabilities: The Softmax Function
+
+During inference, the model outputs logits for every token in its vocabulary. These values can range from negative infinity to positive infinity. To select the next token, those values needs to be normalized to a probability distribution first where each value should be in the `[0, 1]` range and where the sum equal to `1`.
+
+![TODO](image-placeholder)
+
+The section contains some math equations, but bare along with me. We will go over each of them step by step.
+
+The most straightforward, but naive, way to normalize each value is to divide each score with the sum of the other logits.
 
 ```
-p_i = softmax(z_i) = e^(z_i) / Σ(e^(z_j))
+normalized(z_i) = z_i / Σ(z_j)
 ```
 
-You might wonder why we use exponential scaling instead of simple normalization. Two reasons:
+However this approach falls short for 2 reasons among other:
 
-1. **Handles negative values**: Simple division by sum fails with negative logits
-2. **Amplifies differences**: Exponential scaling emphasizes the highest-scoring tokens, creating more confident predictions
+- It only works with positive values. However it not the case, logit can be negative.
+- This naive approach has the tendency to soften the difference between values when the logit value increase.
 
-The softmax effectively acts as a "soft argmax," highlighting the most probable tokens while maintaining a valid probability distribution.
+Let's take the following logits as example:
 
-## Temperature: The Creativity Dial
+- `[10, 11, 12]` -> simple normalization -> `[0.27, 0.33, 0.36]`
+- `[100, 101, 102]` -> simple normalization -> `[0.33, 0.33, 0.34]`
+
+To solve the issues, LLMs are using the **softmax function**. It is often used in machine and closely resemble to the "simple normalization" with the key difference that each logit is exponentied.
+
+```
+softmax(z_i) = e^(z_i) / Σ(e^(z_j))
+```
+
+Let's take the same example as before and now apply the softmax function:
+
+- `[10, 11, 12]` -> softmax -> `[0.09, 0.24, 0.67]`
+- `[100, 101, 102]` -> softmax -> `[0.09, 0.24, 0.67]`
+
+The above example exhibit and interesting aspect of the softmax function. When all the values are shifted with the value value, the softmax function produces the same output. This property in math is called translation invarience.
+
+The softmax effectively acts as a "soft argmax" highlighting the most probable tokens while maintaining a valid probability distribution.
+
+### Temperature: The Creativity Dial
 
 The creative nature of LLMs comes from occasionally selecting less likely tokens. This behavior is controlled by the **temperature** parameter, which modifies the softmax function:
 
@@ -77,23 +99,25 @@ p_i = e^(z_i/T) / Σ(e^(z_j/T))
 
 Think of temperature as a scaling function for the probability distribution:
 
+- **T = 1**, which is the default value of most providers, it has no effect on the probability distribution.
+
 - **T < 1**: Increases the gap between high and low probability tokens (more deterministic)
 - **T = 1**: Default behavior (most providers use this)
 - **T > 1**: Reduces the gap between probabilities (more creative/random)
 
 ![Temperature Effects on Probability Distribution](image-placeholder)
 
-**Important note**: Even setting temperature to 0 doesn't guarantee completely deterministic output due to floating-point precision and implementation details.
+Careful reader might have spotted that that as the temperature tends towards `0`, the decoding becomes like a **greedy search** which is fully deterministic. However, even setting temperature to `0` doesn't guarantee completely deterministic output due to floating-point precision and implementation details.
 
-Most providers constrain temperature ranges:
+Most providers constrain temperature ranges. OpenAI & Google accepts are temperature in the `[0, 2]` range. When Anthropic restrict it further to `[0, 1]`.
 
-- OpenAI & Google: 0 to 2
-- Anthropic: 0 to 1
-- Ollama: defaults to 0.8
+While using `1` is the default temperature value for most LLM provider it is not the case for Ollama, with it's default being set to `0.8`. Indivudal models can override the default API temperature through [`Modelfile`](https://github.com/ollama/ollama/blob/main/docs/modelfile.md#basic-modelfile).
 
-## Top-k Sampling: Limiting the Playing Field
+### Top-k Sampling: Limiting the Playing Field
 
 Top-k sampling restricts token selection to only the K most probable tokens. This removes the "long tail" of unlikely options that might produce nonsensical output.
+
+![TODO](image-placeholder)
 
 **Example**: If k=3 and the top tokens are ["the", "a", "an"], the model can only choose from these three, regardless of their actual probabilities.
 
@@ -101,7 +125,9 @@ Top-k sampling restricts token selection to only the K most probable tokens. Thi
 
 _Note: OpenAI's API doesn't expose top-k, but Google and Anthropic do._
 
-## Top-p Sampling: Adaptive Token Selection
+### Top-p Sampling: Adaptive Token Selection
+
+![TODO](image-placeholder)
 
 Instead of a fixed number of tokens, top-p (nucleus sampling) uses a cumulative probability threshold. The model selects from the smallest set of tokens whose cumulative probability exceeds the threshold p.
 
