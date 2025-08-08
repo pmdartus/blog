@@ -9,7 +9,7 @@
     "serve": "wrangler pages dev dist/",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
@@ -25,7 +25,7 @@
     "rehype-slug": "^6.0.0",
     "remark-toc": "^9.0.0",
     "satori-html": "^0.3.2",
-    "wrangler": "^3.30.1"
+    "wrangler": "^4.28.1"
   },
   "devDependencies": {
     "husky": "^9.1.7",
