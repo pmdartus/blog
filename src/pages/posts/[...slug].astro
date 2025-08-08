@@ -22,7 +22,7 @@ const meta = {
   type: "post",
   title,
   description,
-  ogImage: new URL(Astro.url.pathname + "og.png", Astro.site),
+  ogImage: new URL(Astro.url.pathname + "og.png/", Astro.site),
   publishDate: updateDate ?? publishDate,
 } as const;
 

@@ -9,6 +9,10 @@ import rehypeExternalLinks from "rehype-external-links";
 export default defineConfig({
   site: "https://pm.dartus.fr",
   integrations: [sitemap()],
+  image: {
+    responsiveStyles: true,
+    layout: "constrained",
+  },
   markdown: {
     remarkPlugins: [remarkToc],
     rehypePlugins: [
