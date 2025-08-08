@@ -242,7 +242,7 @@ export default class Loader extends LightningElement {
   data = null;
 
   connectedCallback() {
-    (this.isLoading = true), (this.data = null);
+    ((this.isLoading = true), (this.data = null));
 
     loadRecord().then((res) => {
       this.isLoading = false;
