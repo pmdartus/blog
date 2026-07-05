@@ -10,6 +10,7 @@ import rehypeExternalLinks from "rehype-external-links";
 export default defineConfig({
   site: "https://pm.dartus.fr",
   integrations: [sitemap()],
+  compressHTML: false,
   image: {
     responsiveStyles: true,
     layout: "constrained",

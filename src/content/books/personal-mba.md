@@ -1,5 +1,5 @@
 ---
-title: "The Personal MBA - The Classic Guide to Writing Nonfiction"
+title: "The Personal MBA - 10th Anniversary Edition"
 author: "Josh Kaufman"
 readingDate: 2026-01-01
 ---
