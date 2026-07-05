@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 
 import Rating from "../../components/Rating.astro";
 import Layout from "../../layouts/Layout.astro";
@@ -8,9 +8,9 @@ export async function getStaticPaths() {
   const books = await getCollection("books");
 
   return books
-    .filter((book) => book.body?.length > 0) // Only generate pages for books with content
+    .filter((book) => (book.body?.length ?? 0) > 0) // Only generate pages for books with content
     .map((book) => ({
-      params: { slug: book.slug },
+      params: { slug: book.id },
       props: { book },
     }));
 }
@@ -24,7 +24,7 @@ const meta = {
   description: `Notes on "${title}" by ${author}`,
 } as const;
 
-const { Content } = await book.render();
+const { Content } = await render(book);
 ---
 
 <Layout meta={meta}>

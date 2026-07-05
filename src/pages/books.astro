@@ -34,10 +34,10 @@ const sortedYears = Object.keys(booksByYear).sort(
               <h3 class="title">{book.data.title}</h3>
               <div class="info">
                 <span>by {book.data.author}</span>
-                {book.body?.length > 0 && (
+                {(book.body?.length ?? 0) > 0 && (
                   <span>
                     •&nbsp;
-                    <a href={`/books/${book.slug}/`}>
+                    <a href={`/books/${book.id}/`}>
                       <Icon name="page" /> Reading notes
                     </a>
                   </span>

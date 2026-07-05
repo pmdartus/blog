@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 
 import Layout from "../../layouts/Layout.astro";
 import FormattedDate from "../../components/FormattedDate.astro";
@@ -10,7 +10,7 @@ export async function getStaticPaths() {
   const posts = await getCollection("posts");
 
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: { post },
   }));
 }
@@ -26,8 +26,8 @@ const meta = {
   publishDate: updateDate ?? publishDate,
 } as const;
 
-const { Content } = await post.render();
-const readTime = computeReadTime(post.body);
+const { Content } = await render(post);
+const readTime = computeReadTime(post.body ?? "");
 ---
 
 <Layout meta={meta}>

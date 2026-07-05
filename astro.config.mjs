@@ -1,5 +1,6 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
+import { unified } from "@astrojs/markdown-remark";
 
 import remarkToc from "remark-toc";
 import rehypeSlug from "rehype-slug";
@@ -14,27 +15,29 @@ export default defineConfig({
     layout: "constrained",
   },
   markdown: {
-    remarkPlugins: [remarkToc],
-    rehypePlugins: [
-      rehypeSlug,
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: "append",
-          properties: {
-            className: ["subheading-anchor"],
-            ariaLabel: "Link to section",
+    processor: unified({
+      remarkPlugins: [remarkToc],
+      rehypePlugins: [
+        rehypeSlug,
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: "append",
+            properties: {
+              className: ["subheading-anchor"],
+              ariaLabel: "Link to section",
+            },
           },
-        },
+        ],
+        [
+          rehypeExternalLinks,
+          {
+            target: "_blank",
+            rel: ["noopener", "noreferrer"],
+          },
+        ],
       ],
-      [
-        rehypeExternalLinks,
-        {
-          target: "_blank",
-          rel: ["noopener", "noreferrer"],
-        },
-      ],
-    ],
+    }),
   },
   build: {
     // The theme styles are less than 2kb, so we should inline them in the generated HTML.

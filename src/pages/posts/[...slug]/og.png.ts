@@ -45,7 +45,7 @@ export const getStaticPaths = (async () => {
   const posts = await getPosts({});
   return posts.map((post) => {
     return {
-      params: { slug: post.slug },
+      params: { slug: post.id },
       props: { post },
     };
   });
@@ -66,7 +66,7 @@ export const GET: APIRoute<Props> = async (ctx) => {
     loadAsset(ASSETS.profilePicture),
   ]);
 
-  const readTime = computeReadTime(post.body);
+  const readTime = computeReadTime(post.body ?? "");
   const formattedPublishDate = post.data.publishDate.toLocaleDateString(
     "en-us",
     {
